@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+
+  <title>base</title>
+  <meta name="author" content="">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'musicae_base/w3.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'musicae_base/musicae.css' %}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+<div class="background w3-light-grey"> 
+<div class="display-wrapper ">
+
+  {% if showBanner %}
+  <div class="banner">
+    <img src="{% static 'musicae_base/big_banner.jpg' %}" class="transparent" />
+    <div class="w3-container banner-text">
+      <h1>Fundamenta Musicae</h1>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if menuItems %}
+  <div class="menuBar">
+  <div class="w3-bar w3-light-blue w3-hide-small" id="menu">
+      {% for item in menuItems %}
+        {% if item.children.exists %}
+          <div class="w3-dropdown-hover w3-mobile">
+            <a href="{{ item.target }}" class="w3-button w3-hover-teal w3-mobile">{{item.text}}</a>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4 w3-mobile">
+            {% for child in item.children.all %}
+              <a href="{{ child.target }}" class="w3-bar-item w3-button w3-hover w3-hover-teal w3-mobile">{{child.text}}</a>
+            {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <a href="{{ item.target }}" class="w3-bar-item w3-button w3-hover w3-hover-teal w3-mobile">{{item.text}}</a>
+        {% endif %}
+        
+      {% endfor %}
+
+
+<div class="w3-right w3-bar-item w3-button">
+<div class="w3-display-container w3-card-4" style="height:23px;width:35px;left: -6px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" height="100%">
+<clipPath id="s">
+  <path d="M0,0 v30 h60 v-30 z"/>
+</clipPath>
+<clipPath id="t">
+  <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/>
+</clipPath>
+<g clip-path="url(#s)">
+  <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+  <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+  <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/>
+  <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+  <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+</g>
+</svg>
+</path>
+</div>
+</div>
+
+<div class="w3-right w3-bar-item w3-button">
+ <div class="w3-display-container w3-card-4" style="height:23px;width:37px">
+  <div class="w3-black w3-display-topmiddle" style="width:100%;height:33%"></div>
+  <div class="w3-red w3-display-middle" style="width:100%;height:33%"></div>
+  <div class="w3-yellow w3-display-bottommiddle" style="width:100%;height:33%"></div>
+</div> 
+</div>
+
+<div class="w3-right w3-bar-item w3-button">
+ <div class="w3-display-container w3-card-4" style="height:23px;width:37px">
+  <div class="w3-white w3-display-topmiddle" style="width:100%;height:33%"></div>
+  <div class="w3-green w3-display-middle" style="width:100%;height:33%"></div>
+  <div class="w3-red w3-display-bottommiddle" style="width:100%;height:33%"></div>
+</div> 
+</div>
+
+
+  </div>
+  <a href="javascript:void(0)" class="w3-bar-item w3-button w3-hide-large w3-hide-medium w3-black menuIcon" onclick="flipMenu()">&#9776;</a>
+  </div>
+  {% endif %}
+
+
+
+  <div class="w3-container w3-padding-large">
+    {% block content %}{% endblock %}
+  </div>
+
+
+  <div class="w3-container w3-light-grey w3-small w3-center w3-padding-24">
+  {% block footer %}
+  Copyright &copy; {% now "Y" %}, Fundamenta Musicae
+  <br/>
+  website by Kalin Stoyanov
+  {% endblock %}
+  </div>
+
+</div>
+</div>
+
+<script>
+function flipMenu() {
+  var menu = document.getElementById("menu");
+  if (menu.className.indexOf("w3-show") == -1) {
+    menu.className = menu.className.replace("w3-hide-small", "w3-show");
+  } else { 
+    menu.className = menu.className.replace("w3-show", "w3-hide-small");
+  }
+}
+</script>
+
+</body>
+
+</html>

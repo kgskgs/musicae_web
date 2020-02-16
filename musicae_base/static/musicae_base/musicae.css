@@ -1,0 +1,58 @@
+.background {
+    width: 100%;
+    z-index: -9999;
+}
+
+.display-wrapper{
+    margin: auto;
+    max-width: 1000px;
+    width: 100%;
+    background-color: white;
+}
+
+.menuBar{
+    position: sticky;
+    top: 0;
+    width: inherit;
+    max-width:inherit;
+    overflow: visible;
+    z-index: 1;
+}
+
+@media (max-width:600px){ /*w3-small is 600px*/
+    .menuBar {
+        position: fixed;
+    }
+}
+
+.banner{
+    display: block;
+    position: relative;
+    max-width: 100%;
+    background-image: url("big_banner.jpg"); 
+    background-size: contain;
+}
+
+.banner-text{
+    position: absolute;
+    bottom: 0px;
+    color: white;
+    margin: auto;
+}
+
+h1 {
+    font-weight: bold;
+}
+
+.transparent{
+    opacity: 0;
+    max-width: 100%;
+    vertical-align: top;
+}
+
+.menuIcon{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    z-index: 2;
+}
