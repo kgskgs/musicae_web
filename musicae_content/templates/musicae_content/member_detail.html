@@ -1,0 +1,31 @@
+{% extends "musicae_base/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="w3-row w3-margin-bottom">
+
+<div class="w3-quarter w3-container">
+<h2>{{member.name}}</h2>
+<h3><i>{{member.title}}</i></h3>
+<img class="w3-border w3-padding" src="{% get_static_prefix %}musicae_content/members/mechka_{{member.pk}}.jpg" style="max-width:100%"/>
+</div>
+
+<div class="w3-rest w3-container w3-section">
+  <h4>Bio</h4>
+  <p>{{member.bio}}</p>
+  <hr>
+  <h4>Current Research</h4>
+  <p>{{member.currentResearch}}</p>
+  <hr>
+  {% if member.publications.exists %}
+  <h4>Publications</h4>
+  <ul>
+  {% for pub in member.publications.all %} 
+  <li><a href="#">{{pub.title}}</a>, {{pub.get_ptype_display}}, {{pub.published}} </li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+</div>
+
+{% endblock content %}

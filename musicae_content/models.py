@@ -3,10 +3,11 @@ from django.utils.translation import gettext_lazy as _
 
 
 class pTopic(models.Model):
-    text = models.CharField(max_length=250) 
+    text = models.CharField(max_length=250)
 
     def __str__(self):
         return self.text
+
 
 class Publication(models.Model):
 
@@ -27,18 +28,21 @@ class Publication(models.Model):
     fname = models.CharField(max_length=255, blank=True)
 
     topics = models.ManyToManyField(pTopic,
-                                      symmetrical=True, blank=True)
+                                    symmetrical=False, blank=True)
 
     def __str__(self):
         return self.title
 
+
 class Member(models.Model):
-    bio = models.TextField(max_length=5000)
     name = models.CharField(max_length=255)
+    bio = models.TextField(max_length=5000)
+    title = models.CharField(max_length=255)
     currentResearch = models.TextField(max_length=5000)
+    short_description = models.TextField(max_length=1000)
 
     publications = models.ManyToManyField(Publication,
-                                      symmetrical=True, blank=True)
+                                          symmetrical=False, blank=True)
 
     def __str__(self):
-        return self.name    
+        return self.name

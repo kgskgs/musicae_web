@@ -4,7 +4,7 @@ from .models import *
 
 @register(Member)
 class NewsTranslationOptions(TranslationOptions):
-    fields = ('bio', 'name', 'currentResearch',)
+    fields = ('bio', 'name', 'currentResearch', "title", "short_description",)
 
 
 @register(Publication)
