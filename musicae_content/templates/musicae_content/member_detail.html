@@ -1,5 +1,6 @@
 {% extends "musicae_base/base.html" %}
 {% load static %}
+{% load i18n %}
 {% block content %}
 
 <div class="w3-row w3-margin-bottom">
@@ -11,14 +12,14 @@
 </div>
 
 <div class="w3-rest w3-container w3-section">
-  <h4>Bio</h4>
+  <h4>{%trans "Биография"%}</h4>
   <p>{{member.bio}}</p>
   <hr>
-  <h4>Current Research</h4>
+  <h4>{%trans "Текуща дейност"%}</h4>
   <p>{{member.currentResearch}}</p>
   <hr>
   {% if member.publications.exists %}
-  <h4>Publications</h4>
+  <h4>{%trans "Публикации"%}</h4>
   <ul>
   {% for pub in member.publications.all %} 
   <li><a href="#">{{pub.title}}</a>, {{pub.get_ptype_display}}, {{pub.published}} </li>

@@ -61,3 +61,45 @@ h1 {
     text-decoration: inherit;
     color: inherit;
 }
+
+pre {
+  overflow: auto;
+}
+
+#menu .w3-button{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.w3-modal-content{
+  overflow: auto;
+  height: 90%;
+}
+
+.tos_btn{
+  margin: 0 auto 16px auto;
+  width: 100px;
+  display: block;
+}
+
+.w3-show-inline{
+    display: inline-block !important;
+}
+
+.newsFlex{
+  display: flex;
+  margin-bottom: 20px;
+}
+.newsLarge{
+  width:97%
+}
+.newsSmall{
+  width:97%;
+  max-width:300px;
+  
+  
+}
+
+@media screen and (max-width:990px) {
+  .newsFlex { flex-wrap: wrap;  }
+}

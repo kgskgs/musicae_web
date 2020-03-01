@@ -1,7 +1,8 @@
 {% extends "musicae_base/base.html" %}
 {% load static %}
+{% load i18n %}
 {% block content %}
-<h2>Members</h2>
+<h2>{%trans "Членове"%}</h2>
 
     <div class="w3-row-padding w3-margin-bottom">
     {% for member in object_list %}

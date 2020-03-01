@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -65,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
                 'musicae_base.context_processors.header_processor'
             ],
         },
@@ -112,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'bg'
 
 TIME_ZONE = 'Europe/Kiev'
 
@@ -122,11 +124,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-gettext = lambda s: s
+ugettext = lambda s: s
 LANGUAGES = (
-    ('en', gettext('English')),
-    ('bg', gettext('Bulgarian')),
-    ('de', gettext('German')),
+    ('bg', ugettext('Bulgarian')),
+    ('en', ugettext('English')),
+    ('de', ugettext('German')),
 )
 
 
@@ -134,3 +136,6 @@ LANGUAGES = (
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = ''
+MEDIA_URL = '/media/'

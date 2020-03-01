@@ -1,0 +1,35 @@
+{% extends "musicae_base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="w3-center"><h2>{% trans "Новини"%}</h2></div>
+
+{% for news in object_list %}
+<div class="w3-row w3-margin-bottom newsFlex">
+<div class="w3-half" style="order: {% cycle '1' '2' %};">
+    <div class="w3-card-4 newsLarge" style="margin:auto"> 
+    <header class="w3-container w3-blue w3-center">
+      <h2>{{news.title}}</h2>
+    </header>
+    <div class="w3-container">
+    <p>{{news.content}}</p>
+    </div>
+    </div>
+</div>
+
+<div class="w3-half" style="order: {% cycle '2' '1' %};">
+    <div class="w3-card-4 newsSmall" style="float:{% cycle 'left' 'right'%}">
+      <div class="w3-container w3-center">
+      <h3>{{news.added|date:'d-m-Y H:i'}}</h3>    
+      </div>
+      {% if news.image%}
+      <img src="{{news.image.url}}" alt="img" style="width:100%">
+      {% endif %}
+    </div>
+</div>
+</div>
+<hr>
+{% endfor %}
+
+{% endblock content %}

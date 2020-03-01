@@ -4,11 +4,11 @@
 <head>
   <meta charset="utf-8">
 
-  <title>base</title>
+  <title>FundametaMusicae</title>
   <meta name="author" content="">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  {% load i18n %}
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'musicae_base/w3.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'musicae_base/musicae.css' %}">
@@ -48,7 +48,7 @@
       {% endfor %}
 
 
-<div class="w3-right w3-bar-item w3-button">
+<div class="w3-right w3-bar-item w3-button" onclick="setLang('en')">
 <div class="w3-display-container w3-card-4" style="height:23px;width:35px;left: -6px;">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" height="100%">
 <clipPath id="s">
@@ -69,7 +69,7 @@
 </div>
 </div>
 
-<div class="w3-right w3-bar-item w3-button">
+<div class="w3-right w3-bar-item w3-button" onclick="setLang('de')">
  <div class="w3-display-container w3-card-4" style="height:23px;width:37px">
   <div class="w3-black w3-display-topmiddle" style="width:100%;height:33%"></div>
   <div class="w3-red w3-display-middle" style="width:100%;height:33%"></div>
@@ -77,7 +77,7 @@
 </div> 
 </div>
 
-<div class="w3-right w3-bar-item w3-button">
+<div class="w3-right w3-bar-item w3-button" onclick="setLang('bg')">
  <div class="w3-display-container w3-card-4" style="height:23px;width:37px">
   <div class="w3-white w3-display-topmiddle" style="width:100%;height:33%"></div>
   <div class="w3-green w3-display-middle" style="width:100%;height:33%"></div>
@@ -97,14 +97,30 @@
     {% block content %}{% endblock %}
   </div>
 
-
-  <div class="w3-container w3-light-grey w3-small w3-center w3-padding-24">
   {% block footer %}
-  Copyright &copy; {% now "Y" %}, Fundamenta Musicae
+  <div class="w3-container w3-light-grey w3-small w3-center w3-padding-24">
+  
+  &copy; {% now "Y" %}, Fundamenta Musicae
   <br/>
-  website by Kalin Stoyanov
-  {% endblock %}
+  {% trans "Изплозлвайки уебсайта, Вие декларирате, че приемате" %} <a href="javascript:void(0)" onclick="document.getElementById('tos_modal').style.display='block'">{% trans "усоловията за ползване" %}</a>
+  <br/>
+  {% trans "Уебсайтът използва бисквитки, за да може да функционира" %}
+  <br/><br/>
+  <span class="w3-tiny">{% trans "уебсайт от Калин Стоянов" %}</span>
+
   </div>
+
+  <div id="tos_modal" class="w3-modal">
+  <div class="w3-modal-content">
+  <div class="w3-container" >
+  {% include "musicae_base/tos.html" %}
+  <div class="w3-button w3-border tos_btn" onclick="document.getElementById('tos_modal').style.display='none'">OK</div>
+
+  </div>
+  </div>
+  </div>
+  {% endblock %}
+
 
 </div>
 </div>
@@ -118,7 +134,25 @@ function flipMenu() {
     menu.className = menu.className.replace("w3-show", "w3-hide-small");
   }
 }
+
+function setLang(lang){
+  document.cookie = "django_language="+lang+";path=/"; 
+  location.reload();
+}
+
+// Get the modal
+var modal = document.getElementById('tos_modal');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 </script>
+
+
 
 </body>
 

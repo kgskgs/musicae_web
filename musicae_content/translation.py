@@ -3,15 +3,25 @@ from .models import *
 
 
 @register(Member)
-class NewsTranslationOptions(TranslationOptions):
+class MemberTranslationOptions(TranslationOptions):
     fields = ('bio', 'name', 'currentResearch', "title", "short_description",)
 
 
 @register(Publication)
-class NewsTranslationOptions(TranslationOptions):
+class PublicationTranslationOptions(TranslationOptions):
     fields = ('title', 'abstract',)
 
 
 @register(pTopic)
-class NewsTranslationOptions(TranslationOptions):
+class pTopicTranslationOptions(TranslationOptions):
     fields = ('text',)
+
+
+@register(Seminar)
+class SeminarTranslationOptions(TranslationOptions):
+    fields = ('title', 'time_and_place', 'description',)
+
+
+@register(News)
+class NewsTranslationOptions(TranslationOptions):
+    fields = ('title', 'content',)

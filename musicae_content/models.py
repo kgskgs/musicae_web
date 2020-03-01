@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 
@@ -25,7 +26,7 @@ class Publication(models.Model):
     title = models.CharField(max_length=250)
     abstract = models.TextField(blank=True)
 
-    fname = models.CharField(max_length=255, blank=True)
+    file = models.FileField(upload_to='publications/')
 
     topics = models.ManyToManyField(pTopic,
                                     symmetrical=False, blank=True)
@@ -46,3 +47,37 @@ class Member(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Seminar(models.Model):
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    title = models.CharField(max_length=400)
+    time_and_place = models.CharField(max_length=400)
+    description = models.TextField(max_length=5000)
+
+    def __str__(self):
+        return self.title
+
+    def clean(self):
+        if self.start_date > self.end_date:
+            raise ValidationError("start date > end date")
+
+    class Meta:
+        ordering = ["-start_date", "end_date"]
+        get_latest_by = "-start_date"
+
+
+class News(models.Model):
+    added = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(max_length=400)
+    image = models.ImageField(upload_to='news_img/', blank=True)
+    content = models.TextField(max_length=5000)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ["-added"]
+        get_latest_by = "-added"

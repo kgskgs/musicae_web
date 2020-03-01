@@ -1,0 +1,101 @@
+{% extends "musicae_base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<h2>{% trans "Семинари" %}</h2>
+
+{% if ongoing %}
+<h3>{% trans "Текущи" %}</h3>
+{% for sem in ongoing %}
+<div class="w3-border w3-margin-bottom">
+<button onclick="accordeonFlip('{{sem.pk}}')" class="w3-button w3-block w3-left-align w3-border-bottom w3-row">
+
+    <div class="w3-third">
+        <span id="arrowR{{sem.pk}}" class="w3-show-inline">&minus;</span>
+        <span id="arrowD{{sem.pk}}" class="w3-hide">&plus;</span>  
+        {{sem.title}}
+    </div> 
+    <div class="w3-third">{{sem.time_and_place}}</div> 
+    <div class="w3-third">{{sem.start_date}} - {{sem.end_date}}</div>
+</button>
+
+<div id="sem{{sem.pk}}" class="w3-container w3-show">
+  <p>{{sem.description}}</p>
+</div>
+</div>
+{% endfor %}
+{% endif %}
+
+<div class="w3-row">
+{% if upcoming %}
+
+    <div class="w3-twothird w3-padding">
+    <h3>{% trans "Бъдещи" %}</h3>
+    {% for sem in upcoming %}
+    <div class="w3-border w3-margin-bottom">
+    <button onclick="accordeonFlip('{{sem.pk}}')" class="w3-button w3-block w3-left-align w3-border-bottom w3-row">
+
+        <div class="w3-third">
+            <span id="arrowR{{sem.pk}}" class="w3-hide">&minus;</span>
+            <span id="arrowD{{sem.pk}}" class="w3-show-inline">&plus;</span>  
+            {{sem.title}}
+        </div> 
+        <div class="w3-third">{{sem.time_and_place}}</div> 
+        <div class="w3-third">{{sem.start_date}}</div> <!-- - {{sem.end_date}}-->
+    </button>
+
+    <div id="sem{{sem.pk}}" class="w3-container w3-hide">
+      <p>{{sem.description}}</p>
+    </div>
+    </div>
+    </div>
+{% endfor %}
+{% endif %}
+
+{% if past %}
+
+    <div class="w3-third w3-padding">
+    <h3>{% trans "Минали" %}</h3>
+    {% for sem in past %}
+    <div class="w3-border w3-margin-bottom">
+    <button onclick="accordeonFlip('{{sem.pk}}')" class="w3-button w3-block w3-left-align w3-border-bottom w3-row">
+
+        <div class="w3-third">
+            <span id="arrowR{{sem.pk}}" class="w3-hide">&minus;</span>
+            <span id="arrowD{{sem.pk}}" class="w3-show-inline">&plus;</span>  
+            {{sem.title}}
+        </div> 
+        <!--
+        <div class="w3-third">{{sem.time_and_place}}</div> 
+        <div class="w3-third-right">{{sem.start_date}}</div>--> <!-- - {{sem.end_date}}-->
+    </button>
+
+    <div id="sem{{sem.pk}}" class="w3-container w3-hide">
+      <p>{{sem.description}}</p>
+    </div>
+    </div>
+    </div>
+{% endfor %}
+{% endif %}
+</div>
+
+
+<script>
+function accordeonFlip(id) {
+  var content = document.getElementById("sem"+id);
+  var arrowR = document.getElementById("arrowR"+id);
+  var arrowD = document.getElementById("arrowD"+id);
+  if (content.className.indexOf("w3-hide") != -1) {
+    content.className = content.className.replace("w3-hide", "w3-show");
+    arrowR.className = arrowR.className.replace("w3-hide", "w3-show-inline");
+    arrowD.className = arrowD.className.replace("w3-show-inline", "w3-hide");
+  } else {
+    content.className = content.className.replace("w3-show", "w3-hide");
+    arrowR.className = arrowR.className.replace("w3-show-inline", "w3-hide");
+    arrowD.className = arrowD.className.replace("w3-hide", "w3-show-inline");
+  }
+}
+</script> 
+
+{% endblock content %}
