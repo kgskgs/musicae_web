@@ -10,6 +10,11 @@ class pTopic(models.Model):
         return self.text
 
 
+class Publisher(models.Model):
+    name = models.CharField(max_length=250)
+    website = models.URLField(blank=True)
+
+
 class Publication(models.Model):
 
     class ptypes(models.IntegerChoices):
@@ -25,14 +30,24 @@ class Publication(models.Model):
 
     title = models.CharField(max_length=250)
     abstract = models.TextField(blank=True)
+    
+    publisher = models.ForeignKey(Publisher, null=True, on_delete=models.SET_NULL)
+
+    published_in = models.CharField(max_length=500, blank=True)
+    published_url = models.URLField(blank=True)
 
     file = models.FileField(upload_to='publications/')
 
     topics = models.ManyToManyField(pTopic,
                                     symmetrical=False, blank=True)
 
+
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ["-published"]
+        get_latest_by = "-published"
 
 
 class Member(models.Model):

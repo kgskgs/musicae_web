@@ -9,7 +9,7 @@ class MemberTranslationOptions(TranslationOptions):
 
 @register(Publication)
 class PublicationTranslationOptions(TranslationOptions):
-    fields = ('title', 'abstract',)
+    fields = ('title', 'abstract','published_in')
 
 
 @register(pTopic)
@@ -25,3 +25,8 @@ class SeminarTranslationOptions(TranslationOptions):
 @register(News)
 class NewsTranslationOptions(TranslationOptions):
     fields = ('title', 'content',)
+
+
+@register(Publisher)
+class PublisherTranslationOptions(TranslationOptions):
+    fields = ('name',)
