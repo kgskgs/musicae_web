@@ -30,7 +30,7 @@ class Publication(models.Model):
 
     title = models.CharField(max_length=250)
     abstract = models.TextField(blank=True)
-    
+
     publisher = models.ForeignKey(Publisher, null=True, on_delete=models.SET_NULL)
 
     published_in = models.CharField(max_length=500, blank=True)
@@ -40,7 +40,6 @@ class Publication(models.Model):
 
     topics = models.ManyToManyField(pTopic,
                                     symmetrical=False, blank=True)
-
 
     def __str__(self):
         return self.title
