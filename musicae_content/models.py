@@ -3,6 +3,12 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 
+def forDjango(cls):
+    """https://stackoverflow.com/a/35953630/1002899"""
+    cls.do_not_call_in_templates = True
+    return cls
+
+
 class pTopic(models.Model):
     text = models.CharField(max_length=250)
 
@@ -17,11 +23,12 @@ class Publisher(models.Model):
 
 class Publication(models.Model):
 
+    @forDjango
     class ptypes(models.IntegerChoices):
-        art = 0, _('Article')
-        dis = 1, _('Dissertation')
-        ths = 2, _('PhD Thesis')
-        bok = 3, _('Book')
+        art = 0, _('Статия')
+        dis = 1, _('Дисертация')
+        ths = 2, _('Докторска Теза')
+        bok = 3, _('Книга')
 
     ptype = models.IntegerField(choices=ptypes.choices)
 
@@ -31,12 +38,13 @@ class Publication(models.Model):
     title = models.CharField(max_length=250)
     abstract = models.TextField(blank=True)
 
-    publisher = models.ForeignKey(Publisher, null=True, on_delete=models.SET_NULL)
+    publisher = models.ForeignKey(Publisher, blank=True,
+                                  null=True, on_delete=models.SET_NULL)
 
     published_in = models.CharField(max_length=500, blank=True)
     published_url = models.URLField(blank=True)
 
-    file = models.FileField(upload_to='publications/')
+    file = models.FileField(upload_to='publications/', blank=True)
 
     topics = models.ManyToManyField(pTopic,
                                     symmetrical=False, blank=True)
@@ -55,6 +63,8 @@ class Member(models.Model):
     title = models.CharField(max_length=255)
     currentResearch = models.TextField(max_length=5000)
     short_description = models.TextField(max_length=1000)
+
+    image = models.ImageField(upload_to='members_img/', blank=True)
 
     publications = models.ManyToManyField(Publication,
                                           symmetrical=False, blank=True)

@@ -90,16 +90,16 @@ pre {
   display: flex;
   margin-bottom: 20px;
 }
+
+@media screen and (max-width:990px) {
+  .newsFlex { flex-wrap: wrap;  }
+}
+
 .newsLarge{
   width:97%
 }
 .newsSmall{
   width:97%;
   max-width:300px;
-  
-  
 }
 
-@media screen and (max-width:990px) {
-  .newsFlex { flex-wrap: wrap;  }
-}

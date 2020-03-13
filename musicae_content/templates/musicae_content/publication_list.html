@@ -1,0 +1,161 @@
+{% extends "musicae_base/base.html" %}
+{% load i18n %}
+
+{% block extraHead %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/style.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/index.js"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/de.js"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/bg.js"></script>
+{% endblock %}
+
+{% block content %}
+
+
+
+<h2 class="w3-margin-bottom">{% trans "Публикации" %}<br/></h2>
+
+<form action="/publications" name="searchForm"  method="post" onsubmit="return validateForm()"> {% csrf_token %}
+<div class="w3-bar w3-light-grey w3-border-top w3-border-left w3-border-right w3-padding searchBar">
+  <input name="title" type="text" class="w3-input w3-bar-item  w3-white w3-mobile w3-border" style="width: 500px;" placeholder="{% trans "Заглавие"%}" />
+  <button type="submit" id="search1" class="w3-bar-item w3-button w3-green w3-mobile w3-show">{% trans "Търси" %}</button>
+  <button class="w3-bar-item w3-button w3-green w3-mobile w3-right" onclick="accordeonFlip('1')" type="button">{% trans "Филтри" %} <span id="arrowR1" class="w3-hide">▶</span><span id="arrowD1" class="w3-show-inline">▼</span></button>
+</div>
+<div id="filter1" class="w3-row-padding w3-hide w3-light-grey w3-border-bottom w3-border-left w3-border-right">
+<!---->
+<div class="w3-row">
+ <div class="w3-quarter">
+   <label>{% trans "Автор" %}:</label>
+   <select  class="w3-select w3-border" name="author">
+    <option value="-1" selected>{% trans "Всички" %}</option>
+    {% for member in authors %}
+    <option value="{{member.pk}}">{{member.name}}</option>
+    {% endfor %}
+  </select> 
+  </div>
+  <div class="w3-quarter">
+    {% trans "Теми" %}: <a href="javascript:void(0)" class="w3-small" onclick="checkAll('topics')">({% trans "избери всички" %})</a><br/>
+    {% for topic in topics %}
+    <input class="w3-check" name="topics" type="checkbox" checked="checked" id="topic_{{topic.pk}}" value="{{topic.pk}}" >
+    <label for="topic_{{topic.pk}}">{{topic.text}}</label><br/>
+    {% endfor %}  
+  </div>
+  <div class="w3-quarter">
+    {% trans "Тип" %}: <a href="javascript:void(0)" class="w3-small" onclick="checkAll('types')">({% trans "избери всички" %})</a><br/>
+    {% for type in types %}
+    <input class="w3-check" name="types" type="checkbox" checked="checked" id="type_{{type}}" value="{{type}}">
+    <label for="type_{{type}}">{{type.label}}</label><br/>
+    {% endfor %}  
+  </div>
+  <div class="w3-quarter">
+    {% trans "Издадена" %}:<br/>
+    <label for="p_start">{% trans "От" %}</label>
+    <input type="text" id="p_start" name="p_start" class="date">
+    <br/><br/>
+    <label for="p_end">{% trans "До" %}</label>
+    <input type="text" id="p_end" name="p_end" class="date">
+  </div>
+</div>
+<div class="w3-row w3-center w3-padding">
+<button type="submit" id="search2" class="w3-button w3-green w3-mobile w3-hide" style="margin:auto">{% trans "Търси" %}</button>
+</div>
+</div>
+
+</form>
+
+{% if publications %}
+<table class="w3-table-all w3-hoverable w3-margin-bottom"> 
+  <thead>
+    <tr class="w3-light-grey">
+      <th>{% trans "Заглавие" %}</th>
+      <th>{% trans "Автор" %}</th>
+      <th class="w3-right-align">{% trans "Дата" %}</th>
+    </tr>
+  </thead>
+{% for publication in publications %}
+  
+  <tr onclick="window.open('/publications/{{publication.pk}}', '_self');" style="cursor:pointer">
+    <td>{{publication.title}}</td>
+    <td>{% for member in publication.member_set.all %}{{member.name}}&nbsp;{% endfor %}</td>
+    <td  class="w3-right-align">{{publication.published}}</td>
+  </tr>
+  
+{% endfor %}
+</table>
+{% else %}
+<h3>{% trans "Няма намерени публикации" %}</h3>
+{% endif %}
+
+<script>
+function accordeonFlip(id) {
+  var content = document.getElementById("filter"+id);
+  var arrowR = document.getElementById("arrowR"+id);
+  var arrowD = document.getElementById("arrowD"+id);
+  var btn1 = document.getElementById("search1");
+  var btn2 = document.getElementById("search2");
+  if (content.className.indexOf("w3-hide") != -1) {
+    content.className = content.className.replace("w3-hide", "w3-show");
+    arrowR.className = arrowR.className.replace("w3-hide", "w3-show-inline");
+    arrowD.className = arrowD.className.replace("w3-show-inline", "w3-hide");
+    btn2.className = btn2.className.replace("w3-hide", "w3-show");
+    btn1.className = btn1.className.replace("w3-show", "w3-hide");
+  } else {
+    content.className = content.className.replace("w3-show", "w3-hide");
+    arrowR.className = arrowR.className.replace("w3-show-inline", "w3-hide");
+    arrowD.className = arrowD.className.replace("w3-hide", "w3-show-inline");
+    btn1.className = btn1.className.replace("w3-hide", "w3-show");
+    btn2.className = btn2.className.replace("w3-show", "w3-hide");
+  }
+}
+
+function checkAll(name){
+  var boxes = document.getElementsByName(name);
+  var set = false
+
+  for (var i=0; i < boxes.length; i++){
+    if (boxes[i].checked == false){
+      set = true;
+      break;
+    }
+  }
+
+  boxes.forEach(function (item, index){
+    item.checked = set;
+  });
+}
+
+flatpickrConfig = {
+  plugins: [
+      new monthSelectPlugin({
+        dateFormat: "m.Y",
+        altFormat: "m.Y",
+      })
+  ],
+
+  "locale": "{{LANGUAGE_CODE}}",
+};
+
+
+flatpickr('#p_start', flatpickrConfig)
+flatpickr('#p_end', flatpickrConfig)
+
+
+function validateForm(){
+  var sdate = document.forms["searchForm"]["p_start"].value;
+  var edate = document.forms["searchForm"]["p_end"].value;
+
+  if (sdate && edate){
+    ds = new Date(sdate.split(".")[1], sdate.split(".")[0]-1);
+    de = new Date(edate.split(".")[1], edate.split(".")[0]-1);
+
+    if (ds > de){
+      alert('{% trans "Началната дата трябва да е преди крайната дата." %}');
+      return false;
+    }
+  }
+}
+</script> 
+
+
+{% endblock content %}

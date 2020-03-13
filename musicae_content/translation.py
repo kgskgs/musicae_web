@@ -9,7 +9,7 @@ class MemberTranslationOptions(TranslationOptions):
 
 @register(Publication)
 class PublicationTranslationOptions(TranslationOptions):
-    fields = ('title', 'abstract', 'published_in', ) #
+    fields = ('title', 'abstract', 'published_in', )
 
 
 @register(pTopic)

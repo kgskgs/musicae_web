@@ -64,6 +64,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
@@ -124,11 +125,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-ugettext = lambda s: s
+gettext = lambda s: s
 LANGUAGES = (
-    ('bg', ugettext('Bulgarian')),
-    ('en', ugettext('English')),
-    ('de', ugettext('German')),
+    ('bg', gettext('Bulgarian')),
+    ('en', gettext('English')),
+    ('de', gettext('German')),
 )
 
 

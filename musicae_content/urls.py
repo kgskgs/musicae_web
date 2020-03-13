@@ -9,4 +9,6 @@ urlpatterns = [
     path('rules', views.rules, name='rules'),
     path('seminars', views.seminars, name='seminars'),
     path('news', views.NewsList.as_view(), name='news'),
+    path('publications', views.PublicationList, name='publication_lst'),
+    path('publications/<int:pk>', views.PublicationDetail.as_view(), name='publications_det'),
 ]

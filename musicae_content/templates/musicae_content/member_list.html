@@ -10,7 +10,7 @@
     <a href="members/{{member.pk}}" class="div-link">
     <div class="w3-container w3-card-4 w3-hover-light-blue">
         <div class="w3-center">
-        <img class="w3-circle w3-center w3-section" src="{% get_static_prefix %}musicae_content/members/mechka_{{member.pk}}.jpg" style="max-width:150px"/>
+        <img class="w3-circle w3-center w3-section" src="{% if member.image %}{{member.image.url}}{% else %}{% static 'musicae_base/Profile_avatar_placeholder_large.png' %}{% endif %}" style="max-width:150px"/>
         </div>
         <div class="w3-center">
         <h4>{{ member.name }}</h4>

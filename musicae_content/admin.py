@@ -1,14 +1,17 @@
 from django.contrib import admin
 from .models import *
 
+
 class MemberAdmin(admin.ModelAdmin):
     ordering = ('pk',)
     list_display = ['name', 'pk']
     filter_horizontal = ['publications']
 
+
 class PublicationAdmin(admin.ModelAdmin):
     ordering = ('pk',)
-    list_display = ['title', 'pk', 'published']
+    list_display = ['title', 'ptype', 'pk', 'published']
+
 
 class NewsAdmin(admin.ModelAdmin):
     ordering = ('-added',)
@@ -20,3 +23,4 @@ admin.site.register(Publication, PublicationAdmin)
 admin.site.register(pTopic)
 admin.site.register(Seminar)
 admin.site.register(News, NewsAdmin)
+admin.site.register(Publisher)
