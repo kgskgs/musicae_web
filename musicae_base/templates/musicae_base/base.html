@@ -12,6 +12,7 @@
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'musicae_base/w3.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'musicae_base/musicae.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap" rel="stylesheet"> 
   {% block extraHead %}
   {% endblock %}
 </head>
@@ -24,8 +25,10 @@
   {% if showBanner %}
   <div class="banner">
     <img src="{% static 'musicae_base/big_banner.jpg' %}" class="transparent" />
-    <div class="w3-container banner-text">
-      <h1>Fundamenta Musicae</h1>
+    <div class="w3-container banner-text-container">
+      <div id="banner-text">Fundamenta Musicae</div>
+      <div id="banner-sub-text"></div>
+      <h3>{% trans "Център за музикална философия и хуманитаристика" %}</h3>
     </div>
   </div>
   {% endif %}
@@ -35,7 +38,7 @@
   <div class="w3-bar w3-light-blue w3-hide-small" id="menu">
       {% for item in menuItems %}
         {% if item.children.exists %}
-          <div class="w3-dropdown-hover w3-mobile">
+          <div class="w3-dropdown-hover w3-mobile menu-text">
             <a href="{{ item.target }}" class="w3-button w3-hover-teal w3-mobile">{{item.text}}</a>
             <div class="w3-dropdown-content w3-bar-block w3-card-4 w3-mobile">
             {% for child in item.children.all %}
@@ -44,7 +47,7 @@
             </div>
           </div>
         {% else %}
-          <a href="{{ item.target }}" class="w3-bar-item w3-button w3-hover w3-hover-teal w3-mobile">{{item.text}}</a>
+          <a href="{{ item.target }}" class="w3-bar-item w3-button w3-hover w3-hover-teal w3-mobile menu-text">{{item.text}}</a>
         {% endif %}
         
       {% endfor %}
@@ -96,7 +99,9 @@
 
 
   <div class="w3-container w3-padding-large">
+   {% autoescape off %}
     {% block content %}{% endblock %}
+   {% endautoescape %} 
   </div>
 
   {% block footer %}

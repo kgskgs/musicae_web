@@ -3,8 +3,8 @@ from .models import *
 
 
 class MemberAdmin(admin.ModelAdmin):
-    ordering = ('pk',)
-    list_display = ['name', 'pk']
+    ordering = ('position',)
+    list_display = ['name', 'pk', 'position']
     filter_horizontal = ['publications']
 
 

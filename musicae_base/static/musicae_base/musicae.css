@@ -3,14 +3,18 @@
     z-index: -9999;
 }
 
-.display-wrapper{
+.display-wrapper {
     margin: auto;
     max-width: 1000px;
     width: 100%;
     background-color: white;
 }
 
-.menuBar{
+html, body, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.menuBar {
     position: sticky;
     top: 0;
     width: inherit;
@@ -19,13 +23,19 @@
     z-index: 1;
 }
 
-@media (max-width:600px){ /*w3-small is 600px*/
+.menu-text{
+    font-size:18px;
+}
+
+/*
+@media (max-width:600px) { 
     .menuBar {
         position: fixed;
     }
 }
+/*w3-small is 600px*/
 
-.banner{
+.banner {
     display: block;
     position: relative;
     max-width: 100%;
@@ -33,31 +43,38 @@
     background-size: contain;
 }
 
-.banner-text{
+.banner-text-container {
     position: absolute;
-    bottom: 0px;
     color: white;
-    margin: auto;
+    width: 100%;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    text-align: center;
 }
 
-h1 {
-    font-weight: bold;
+#banner-text {
+  font-size: calc(30px + 2vw);
 }
-
-.transparent{
+/*
+#banner-sub-text{
+  font-size: calc(32px + .001vw);
+}
+*/
+.transparent {
     opacity: 0;
     max-width: 100%;
     vertical-align: top;
 }
 
-.menuIcon{
+.menuIcon {
     position: absolute;
     right: 0px;
     top: 0px;
     z-index: 2;
 }
 
-.div-link{
+.div-link {
     text-decoration: inherit;
     color: inherit;
 }
@@ -66,27 +83,27 @@ pre {
   overflow: auto;
 }
 
-#menu .w3-button{
+#menu .w3-button {
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.w3-modal-content{
+.w3-modal-content {
   overflow: auto;
   height: 90%;
 }
 
-.tos_btn{
+.tos_btn {
   margin: 0 auto 16px auto;
   width: 100px;
   display: block;
 }
 
-.w3-show-inline{
+.w3-show-inline {
     display: inline-block !important;
 }
 
-.newsFlex{
+.newsFlex {
   display: flex;
   margin-bottom: 20px;
 }
@@ -95,10 +112,10 @@ pre {
   .newsFlex { flex-wrap: wrap;  }
 }
 
-.newsLarge{
+.newsLarge {
   width:97%
 }
-.newsSmall{
+.newsSmall {
   width:97%;
   max-width:300px;
 }

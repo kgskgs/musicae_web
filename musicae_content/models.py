@@ -69,6 +69,11 @@ class Member(models.Model):
     publications = models.ManyToManyField(Publication,
                                           symmetrical=False, blank=True)
 
+    position = models.IntegerField()
+
+    class Meta:
+        ordering = ["position"]
+
     def __str__(self):
         return self.name
 

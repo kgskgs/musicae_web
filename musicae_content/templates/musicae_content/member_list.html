@@ -2,25 +2,27 @@
 {% load static %}
 {% load i18n %}
 {% block content %}
+<div class="w3-container w3-margin-bottom">
 <h2>{%trans "Членове"%}</h2>
+</div>
 
-    <div class="w3-row-padding w3-margin-bottom">
-    {% for member in object_list %}
-    <div class="w3-half w3-margin-bottom">
-    <a href="members/{{member.pk}}" class="div-link">
-    <div class="w3-container w3-card-4 w3-hover-light-blue">
-        <div class="w3-center">
-        <img class="w3-circle w3-center w3-section" src="{% if member.image %}{{member.image.url}}{% else %}{% static 'musicae_base/Profile_avatar_placeholder_large.png' %}{% endif %}" style="max-width:150px"/>
-        </div>
-        <div class="w3-center">
-        <h4>{{ member.name }}</h4>
-        <p><i>{{ member.title }}</i></p>
-        </div>
-        <p>{{ member.short_description}}</p>
+<div class="w3-row-padding w3-section">
+{% for member in object_list %}
+<div class="w3-half w3-margin-bottom">
+<a href="members/{{member.pk}}" class="div-link">
+<div class="w3-container w3-card-4 w3-hover-light-blue">
+    <div class="w3-center">
+    <img class="w3-circle w3-center w3-section" src="{% if member.image %}{{member.image.url}}{% else %}{% static 'musicae_base/Profile_avatar_placeholder_large.png' %}{% endif %}" style="max-width:150px"/>
     </div>
-    </a>
+    <div class="w3-center">
+    <h4>{{ member.name }}</h4>
+    <p><i>{{ member.title }}</i></p>
     </div>
-    {% endfor %}
-    </div>
+    <p>{{ member.short_description}}</p>
+</div>
+</a>
+</div>
+{% endfor %}
+</div>
 
 {% endblock content %}
