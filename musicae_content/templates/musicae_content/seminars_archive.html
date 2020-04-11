@@ -5,11 +5,16 @@
 
 <h2>{% trans "Минали Семинари" %}</h2>
 
+{% if sems %}
 {% for sem in sems %}
 
 {% include "musicae_content\seminar_row.html" %}
 
 {% endfor %}
+
+{% else %}
+{% trans "Няма минали семинари" %}
+{% endif %}
 
 <script>
 function accordeonFlip(id) {
