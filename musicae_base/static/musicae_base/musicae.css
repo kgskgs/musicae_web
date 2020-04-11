@@ -30,7 +30,7 @@
 }
 
 html, body, h1, h2, h3, h4, h5, h6 {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans'; /*, sans-serif*/
 }
 
 .menuBar {
@@ -80,6 +80,17 @@ html, body, h1, h2, h3, h4, h5, h6 {
   font-size: calc(32px + .001vw);
 }
 */
+
+@media screen and (max-width:449px) {
+    #banner-text {
+      font-size: 26px;
+    }
+  #banner-sub-text{
+    font-size: 16px;
+  }
+
+}
+
 .transparent {
     opacity: 0;
     max-width: 100%;
@@ -143,6 +154,22 @@ pre {
 .news-img{
   height:200px;
   background-size: cover;
+}
+
+.news-det-img{
+  float: left;
+  max-width:50%;
+  margin:5px;
+  margin-right:20px;
+  border: 1px solid black;
+}
+
+@media (max-width:600px) { 
+    .news-det-img {
+        width: 100%;
+        max-width: 100%;
+        margin: 0px 0px 20px;
+    }
 }
 
 .news-summary{
