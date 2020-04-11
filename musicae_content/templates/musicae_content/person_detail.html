@@ -6,25 +6,25 @@
 <div class="w3-row w3-section">
 
 <div class="w3-quarter w3-container">
-<h2>{{member.name}}</h2>
-<h3><i>{{member.title}}</i></h3>
-{% if member.image %}
-<img class="w3-border w3-padding" src="{{member.image.url}}" style="max-width:100%"/>
+<h2>{{person.name}}</h2>
+<h5><i>{{person.title}}</i></h5>
+{% if person.image %}
+<img class="w3-border w3-padding" src="{{person.image.url}}" style="max-width:100%"/>
 {% endif %}
 </div>
 
 
 <div class="w3-rest w3-container w3-section">
   <h4>{%trans "Биография"%}</h4>
-  <p>{{member.bio}}</p>
+  <p>{{person.bio}}</p>
   <hr>
   <h4>{%trans "Текуща дейност"%}</h4>
-  <p>{{member.currentResearch}}</p>
+  <p>{{person.currentResearch}}</p>
   <hr>
-  {% if member.publications.exists %}
+  {% if person.publication_set.exists %}
   <h4>{%trans "Публикации"%}</h4>
   <ul>
-  {% for pub in member.publications.all %} 
+  {% for pub in person.publication_set.all %} 
   <li><a href="/publications/{{pub.pk}}">{{pub.title}}</a>, {{pub.get_ptype_display}}, {{pub.published}} </li>
   {% endfor %}
   </ul>

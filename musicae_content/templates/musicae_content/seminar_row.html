@@ -1,0 +1,24 @@
+{% load i18n %}
+
+<!--
+you need to have sem in the context for the seminar object
+accordeonFlip js function
+-->
+
+<div class="w3-border w3-margin-bottom">
+<div class="w3-row w3-border-bottom">
+<div class="w3-padding w3-center w3-display-inline w3-rest w3-col">
+    {{sem.title}} 
+    | {% for prof in sem.profs.all %}<a href="/members/{{prof.pk}}">{{prof.name}}</a> {% endfor %} 
+    | {{sem.place}}
+    | {{sem.time}}
+    | {{sem.get_semester_display}}
+</div>
+
+<button class="w3-button w3-mobile w3-right w3-col semArrow" onclick="accordeonFlip('{{sem.pk}}')" type="button"><span id="arrowR{{sem.pk}}" class="w3-show-inline">▶</span><span id="arrowD{{sem.pk}}" class="w3-hide">▼</span></button>
+</div>
+
+<div id="sem{{sem.pk}}" class="w3-container w3-show">
+  <p>{{sem.description}}</p>
+</div>
+</div>

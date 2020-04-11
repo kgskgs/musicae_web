@@ -3,28 +3,13 @@
 
 {% block content %}
 
-<h2>{% trans "Семинари" %}</h2>
+<h2>{% trans "Минали Семинари" %}</h2>
 
-{% if ongoing %}
-<h3>{% trans "Текущи" %}</h3>
-{% for sem in ongoing %}
+{% for sem in sems %}
 
 {% include "musicae_content\seminar_row.html" %}
 
 {% endfor %}
-{% endif %}
-
-
-{% if upcoming %}
-<h3>{% trans "Бъдещи" %}</h3>
-{% for sem in upcoming %}
-
-{% include "musicae_content\seminar_row.html" %}
-
-{% endfor %}
-{% endif %}
-
-
 
 <script>
 function accordeonFlip(id) {

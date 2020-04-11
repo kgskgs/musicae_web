@@ -3,4 +3,29 @@
 
 {% block content %}
 <h2>{{publication.title}}</h2>
+<h4 class="w3-margin-bottom">
+{% trans "Автор:" %} 
+{% for prof in publication.authors.all %}
+{% if publication.internal %}
+<a href="/members/{{prof.pk}}">{{prof.name}}</a> 
+{% else %}
+{{prof.name}}
+{% endif %}
+{% endfor %}
+| {{publication.get_ptype_display}}
+| {% trans "Тема:" %} {{publication.topic.text}}
+| {% trans "Добавена:" %} {{publication.added|date:'Y-m-d'}}
+</h4>
+<div class="w3-container w3-margin-bottom">
+{{publication.abstract}}
+</div>
+<h5>
+{% trans "Цитирай:" %} {{publication.bib_info}}
+</h5>
+<h5>
+{% trans "Ключови думи:" %} {% for keyword in publication.keywords.all %}<div class="w3-border w3-round-xxlarge w3-small w3-container" style="display:inline-block"><b>{{keyword.text}}</b></div> {% endfor %}
+</h5>
+{% if publication.file %}
+<a href="{{publication.file.url}}" target="_blank" download="{{publication.filename}}" class="w3-button w3-border w3-large">{% trans "Свали" %}</a>
+{% endif %}
 {% endblock content %}

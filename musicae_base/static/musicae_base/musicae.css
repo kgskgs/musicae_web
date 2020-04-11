@@ -10,6 +10,25 @@
     background-color: white;
 }
 
+.flex-container {
+  margin: 1em 0;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: space-around;
+  height:150px;
+}
+
+@media (max-width:600px) { 
+    .flex-container {
+        flex-flow: column nowrap;
+        height:100%;
+    }
+}
+
+.flex-inner {
+  align-self: flex-start;
+}
+
 html, body, h1, h2, h3, h4, h5, h6 {
   font-family: 'Open Sans', sans-serif;
 }
@@ -24,7 +43,7 @@ html, body, h1, h2, h3, h4, h5, h6 {
 }
 
 .menu-text{
-    font-size:18px;
+    font-size:16px;
 }
 
 /*
@@ -32,7 +51,7 @@ html, body, h1, h2, h3, h4, h5, h6 {
     .menuBar {
         position: fixed;
     }
-}
+}*/
 /*w3-small is 600px*/
 
 .banner {
@@ -105,7 +124,8 @@ pre {
 
 .newsFlex {
   display: flex;
-  margin-bottom: 20px;
+  flex-direction:  column;
+  /*margin-bottom: 20px;*/
 }
 
 @media screen and (max-width:990px) {
@@ -120,3 +140,37 @@ pre {
   max-width:300px;
 }
 
+.news-img{
+  height:200px;
+  background-size: cover;
+}
+
+.news-summary{
+  height:200px;
+  overflow: hidden;
+  position: relative;
+  padding: 10px 10px 0px 10px;
+}
+
+.news-more{
+  position: absolute; 
+  bottom: 0; 
+  left: 0;
+  width: 100%; 
+  text-align: center; 
+  margin: 0; padding: 30px 0 15px 0; 
+  
+  /* "transparent" only works here because == rgba(0,0,0,0) */
+  background-image: linear-gradient(to bottom, transparent, grey);
+}
+
+.semArrow {
+  width: 50px;
+  position: absolute;
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+
+.year-select {
+  width: 75px;
+}

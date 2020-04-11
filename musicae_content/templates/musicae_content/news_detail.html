@@ -1,0 +1,18 @@
+{% extends "musicae_base/base.html" %}
+{% load i18n %}
+
+
+
+{% block content %}
+<h2>{{news.title}}</h2>
+<h5>{{news.added|date:'d-m-Y H:i'}}</h5>  
+<hr/>
+<div class="w3-container">
+{% if news.image %}
+<img src="{{news.image.url}}" alt="img" style="float: right; max-width:100%; margin:5px; border: 1px solid black;"/>
+{% endif %}
+
+{{news.content}}
+</div>
+
+{% endblock content %}

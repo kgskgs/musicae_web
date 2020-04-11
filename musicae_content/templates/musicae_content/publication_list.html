@@ -1,14 +1,6 @@
 {% extends "musicae_base/base.html" %}
 {% load i18n %}
 
-{% block extraHead %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/style.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/index.js"></script>
-<script src="https://npmcdn.com/flatpickr/dist/l10n/de.js"></script>
-<script src="https://npmcdn.com/flatpickr/dist/l10n/bg.js"></script>
-{% endblock %}
 
 {% block content %}
 
@@ -18,94 +10,131 @@
 
 <form action="/publications" name="searchForm"  method="post" onsubmit="return validateForm()"> {% csrf_token %}
 <div class="w3-bar w3-light-grey w3-border-top w3-border-left w3-border-right w3-padding searchBar">
-  <input name="title" type="text" class="w3-input w3-bar-item  w3-white w3-mobile w3-border" style="width: 500px;" placeholder="{% trans "Заглавие"%}" />
+  <input name="title" type="text" class="w3-input w3-bar-item  w3-white w3-mobile w3-border w3-show" style="width: 500px;" placeholder="{% trans "Заглавие"%}" />
   <button type="submit" id="search1" class="w3-bar-item w3-button w3-green w3-mobile w3-show">{% trans "Търси" %}</button>
-  <button class="w3-bar-item w3-button w3-green w3-mobile w3-right" onclick="accordeonFlip('1')" type="button">{% trans "Филтри" %} <span id="arrowR1" class="w3-hide">▶</span><span id="arrowD1" class="w3-show-inline">▼</span></button>
+  <button class="w3-bar-item w3-button w3-green w3-mobile w3-right" onclick="accordeonFlipSearch('1')" type="button">{% trans "Детайлно търсене" %} <span id="arrowR1" class="w3-hide">▶</span><span id="arrowD1" class="w3-show-inline">▼</span></button>
 </div>
 <div id="filter1" class="w3-row-padding w3-hide w3-light-grey w3-border-bottom w3-border-left w3-border-right">
 <!---->
 <div class="w3-row">
- <div class="w3-quarter">
-   <label>{% trans "Автор" %}:</label>
-   <select  class="w3-select w3-border" name="author">
-    <option value="-1" selected>{% trans "Всички" %}</option>
-    {% for member in authors %}
-    <option value="{{member.pk}}">{{member.name}}</option>
-    {% endfor %}
-  </select> 
-  </div>
-  <div class="w3-quarter">
-    {% trans "Теми" %}: <a href="javascript:void(0)" class="w3-small" onclick="checkAll('topics')">({% trans "избери всички" %})</a><br/>
-    {% for topic in topics %}
-    <input class="w3-check" name="topics" type="checkbox" checked="checked" id="topic_{{topic.pk}}" value="{{topic.pk}}" >
-    <label for="topic_{{topic.pk}}">{{topic.text}}</label><br/>
-    {% endfor %}  
-  </div>
-  <div class="w3-quarter">
-    {% trans "Тип" %}: <a href="javascript:void(0)" class="w3-small" onclick="checkAll('types')">({% trans "избери всички" %})</a><br/>
+  <div class="w3-threequarter">
+    {% trans "Вид" %}: <a href="javascript:void(0)" class="w3-small" onclick="checkAll('types')">({% trans "избери всички" %})</a><br/>
+    <div class="flex-container">
     {% for type in types %}
+    <label for="type_{{type}}" class="flex-inner">
     <input class="w3-check" name="types" type="checkbox" checked="checked" id="type_{{type}}" value="{{type}}">
-    <label for="type_{{type}}">{{type.label}}</label><br/>
+    {{type.label}}
+    </label><br/>
     {% endfor %}  
+    </div>
   </div>
   <div class="w3-quarter">
-    {% trans "Издадена" %}:<br/>
-    <label for="p_start">{% trans "От" %}</label>
-    <input type="text" id="p_start" name="p_start" class="date">
+    {% trans "Издадена" %}:<br/><br/>
+    <label for="sdate">{% trans "От" %}</label>
+    <select type="text" id="sdate" name="sdate" class="w3-select w3-border year-select" autocomplete="off">
+      <option value="{{ystart}}" selected>{{ystart}}</option>
+      {% for i in yrange %}
+      <option value="{{i}}">{{i}}</option>
+      {% endfor %}
+    </select>
     <br/><br/>
-    <label for="p_end">{% trans "До" %}</label>
-    <input type="text" id="p_end" name="p_end" class="date">
+    <label for="edate">{% trans "До" %}</label>
+    <select type="text" id="edate" name="edate" class="w3-select w3-border year-select" autocomplete="off">
+      {% for i in yrange %}
+      <option value="{{i}}">{{i}}</option>
+      {% endfor %}
+      <option value="{{yend}}" selected>{{yend}}</option>
+    </select>
   </div>
-</div>
-<div class="w3-row w3-center w3-padding">
-<button type="submit" id="search2" class="w3-button w3-green w3-mobile w3-hide" style="margin:auto">{% trans "Търси" %}</button>
-</div>
 </div>
 
+{% for i in serachRange%}
+<div class="w3-row w3-margin-top {% if i == 0 %}w3-show{% else %}w3-hide{% endif %}" id="srch-{{i}}">
+  <select name="srch-logic-{{i}}" class="w3-select w3-border w3-col" style="width:75px"> 
+      <option value="1">{% trans "И" %}</option>
+      <option value="0">{% trans "ИЛИ" %}</option>
+      <option value="-1">{% trans "И НЕ" %}</option>
+  </select>
+  <select name="srch-type-{{i}}" class="w3-select w3-border w3-col" style="width:150px"> 
+      <option value="title">{% trans "Заглавие" %}</option>
+      <option value="authors__name">{% trans "Автор" %}</option>
+      <option value="topic__text">{% trans "Тема" %}</option>
+      <option value="keywords__text">{% trans "Ключови думи" %}</option>
+      <option value="publisher__name">{% trans "Издателство" %}</option>
+  </select>
+  <div class="w3-rest w3-mobile">
+  <input name="srch-txt-{{i}}" id="srch-txt-{{i}}" type="text" class="w3-white w3-mobile w3-border w3-input w3-col"/>
+  </div>
+</div>
+{% endfor %}
+<div class="w3-row w3-center">
+    <a id="btn-less" class="w3-button w3-large w3-circle w3-large w3-green w3-disabled" style="width:43px"  onclick="hidePrev()"><b>-</b></a>
+    <a id="btn-more" class="w3-button w3-large w3-circle w3-large w3-green w3-margin-left w3-enabled" style="width:43px" onclick="showNext()"><b>+</b></a>
+</div>
+
+<div class="w3-row w3-center w3-padding">
+<button type="submit" id="search2" class="w3-button w3-green w3-mobile w3-hide w3-large" style="margin:auto" style="z-index:0">{% trans "Търси" %}</button>
+</div>
+</div>
+<input type="number" id="detailed" name="detailed" class="w3-hide" value="0"/>
 </form>
 
 {% if publications %}
+<div style="overflow-x:auto;">
 <table class="w3-table-all w3-hoverable w3-margin-bottom"> 
   <thead>
     <tr class="w3-light-grey">
-      <th>{% trans "Заглавие" %}</th>
-      <th>{% trans "Автор" %}</th>
-      <th class="w3-right-align">{% trans "Дата" %}</th>
+      <th  class="w3-large">{% trans "Заглавие" %}</th>
+      <th  class="w3-large">{% trans "Автор" %}</th>
+      <th  class="w3-large">{% trans "Тема" %}</th>
+      <th class="w3-right-align w3-large">{% trans "Публикувана" %}</th>
     </tr>
   </thead>
 {% for publication in publications %}
   
-  <tr onclick="window.open('/publications/{{publication.pk}}', '_self');" style="cursor:pointer">
+  <tr onclick="window.open('/publications/{{publication.pk}}', '_self');" style="cursor:pointer" class="w3-large">
     <td>{{publication.title}}</td>
-    <td>{% for member in publication.member_set.all %}{{member.name}}&nbsp;{% endfor %}</td>
-    <td  class="w3-right-align">{{publication.published}}</td>
+    <td>{% for member in publication.authors.all %}{{member.name}}&nbsp;{% endfor %}</td>
+    <td>{{publication.topic.text}}</td>
+    <td  class="w3-right-align">{{publication.published_year}}</td>
   </tr>
   
 {% endfor %}
 </table>
+</div>
 {% else %}
 <h3>{% trans "Няма намерени публикации" %}</h3>
 {% endif %}
 
 <script>
-function accordeonFlip(id) {
+var srchDisplayed = 0
+
+document.getElementById("detailed").value = 0;
+
+function accordeonFlipSearch(id) {
   var content = document.getElementById("filter"+id);
   var arrowR = document.getElementById("arrowR"+id);
   var arrowD = document.getElementById("arrowD"+id);
   var btn1 = document.getElementById("search1");
   var btn2 = document.getElementById("search2");
+  var stitle = document.getElementsByName("title")[0];
+  var detailed = document.getElementById("detailed");
   if (content.className.indexOf("w3-hide") != -1) {
     content.className = content.className.replace("w3-hide", "w3-show");
     arrowR.className = arrowR.className.replace("w3-hide", "w3-show-inline");
     arrowD.className = arrowD.className.replace("w3-show-inline", "w3-hide");
     btn2.className = btn2.className.replace("w3-hide", "w3-show");
     btn1.className = btn1.className.replace("w3-show", "w3-hide");
+    stitle.className = stitle.className.replace("w3-show", "w3-hide");
+    detailed.value = 1;
   } else {
     content.className = content.className.replace("w3-show", "w3-hide");
     arrowR.className = arrowR.className.replace("w3-show-inline", "w3-hide");
     arrowD.className = arrowD.className.replace("w3-hide", "w3-show-inline");
     btn1.className = btn1.className.replace("w3-hide", "w3-show");
     btn2.className = btn2.className.replace("w3-show", "w3-hide");
+    stitle.className = stitle.className.replace("w3-hide", "w3-show");
+    detailed.value = 0;
   }
 }
 
@@ -125,36 +154,56 @@ function checkAll(name){
   });
 }
 
-flatpickrConfig = {
-  plugins: [
-      new monthSelectPlugin({
-        dateFormat: "m.Y",
-        altFormat: "m.Y",
-      })
-  ],
+function showNext(){
+  console.log(srchDisplayed)
+  if (srchDisplayed < {{searchMax|add:"-1"}}){
+    var next = document.getElementById("srch-"+(srchDisplayed+1).toString());
+    next.className = next.className.replace("w3-hide", "w3-show");
+    srchDisplayed += 1;
+    if (srchDisplayed == {{searchMax|add:"-1"}}) {
+      var btnNext = document.getElementById("btn-more");
+      btnNext.className = btnNext.className.replace("w3-enabled", "w3-disabled");
+    }
+    if (srchDisplayed > 0) {
+      var btnPrev = document.getElementById("btn-less");
+      btnPrev.className = btnPrev.className.replace("w3-disabled", "w3-enabled");
+    }
+    detailed.value=srchDisplayed+1
+  }
+}
 
-  "locale": "{{LANGUAGE_CODE}}",
-};
+function hidePrev(){
+  console.log(srchDisplayed)
+  if (srchDisplayed > 0){
+    var next = document.getElementById("srch-"+(srchDisplayed).toString());
+    next.className = next.className.replace("w3-show", "w3-hide");
+    document.getElementById("srch-txt-"+(srchDisplayed).toString()).value = ''
+    srchDisplayed -= 1;
+    if (srchDisplayed == 0) {
+      var btnPrev = document.getElementById("btn-less");
+      btnPrev.className = btnPrev.className.replace("w3-enabled", "w3-disabled");
+    }
+    if (srchDisplayed < {{searchMax|add:"-1"}}) {
+      var btnNext = document.getElementById("btn-more");
+      btnNext.className = btnNext.className.replace("w3-disabled", "w3-enabled");
+    }
+    detailed.value=srchDisplayed+1
+  }
+}
 
-
-flatpickr('#p_start', flatpickrConfig)
-flatpickr('#p_end', flatpickrConfig)
 
 
 function validateForm(){
-  var sdate = document.forms["searchForm"]["p_start"].value;
-  var edate = document.forms["searchForm"]["p_end"].value;
+  var sdate = document.forms["searchForm"]["sdate"].value;
+  var edate = document.forms["searchForm"]["edate"].value;
 
-  if (sdate && edate){
-    ds = new Date(sdate.split(".")[1], sdate.split(".")[0]-1);
-    de = new Date(edate.split(".")[1], edate.split(".")[0]-1);
 
-    if (ds > de){
+    if (sdate > edate){
       alert('{% trans "Началната дата трябва да е преди крайната дата." %}');
       return false;
     }
-  }
 }
+
 </script> 
 
 
