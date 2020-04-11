@@ -104,9 +104,6 @@ class Publication(models.Model):
 
 
 class Seminar(models.Model):
-    start_date = models.DateField()
-    end_date = models.DateField()
-
     title = models.CharField(max_length=400)
     time = models.CharField(max_length=400)
     place = models.CharField(max_length=400)
