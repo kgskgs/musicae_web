@@ -22,13 +22,15 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', include('musicae_content.urls')),
+    path('', include('musicae_base.urls')),
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
+    path('captcha/', include('captcha.urls')),
 ]
 
-urlpatterns += i18n_patterns(
-    path('', include('musicae_content.urls')),
-)
+#urlpatterns += i18n_patterns(
+#    path('', include('musicae_content.urls')),
+#)
 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

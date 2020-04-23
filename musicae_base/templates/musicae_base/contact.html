@@ -1,0 +1,40 @@
+{% extends "musicae_base/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block extraHead %}
+<script src="{% static 'musicae_base/contact.js' %}"></script>
+{% endblock extraHead %}
+
+{% block content %}
+<h2>{% trans "Контакт" %}</h2>
+<form role="form" action="" method="post">
+    {% csrf_token %}
+
+    <div class="w3-panel w3-red contactResult w3-large {{failClass}}">{% trans "Съобщението не е изпратено" %}</div>
+    <div class="w3-panel w3-green contactResult w3-large {{successClass}}">{% trans "Съобщението е изпратено успешно" %}</div>
+
+    <h4><label for="{{ form.contact_name.id_for_label }}">{{ form.contact_name.label }}</label></h4>
+    <div class="w3-panel w3-red contactErrMsg">{{ form.contact_name.errors }}</div>
+    {{ form.contact_name }}    
+    <h4><label for="{{ form.contact_email.id_for_label }}">{{ form.contact_email.label }}</label></h4>
+    <div class="w3-panel w3-red contactErrMsg">{{ form.contact_email.errors }}</div>
+    {{ form.contact_email }}
+    <h4><label for="{{ form.content.id_for_label }}">{{ form.content.label }}</label></h4>
+    <div class="w3-panel w3-red contactErrMsg">{{ form.content.errors }}</div>
+    {{ form.content }}
+
+    <div class="w3-content w3-center w3-large">
+    <label for="{{ form.captcha.id_for_label }}">{{capInstruction}}:<br/></label>
+    <div class="w3-panel w3-red contactErrMsg">{{ form.captcha.errors }}</div>
+    {{form.captcha}}
+    </div>
+    <div class="w3-content w3-center w3-margin-top">
+    <button type="submit" class="w3-button w3-border"><b>{% trans "Изпрати" %}</b></button>
+    </div>
+
+    <span id="err_blank" class="w3-hide">{% trans "Това поле е задължително" %}</span>
+    <span id="err_mail" class="w3-hide">{% trans "Въведете валиден имейл адрес" %}</span>
+</form>
+
+
+{% endblock content %}

@@ -12,7 +12,8 @@
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'musicae_base/w3.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'musicae_base/musicae.css' %}">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap" rel="stylesheet"> 
+  <script src="{% static 'musicae_base/musicae.js' %}"></script> 
+  <link href="https://fonts.googleapis.com/css?family=EB+Garamond&amp;display=swap" rel="stylesheet"> 
   {% block extraHead %}
   {% endblock %}
 </head>
@@ -131,34 +132,6 @@
 
 </div>
 </div>
-
-<script>
-function flipMenu() {
-  var menu = document.getElementById("menu");
-  if (menu.className.indexOf("w3-show") == -1) {
-    menu.className = menu.className.replace("w3-hide-small", "w3-show");
-  } else { 
-    menu.className = menu.className.replace("w3-show", "w3-hide-small");
-  }
-}
-
-function setLang(lang){
-  document.cookie = "django_language="+lang+";path=/"; 
-  location.reload();
-}
-
-// Get the modal
-var modal = document.getElementById('tos_modal');
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-</script>
-
 
 
 </body>

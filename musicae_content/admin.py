@@ -10,6 +10,7 @@ class PersonAdmin(admin.ModelAdmin):
 
 class PublicationAdmin(admin.ModelAdmin):
     ordering = ('pk',)
+    save_as = True
     list_display = ['title', 'internal', 'ptype', 'published_year', 'pk']
 
 
@@ -29,3 +30,4 @@ admin.site.register(pKeyword)
 admin.site.register(Seminar, SeminarsAdmin)
 admin.site.register(News, NewsAdmin)
 admin.site.register(Publisher)
+admin.site.register(Journal)

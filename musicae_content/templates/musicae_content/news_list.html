@@ -15,8 +15,8 @@
     <!--img src="{{news.image.url}}" alt="img" style="width:100%"; width: 100%; object-fit: contain'-->
     {% endif %}
     <header class="w3-container w3-blue w3-center">
-      <h2>{{news.title}}</h2>
-      <h5>{{news.added|date:'d-m-Y H:i'}}</h5>  
+      <h3>{{news.title}}</h3>
+      <h5>{{news.added|date:'d.m.Y'}}</h5>  
     </header>
     <div class="news-summary">
     {{news.content}}

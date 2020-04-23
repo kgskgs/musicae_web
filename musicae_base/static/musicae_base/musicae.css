@@ -30,8 +30,16 @@
 }
 
 html, body, h1, h2, h3, h4, h5, h6 {
-  font-family: 'Open Sans'; /*, sans-serif*/
+  font-family: 'EB Garamond'; /*, sans-serif*/
 }
+h1{font-size:66px;}
+h2{font-size:50px;}
+h3{font-size:38px;}
+h4{font-size:26px;}
+h5{font-size:22px;}
+h6{font-size:21px;}
+.menu-text{font-size:20px;}
+div{font-size:20px;}
 
 .menuBar {
     position: sticky;
@@ -42,16 +50,12 @@ html, body, h1, h2, h3, h4, h5, h6 {
     z-index: 1;
 }
 
-.menu-text{
-    font-size:16px;
-}
 
-/*
 @media (max-width:600px) { 
     .menuBar {
         position: fixed;
     }
-}*/
+}/**/
 /*w3-small is 600px*/
 
 .banner {
@@ -73,7 +77,7 @@ html, body, h1, h2, h3, h4, h5, h6 {
 }
 
 #banner-text {
-  font-size: calc(30px + 2vw);
+  font-size: calc(45px + 2vw);
 }
 /*
 #banner-sub-text{
@@ -81,12 +85,12 @@ html, body, h1, h2, h3, h4, h5, h6 {
 }
 */
 
-@media screen and (max-width:449px) {
+@media screen and (max-width:530px) {
     #banner-text {
-      font-size: 26px;
+      font-size: 30px;
     }
   #banner-sub-text{
-    font-size: 16px;
+    font-size: 20px;
   }
 
 }
@@ -200,4 +204,44 @@ pre {
 
 .year-select {
   width: 75px;
+}
+
+#pubTable thead {
+  cursor: pointer;
+  position: sticky;
+  top: 0;
+  white-space: nowrap;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+
+.pubTableWrap {
+  overflow:auto; 
+  max-height:500px;
+}
+
+#id_captcha_1{
+  width: 100px;
+  text-align: center;
+  font-size:24px;
+  font-family: "Vera";
+}
+
+.contactErrMsg{
+  margin: 0px 0px 3px;
+  padding: 0px !important;
+}
+
+.contactErrMsg ul{
+  margin: 0px;
+}
+
+.contactResult{
+  padding: 15px;
 }

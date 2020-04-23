@@ -1,6 +1,10 @@
 {% extends "musicae_base/base.html" %}
 {% load i18n %}
 
+{% load static %}
+{% block extraHead %}
+<script src="{% static 'musicae_content/publication_list.js' %}"></script>
+{% endblock extraHead %}
 
 {% block content %}
 
@@ -82,14 +86,30 @@
 </form>
 
 {% if publications %}
-<div style="overflow-x:auto;">
-<table class="w3-table-all w3-hoverable w3-margin-bottom"> 
+<div class="pubTableWrap">
+<table class="w3-table-all w3-hoverable w3-margin-bottom" id="pubTable"> 
   <thead>
     <tr class="w3-light-grey">
-      <th  class="w3-large">{% trans "Заглавие" %}</th>
-      <th  class="w3-large">{% trans "Автор" %}</th>
-      <th  class="w3-large">{% trans "Тема" %}</th>
-      <th class="w3-right-align w3-large">{% trans "Публикувана" %}</th>
+      <th  class="w3-large" onclick="sortTable(0, 'pubTable')">
+        {% trans "Заглавие" %}
+        <span id="thArrowD0" class="w3-hide">▼</span>
+        <span id="thArrowU0" class="w3-hide">▲</span>
+      </th>
+      <th  class="w3-large" onclick="sortTable(1, 'pubTable')">
+        {% trans "Автор" %}
+        <span id="thArrowD1" class="w3-hide">▼</span>
+        <span id="thArrowU1" class="w3-hide">▲</span>
+      </th>
+      <th  class="w3-large" onclick="sortTable(2, 'pubTable')">
+        {% trans "Тема" %}
+        <span id="thArrowD2" class="w3-hide">▼</span>
+        <span id="thArrowU2" class="w3-hide">▲</span>
+      </th>
+      <th class="w3-right-align w3-large" onclick="sortTable(3, 'pubTable')">
+        {% trans "Публикувана" %}
+        <span id="thArrowD3" class="w3-show-inline">▼</span>
+        <span id="thArrowU3" class="w3-hide">▲</span>
+      </th>
     </tr>
   </thead>
 {% for publication in publications %}
@@ -112,49 +132,6 @@
 var srchDisplayed = 0
 
 document.getElementById("detailed").value = 0;
-
-function accordeonFlipSearch(id) {
-  var content = document.getElementById("filter"+id);
-  var arrowR = document.getElementById("arrowR"+id);
-  var arrowD = document.getElementById("arrowD"+id);
-  var btn1 = document.getElementById("search1");
-  var btn2 = document.getElementById("search2");
-  var stitle = document.getElementsByName("title")[0];
-  var detailed = document.getElementById("detailed");
-  if (content.className.indexOf("w3-hide") != -1) {
-    content.className = content.className.replace("w3-hide", "w3-show");
-    arrowR.className = arrowR.className.replace("w3-hide", "w3-show-inline");
-    arrowD.className = arrowD.className.replace("w3-show-inline", "w3-hide");
-    btn2.className = btn2.className.replace("w3-hide", "w3-show");
-    btn1.className = btn1.className.replace("w3-show", "w3-hide");
-    stitle.className = stitle.className.replace("w3-show", "w3-hide");
-    detailed.value = 1;
-  } else {
-    content.className = content.className.replace("w3-show", "w3-hide");
-    arrowR.className = arrowR.className.replace("w3-show-inline", "w3-hide");
-    arrowD.className = arrowD.className.replace("w3-hide", "w3-show-inline");
-    btn1.className = btn1.className.replace("w3-hide", "w3-show");
-    btn2.className = btn2.className.replace("w3-show", "w3-hide");
-    stitle.className = stitle.className.replace("w3-hide", "w3-show");
-    detailed.value = 0;
-  }
-}
-
-function checkAll(name){
-  var boxes = document.getElementsByName(name);
-  var set = false
-
-  for (var i=0; i < boxes.length; i++){
-    if (boxes[i].checked == false){
-      set = true;
-      break;
-    }
-  }
-
-  boxes.forEach(function (item, index){
-    item.checked = set;
-  });
-}
 
 function showNext(){
   console.log(srchDisplayed)
@@ -192,7 +169,6 @@ function hidePrev(){
     detailed.value=srchDisplayed+1
   }
 }
-
 
 
 function validateForm(){

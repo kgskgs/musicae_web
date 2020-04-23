@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from .cap_funcs import add_sub_challange
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,6 +35,7 @@ INSTALLED_APPS = [
     'musicae_base.apps.MusicaeBaseConfig',
     'musicae_content.apps.MusicaeContentConfig',
     'modeltranslation',
+    'captcha',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -125,7 +127,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-gettext = lambda s: s
+
+def gettext(s): return s
 LANGUAGES = (
     ('bg', gettext('Bulgarian')),
     ('en', gettext('English')),
@@ -140,3 +143,21 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = ''
 MEDIA_URL = '/media/'
+
+# Email
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'testing@example.com'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+EMAIL_PORT = 1025
+
+CONTACT_EMAILS = ["test_mail@example.com"]
+
+# Captcha
+
+challenge = add_sub_challange()
+CAPTCHA_CHALLENGE_FUNCT = challenge
+CAPTCHA_LETTER_ROTATION = 0
+CAPTCHA_NOISE_FUNCTIONS = []

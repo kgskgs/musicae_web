@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
+from django.conf import settings
 from .models import *
 
 import datetime
@@ -7,18 +8,6 @@ import shlex
 import operator
 from functools import reduce
 from django.db.models import Q
-
-
-def index(request):
-    return render(request, "musicae_content/index.html")
-
-
-def about(request):
-    return render(request, "musicae_content/about.html")
-
-
-def rules(request):
-    return render(request, "musicae_content/rules.html")
 
 
 class PersonList(ListView):
@@ -48,21 +37,35 @@ def PublicationList(request, internal):
     context['searchMax'] = 15
     context['serachRange'] = range(context['searchMax'])
 
+    # print()
+
     if request.method == 'GET':
-        context["publications"] = Publication.objects.filter(internal=internal)
+        if internal:
+            context["publications"] = Publication.objects.filter(internal=True)
+        else:
+            context["publications"] = Publication.objects.all()
 
     elif request.method == 'POST':
         search_terms = request.POST
 
-        pub_set = Publication.objects.filter(internal=internal)
+        if internal:
+            pub_set = Publication.objects.filter(internal=True)
+        else:
+            pub_set = Publication.objects.all()
 
         detailed = int(search_terms['detailed'])
-        print(detailed)
+        # print(detailed)
+        langs = [x[0] for x in settings.LANGUAGES]
 
         if detailed == 0:
             print(search_terms['title'])
+            search_txts = shlex.split(search_terms['title'])
             pub_set = pub_set.filter(
-                title__icontains=search_terms['title'])
+                reduce(operator.or_,
+                       (Q(**{f"title_{lang}__icontains": term})
+                        for term in search_txts for lang in langs)
+                       )
+            ).distinct()
         else:
             if 'types' in search_terms:
                 pub_set = pub_set.filter(
@@ -71,24 +74,25 @@ def PublicationList(request, internal):
             if edate >= sdate:
                 pub_set = pub_set.filter(published_year__gte=sdate)
                 pub_set = pub_set.filter(published_year__lte=edate)
-
-            for s in range(detailed):
-                if not search_terms[f'srch-txt-{s}']:
+            for i in range(detailed):
+                if not search_terms[f'srch-txt-{i}']:
                     continue
                 # https://stackoverflow.com/questions/4824759/django-query-using-contains-each-value-in-a-list
                 # https://stackoverflow.com/questions/2932648/how-do-i-use-a-string-as-a-keyword-argument
-                search_txts = shlex.split(search_terms[f'srch-txt-{s}'])
+                search_txts = shlex.split(search_terms[f'srch-txt-{i}'])
 
                 tmp_set = Publication.objects.filter(
                     reduce(operator.or_,
-                           (Q(**{f"{search_terms[f'srch-type-{s}']}__icontains": x}) for x in search_txts))
+                           (Q(**{f"{search_terms[f'srch-type-{i}']}_{lang}__icontains": term})
+                            for term in search_txts for lang in langs)
+                           )
                 ).distinct()
 
-                if search_terms[f'srch-logic-{s}'] == '1':
+                if search_terms[f'srch-logic-{i}'] == '1':
                     pub_set = pub_set & tmp_set
-                if search_terms[f'srch-logic-{s}'] == '0':
+                if search_terms[f'srch-logic-{i}'] == '0':
                     pub_set = pub_set | tmp_set
-                if search_terms[f'srch-logic-{s}'] == '-1':
+                if search_terms[f'srch-logic-{i}'] == '-1':
                     pub_set = pub_set.exclude(id__in=tmp_set)
 
         print(pub_set.query)

@@ -13,21 +13,29 @@ def forDjango(cls):
 
 
 class pTopic(models.Model):
-    text = models.CharField(max_length=250, unique=True)
+    text = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.text
 
 
 class pKeyword(models.Model):
-    text = models.CharField(max_length=250, unique=True)
+    text = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.text
 
 
 class Publisher(models.Model):
-    name = models.CharField(max_length=250)
+    name = models.CharField(max_length=255, unique=True)
+    website = models.URLField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Journal(models.Model):
+    name = models.CharField(max_length=255, unique=True)
     website = models.URLField(blank=True)
 
     def __str__(self):
@@ -36,10 +44,10 @@ class Publisher(models.Model):
 
 class Person(models.Model):
     name = models.CharField(max_length=255)
-    bio = models.TextField(max_length=5000, blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, null=True)
-    currentResearch = models.TextField(max_length=5000, blank=True, null=True)
-    short_description = models.TextField(max_length=1000, blank=True, null=True)
+    currentResearch = models.TextField(blank=True, null=True)
+    short_description = models.TextField(blank=True, null=True)
 
     image = models.ImageField(upload_to='members_img/', blank=True)
 
@@ -69,7 +77,7 @@ class Publication(models.Model):
         tex = 7, _("Учебник/учебно помагало")
 
     ptype = models.IntegerField(choices=ptypes.choices)
-    title = models.CharField(max_length=250)
+    title = models.CharField(max_length=255)
     abstract = models.TextField(blank=True)
     internal = models.BooleanField()
     authors = models.ManyToManyField(Person,
@@ -77,17 +85,19 @@ class Publication(models.Model):
 
     publisher = models.ForeignKey(Publisher, blank=True,
                                   null=True, on_delete=models.SET_NULL)
+    journal = models.ForeignKey(Journal, blank=True,
+                                null=True, on_delete=models.SET_NULL)
     published_year = models.PositiveIntegerField(
         validators=[
             MinValueValidator(1900),
             MaxValueValidator(datetime.date.today().year)])
-    published_place = models.CharField(max_length=500, blank=True)
+    published_place = models.CharField(max_length=255, blank=True)
 
     topic = models.ForeignKey(pTopic,
                               null=True, on_delete=models.SET_NULL)
     keywords = models.ManyToManyField(pKeyword,
                                       symmetrical=False, blank=True)
-    bib_info = models.CharField(max_length=500, blank=True,
+    bib_info = models.CharField(max_length=255, blank=True,
                                 null=True)
 
     file = models.FileField(upload_to='publications/', blank=True)
@@ -104,10 +114,10 @@ class Publication(models.Model):
 
 
 class Seminar(models.Model):
-    title = models.CharField(max_length=400)
-    time = models.CharField(max_length=400)
-    place = models.CharField(max_length=400)
-    description = models.TextField(max_length=5000)
+    title = models.CharField(max_length=255)
+    time = models.CharField(max_length=255)
+    place = models.CharField(max_length=255)
+    description = models.TextField()
 
     @forDjango
     class semesters(models.IntegerChoices):
@@ -126,9 +136,9 @@ class Seminar(models.Model):
 
 class News(models.Model):
     added = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=400)
+    title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='news_img/', blank=True)
-    content = models.TextField(max_length=5000)
+    content = models.TextField()
 
     def __str__(self):
         return self.title
