@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 from .models import Page
 
@@ -15,5 +15,5 @@ extraPages = Page.objects.exclude(link=index_item)
 for page in extraPages:
     target = page.link.target.replace('/', '')
     urlpatterns.append(
-        path(target, views.PageView, {'link': page.link}, name=target)
+        re_path(target+r"\/?", views.PageView, {'link': page.link}, name=target)
     )
