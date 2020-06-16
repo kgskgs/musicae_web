@@ -26,7 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
     path('captcha/', include('captcha.urls')),
-]
+] 
 
 #urlpatterns += i18n_patterns(
 #    path('', include('musicae_content.urls')),

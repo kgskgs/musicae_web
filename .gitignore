@@ -11,6 +11,5 @@ __pycache__/
 #sublime
 *.sublime-workspace
 #project specific
-news_img/
-publications/
-members_img/
+media/
+static/
