@@ -108,27 +108,22 @@ class PublicationDetail(DetailView):
 def seminars(request):
     todayMonth = datetime.date.today().month
 
-    fall = [8, 9, 10, 11, 12, 1]
-
-    sem = -1 if todayMonth in fall else 1
-
-    active = Seminar.objects.filter(active=True)
+    active = Seminar.objects.filter(profs__id=request.GET['prof'])
 
     context = {
-        "ongoing": active.filter(semester=sem),
-        "upcoming": active.filter(semester=-sem),
+        "seminars" : active
     }
 
     return render(request, 'musicae_content/seminars.html', context)
 
 
-def seminars_archive(request):
+# def seminars_archive(request):
 
-    context = {
-        "sems": Seminar.objects.filter(active=False),
-    }
+#     context = {
+#         "sems": Seminar.objects.filter(active=False),
+#     }
 
-    return render(request, 'musicae_content/seminars_archive.html', context)
+#     return render(request, 'musicae_content/seminars_archive.html', context)
 
 
 class NewsList(ListView):

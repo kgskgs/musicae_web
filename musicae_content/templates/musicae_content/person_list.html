@@ -6,17 +6,27 @@
 <h2>{%trans "Членове"%}</h2>
 </div>
 
-<div class="w3-row-padding">
-<div class="w3-col m6 l6">
-{% for member in object_list|slice:"0::2" %}
-{% include "musicae_content/person_card.html" %}
+<div class="pubTableWrap">
+<table class="w3-table-all w3-hoverable w3-margin-bottom" id="pubTable"> 
+  <thead>
+    <tr class="mus-table-darker">
+      <th  class="w3-large">
+        {% trans "Име" %}
+      </th>
+      <th  class="w3-large">
+        {% trans "Описание" %}
+      </th>
+    </tr>
+  </thead>
+{% for member in object_list %}
+  
+  <tr onclick="window.open('/members/{{member.pk}}', '_self');" style="cursor:pointer" class="w3-large mus-hover-ochre">
+    <td>{{ member.name }}</td>
+    <td>{{ member.short_description }}</td>
+  </tr>
+  
 {% endfor %}
-</div>
-<div class="w3-col m6 l6">
-{% for member in object_list|slice:"1::2" %}
-{% include "musicae_content/person_card.html" %}
-{% endfor %}
-</div>
+</table>
 </div>
 
 {% endblock content %}

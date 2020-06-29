@@ -9,6 +9,13 @@
 
 <h2>{% trans "Семинари" %}</h2>
 
+{% for sem in seminars %}
+
+{% include "musicae_content/seminar_row.html" %}
+
+{% endfor %}
+
+<!--
 {% if ongoing %}
 <h3>{% trans "Текущи" %}</h3>
 {% for sem in ongoing %}
@@ -27,6 +34,6 @@
 
 {% endfor %}
 {% endif %}
- 
+-->
 
 {% endblock content %}

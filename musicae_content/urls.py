@@ -10,5 +10,5 @@ urlpatterns = [
     path('publications', views.PublicationList, {'internal': True}, name='publication_lst'),
     path('publications/<int:pk>', views.PublicationDetail.as_view(), name='publications_det'),
     path('library', views.PublicationList, {'internal': False}, name='library_lst'),
-    path('seminars/archive', views.seminars_archive, name='seminars_archive'),
+    #path('seminars/archive', views.seminars_archive, name='seminars_archive'),
 ]

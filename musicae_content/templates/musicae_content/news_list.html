@@ -14,13 +14,13 @@
     </div>
     <!--img src="{{news.image.url}}" alt="img" style="width:100%"; width: 100%; object-fit: contain'-->
     {% endif %}
-    <header class="w3-container w3-blue w3-center">
+    <header class="w3-container mus-highlight w3-center">
       <h3>{{news.title}}</h3>
       <h5>{{news.added|date:'d.m.Y'}}</h5>  
     </header>
     <div class="news-summary">
     {{news.content}}
-    <a href="/news/{{news.pk}}" class="news-more"><div class='w3-blue w3-round-xxlarge w3-padding' style='display:inline'>{% trans "Прочети още"%}</div></a>
+    <a href="/news/{{news.pk}}" class="news-more"><div class='w3-brown w3-round-xxlarge w3-padding' style='display:inline'>{% trans "Прочети още"%}</div></a>
     </div>
     </div>
 </div>

@@ -1,0 +1,22 @@
+{% extends "musicae_base/base.html" %}
+
+{% load i18n %}
+{% block content %}
+<div class="w3-container w3-margin-bottom">
+<h2>{%trans "Членове"%}</h2>
+</div>
+
+<div class="w3-row-padding">
+<div class="w3-col m6 l6">
+{% for member in object_list|slice:"0::2" %}
+{% include "musicae_content/person_card.html" %}
+{% endfor %}
+</div>
+<div class="w3-col m6 l6">
+{% for member in object_list|slice:"1::2" %}
+{% include "musicae_content/person_card.html" %}
+{% endfor %}
+</div>
+</div>
+
+{% endblock content %}

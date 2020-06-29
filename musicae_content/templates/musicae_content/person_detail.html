@@ -6,7 +6,7 @@
 <div class="w3-row w3-section">
 
 <div class="w3-quarter w3-container">
-<h2>{{person.name}}</h2>
+<h3>{{person.name}}</h3>
 <h5><i>{{person.title}}</i></h5>
 {% if person.image %}
 <img class="w3-padding" src="{{person.image.url}}" style="max-width:100%"/>
@@ -18,7 +18,7 @@
   <h4>{%trans "Биография"%}</h4>
   <p>{{person.bio}}</p>
   <hr>
-  <h4>{%trans "Текуща дейност"%}</h4>
+  <h4>{%trans "Професионални интереси"%}</h4>
   <p>{{person.currentResearch}}</p>
   <hr>
   {% if person.publication_set.exists %}
@@ -28,6 +28,10 @@
   <li><a href="/publications/{{pub.pk}}">{{pub.title}}</a>, {{pub.get_ptype_display}}, {{pub.published_year}} </li>
   {% endfor %}
   </ul>
+  {% endif %}
+
+  {% if person.seminar_set.exists %}
+  <h5><a href="/seminars?prof={{person.pk}}">{%trans "Преподавани дисциплини"%}</a></h5>
   {% endif %}
 </div>
 </div>

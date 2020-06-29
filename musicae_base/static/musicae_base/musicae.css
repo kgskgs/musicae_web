@@ -245,3 +245,38 @@ pre {
 .contactResult{
   padding: 15px;
 }
+
+/*color theme*/
+.mus-background-light{
+  background-color: #fdfbdf;
+  color: #000;
+}
+
+.mus-background-dark {
+  color: #FFF;
+  background-color: #242a11;
+}
+
+.mus-background-dark > a{
+  color: #b2cbf7;
+}
+
+.mus-highlight{
+  background-color: #e4ce7b;
+  color: #000;
+}
+
+.mus-ochre,
+.mus-hover-ochre:hover{
+  background-color: #dabf58!important;
+}
+
+.mus-table-darker{
+  background-color: #f2f1df!important;
+}
+
+.mus-btn-hover{
+  color: #fff;
+  background-color: #e4ce7c;
+}
+

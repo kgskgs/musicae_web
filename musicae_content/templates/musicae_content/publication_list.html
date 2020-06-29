@@ -12,13 +12,13 @@
 
 <h2 class="w3-margin-bottom">{% trans "Публикации" %}<br/></h2>
 
-<form action="/publications" name="searchForm"  method="post" onsubmit="return validateForm()"> {% csrf_token %}
-<div class="w3-bar w3-light-grey w3-border-top w3-border-left w3-border-right w3-padding searchBar">
+<form action="/publications" name="searchForm"  method="post" onsubmit="return validateForm(event)"> {% csrf_token %}
+<div class="w3-bar mus-table-darker w3-border-top w3-border-left w3-border-right w3-padding searchBar">
   <input name="title" type="text" class="w3-input w3-bar-item  w3-white w3-mobile w3-border w3-show" style="width: 500px;" placeholder="{% trans "Заглавие"%}" />
-  <button type="submit" id="search1" class="w3-bar-item w3-button w3-green w3-mobile w3-show">{% trans "Търси" %}</button>
-  <button class="w3-bar-item w3-button w3-green w3-mobile w3-right" onclick="accordeonFlipSearch('1')" type="button">{% trans "Детайлно търсене" %} <span id="arrowR1" class="w3-hide">▶</span><span id="arrowD1" class="w3-show-inline">▼</span></button>
+  <button type="submit" id="search1" class="w3-bar-item w3-button mus-hover-ochre mus-highlight w3-mobile w3-show">{% trans "Търси" %}</button>
+  <button class="w3-bar-item w3-button mus-hover-ochre mus-highlight w3-mobile w3-right" onclick="accordeonFlipSearch('1')" type="button">{% trans "Детайлно търсене" %} <span id="arrowR1" class="w3-hide">▶</span><span id="arrowD1" class="w3-show-inline">▼</span></button>
 </div>
-<div id="filter1" class="w3-row-padding w3-hide w3-light-grey w3-border-bottom w3-border-left w3-border-right">
+<div id="filter1" class="w3-row-padding w3-hide mus-table-darker w3-border-bottom w3-border-left w3-border-right">
 <!---->
 {% for i in serachRange%}
 <div class="w3-row w3-margin-top {% if i == 0 %}w3-show{% else %}w3-hide{% endif %}" id="srch-{{i}}">
@@ -40,8 +40,8 @@
 </div>
 {% endfor %}
 <div class="w3-row w3-center">
-    <a id="btn-less" class="w3-button w3-large w3-circle w3-large w3-green w3-disabled" style="width:43px"  onclick="hidePrev()"><b>-</b></a>
-    <a id="btn-more" class="w3-button w3-large w3-circle w3-large w3-green w3-margin-left w3-enabled" style="width:43px" onclick="showNext()"><b>+</b></a>
+    <a id="btn-less" class="w3-button mus-hover-ochre w3-large w3-circle w3-large mus-highlight w3-disabled" style="width:43px"  onclick="hidePrev()"><b>-</b></a>
+    <a id="btn-more" class="w3-button mus-hover-ochre w3-large w3-circle w3-large mus-highlight w3-margin-left w3-enabled" style="width:43px" onclick="showNext()"><b>+</b></a>
 </div>
 
 <div class="w3-row">
@@ -79,7 +79,7 @@
 
 
 <div class="w3-row w3-center w3-padding">
-<button type="submit" id="search2" class="w3-button w3-green w3-mobile w3-hide w3-large" style="margin:auto" style="z-index:0">{% trans "Търси" %}</button>
+<button type="submit" id="search2" class="w3-button mus-hover-ochre mus-highlight w3-mobile w3-hide w3-large" style="margin:auto" style="z-index:0">{% trans "Търси" %}</button>
 </div>
 </div>
 <input type="number" id="detailed" name="detailed" class="w3-hide" value="0"/>
@@ -89,7 +89,7 @@
 <div class="pubTableWrap">
 <table class="w3-table-all w3-hoverable w3-margin-bottom" id="pubTable"> 
   <thead>
-    <tr class="w3-light-grey">
+    <tr class="mus-table-darker">
       <th  class="w3-large" onclick="sortTable(0, 'pubTable')">
         {% trans "Заглавие" %}
         <span id="thArrowD0" class="w3-hide">▼</span>
@@ -114,7 +114,7 @@
   </thead>
 {% for publication in publications %}
   
-  <tr onclick="window.open('/publications/{{publication.pk}}', '_self');" style="cursor:pointer" class="w3-large">
+  <tr onclick="window.open('/publications/{{publication.pk}}', '_self');" style="cursor:pointer" class="w3-large mus-hover-ochre">
     <td>{{publication.title}}</td>
     <td>{% for member in publication.authors.all %}{{member.name}}&nbsp;{% endfor %}</td>
     <td>{{publication.topic.text}}</td>
@@ -171,16 +171,23 @@ function hidePrev(){
 }
 
 
-function validateForm(){
+function validateForm(evt){
   var sdate = document.forms["searchForm"]["sdate"].value;
   var edate = document.forms["searchForm"]["edate"].value;
 
-
-    if (sdate > edate){
-      alert('{% trans "Началната дата трябва да е преди крайната дата." %}');
+  
+  if (evt.submitter.id=="search1" && 
+    document.getElementsByName("title")[0].value.length==0){
+      evt.preventDefault();
       return false;
-    }
+  }
+
+  if (sdate > edate){
+    alert('{% trans "Началната дата трябва да е преди крайната дата." %}');
+    return false;
+  }
 }
+
 
 </script> 
 
