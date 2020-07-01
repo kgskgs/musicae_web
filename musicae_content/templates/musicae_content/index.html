@@ -13,7 +13,13 @@
 </div>
 
 {% if show_news %}
-<div class="w3-center"><h3>{% trans "Новини"%}</h3>
+<div class="w3-center"><h3>{% trans "Новини"%}<br/>
+<button class="w3-button mus-hover-ochre w3-medium" onclick="plusDivs(-1)">&#10094;</button>
+<button class="w3-button mus-hover-ochre w3-medium" onclick="plusDivs(+1)">&#10095;</button>
+</h3>
+{% if show_arrows %}
+
+{% endif %}
 </div>
 
 <div class="w3-row w3-margin-bottom">
@@ -41,12 +47,7 @@
 </div>
 {% endfor %}
 </div>
-{% if show_arrows %}
-<div class="w3-center">
-<button class="w3-button mus-hover-ochre" onclick="plusDivs(-1)">&#10094;</button>
-<button class="w3-button mus-hover-ochre" onclick="plusDivs(+1)">&#10095;</button>
-{% endif %}
-</div>
+
 {% endif %}
 
 
