@@ -1,14 +1,24 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.conf import settings
+from django.db.models import Q
 from .models import *
 
 import datetime
 import shlex
 import operator
 from functools import reduce
-from django.db.models import Q
+import re
 
+def mobile(request):
+    """Return True if the request comes from a mobile device."""
+
+    MOBILE_AGENT_RE=re.compile(r".*(iphone|mobile|androidtouch)",re.IGNORECASE)
+
+    if MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']):
+        return True
+    else:
+        return False
 
 class PersonList(ListView):
     model = Person
@@ -28,11 +38,15 @@ class PersonDetail(DetailView):
 
 def index(request):
     news = News.objects.all()
-    news_nested = [news[i:i+3] for i in range(0, len(news), 3)]
+    if request.user_agent.is_mobile:
+        news_nested = [[news[i]] for i in range(len(news))]
+    else:
+        news_nested = [news[i:i+3] for i in range(0, len(news), 3)]
     context = {
         "news_nested": news_nested, 
         "show_arrows": len(news_nested) > 1,
-        "show_news": len(news) > 0
+        "show_news": len(news) > 0,
+        "dev" : request.user_agent.device.family
     }
     return render(request, 'musicae_content/index.html', context)
 

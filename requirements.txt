@@ -1,3 +1,7 @@
 django
 django-modeltranslation
 django-simple-captcha
+pyyaml 
+ua-parser 
+user-agents
+django-user-agents
