@@ -26,6 +26,17 @@ class PersonDetail(DetailView):
         return queryset
 
 
+def index(request):
+    news = News.objects.all()
+    news_nested = [news[i:i+3] for i in range(0, len(news), 3)]
+    context = {
+        "news_nested": news_nested, 
+        "show_arrows": len(news_nested) > 1,
+        "show_news": len(news) > 0
+    }
+    return render(request, 'musicae_content/index.html', context)
+
+
 def PublicationList(request, internal):
     context = {}
 
@@ -106,12 +117,15 @@ class PublicationDetail(DetailView):
 
 
 def seminars(request):
-    todayMonth = datetime.date.today().month
+    #todayMonth = datetime.date.today().month
 
-    active = Seminar.objects.filter(profs__id=request.GET['prof'])
+    prof_id = request.GET['prof']
+    active = Seminar.objects.filter(profs__id=prof_id)
+    prof = Person.objects.get(pk=prof_id)
 
     context = {
-        "seminars" : active
+        "seminars": active,
+        "prof": prof
     }
 
     return render(request, 'musicae_content/seminars.html', context)

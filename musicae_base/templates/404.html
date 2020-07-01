@@ -1,0 +1,14 @@
+{% extends "musicae_base/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block extraHead %}
+<script src="{% static 'musicae_base/contact.js' %}"></script>
+{% endblock extraHead %}
+
+{% block content %}
+<div class=""><h1>404</h1><br/><br/>
+{% trans "Страницата не е намерена" %}
+</div>
+
+
+{% endblock content %}

@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<h2>{% trans "Семинари" %}</h2>
+<h3>{% trans "Дисциплини, преподавани от " %}<a href="/members/{{prof.pk}}" target="_self">{{prof.name}}</a></h3>
 
 {% for sem in seminars %}
 

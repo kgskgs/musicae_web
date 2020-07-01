@@ -7,7 +7,6 @@
     margin: auto;
     max-width: 1000px;
     width: 100%;
-    background-color: white;
 }
 
 .flex-container {
@@ -256,6 +255,11 @@ pre {
   color: #FFF;
   background-color: #242a11;
 }
+
+body { 
+  background-color: #242a11;
+}
+
 
 .mus-background-dark > a{
   color: #b2cbf7;

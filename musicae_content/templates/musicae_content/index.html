@@ -1,0 +1,58 @@
+{% extends "musicae_base/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block extraHead %}
+<script src="{% static 'musicae_base/slide.js' %}"></script>
+{% endblock extraHead %}
+
+
+{% block content %}
+
+<div> 
+Текст Текст Текст Текст Текст Текст Текст Текст
+</div>
+
+{% if show_news %}
+<div class="w3-center"><h3>{% trans "Новини"%}</h3>
+</div>
+
+<div class="w3-row w3-margin-bottom">
+{% for news_grp in news_nested %}
+<div class="slide_container w3-animate-opacity">
+{% for news in news_grp %}
+<div class="w3-third w3-margin-bottom">
+    <div class="w3-card-4 newsLarge" style="margin:auto"> 
+    {% if news.image %}
+    <div class="news-img" style="background-image: url('{{news.image.url}}');" >
+    </div>
+    <!--img src="{{news.image.url}}" alt="img" style="width:100%"; width: 100%; object-fit: contain'-->
+    {% endif %}
+    <header class="w3-container mus-highlight w3-center">
+      <h4>{{news.title}}</h4>
+      <h5>{{news.added|date:'d.m.Y'}}</h5>  
+    </header>
+    <div class="news-summary">
+    {{news.content}}
+    <a href="/news/{{news.pk}}" class="news-more"><div class='w3-brown w3-round-xxlarge w3-padding' style='display:inline'>{% trans "Прочети още"%}</div></a>
+    </div>
+    </div>
+</div>
+{% endfor %}
+</div>
+{% endfor %}
+</div>
+{% if show_arrows %}
+<div class="w3-center">
+<button class="w3-button mus-hover-ochre" onclick="plusDivs(-1)">&#10094;</button>
+<button class="w3-button mus-hover-ochre" onclick="plusDivs(+1)">&#10095;</button>
+{% endif %}
+</div>
+{% endif %}
+
+
+<div>
+<div class="w3-center"><h3>{% trans "Линкове"%}</h3></div>
+</div>
+
+
+{% endblock content %}
