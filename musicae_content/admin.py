@@ -22,6 +22,9 @@ class NewsAdmin(admin.ModelAdmin):
 class SeminarsAdmin(admin.ModelAdmin):
     list_display = ['title', 'semester', 'active']
 
+class LinkAdmin(admin.ModelAdmin):
+    list_display = ['url']
+
 
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Publication, PublicationAdmin)
@@ -31,3 +34,4 @@ admin.site.register(Seminar, SeminarsAdmin)
 admin.site.register(News, NewsAdmin)
 admin.site.register(Publisher)
 admin.site.register(Journal)
+admin.site.register(Link, LinkAdmin)

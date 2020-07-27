@@ -146,3 +146,7 @@ class News(models.Model):
     class Meta:
         ordering = ["-added"]
         get_latest_by = "-added"
+
+class Link(models.Model):
+    url = models.URLField()
+    text = models.TextField(max_length=500)

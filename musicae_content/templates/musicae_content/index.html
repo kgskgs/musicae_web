@@ -51,8 +51,15 @@
 {% endif %}
 
 
-<div>
+<div class="w3-content w3-large">
+{% if links %}
 <div class="w3-center"><h3>{% trans "Връзки"%}</h3></div>
+<ul>
+{% for link in links %}
+<li><a href="{{link.url}}" target="_blank">{{link.text}}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
 </div>
 
 

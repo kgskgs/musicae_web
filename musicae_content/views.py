@@ -46,6 +46,7 @@ def index(request):
         "news_nested": news_nested, 
         "show_arrows": len(news_nested) > 1,
         "show_news": len(news) > 0,
+        "links": Link.objects.all(),
         "dev" : request.user_agent.device.family
     }
     return render(request, 'musicae_content/index.html', context)
