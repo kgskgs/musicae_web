@@ -35,3 +35,7 @@ class NewsTranslationOptions(TranslationOptions):
 @register(Publisher)
 class PublisherTranslationOptions(TranslationOptions):
     fields = ('name',)
+
+@register(Link)
+class LinkTranslationOptions(TranslationOptions):
+    fields = ('text',)

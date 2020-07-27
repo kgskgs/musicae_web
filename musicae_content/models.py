@@ -147,6 +147,15 @@ class News(models.Model):
         ordering = ["-added"]
         get_latest_by = "-added"
 
+
 class Link(models.Model):
     url = models.URLField()
-    text = models.TextField(max_length=500)
+    text = models.TextField(max_length=1000)
+
+
+class File(models.Model):
+    file = models.FileField(upload_to='files/', blank=True)
+    title = models.CharField(max_length=255)
+
+    def get_url(self):
+        return self.file.url

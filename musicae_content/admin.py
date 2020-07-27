@@ -25,6 +25,8 @@ class SeminarsAdmin(admin.ModelAdmin):
 class LinkAdmin(admin.ModelAdmin):
     list_display = ['url']
 
+class FileAdmin(admin.ModelAdmin):
+    list_display = ['title', 'get_url']
 
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Publication, PublicationAdmin)
@@ -35,3 +37,4 @@ admin.site.register(News, NewsAdmin)
 admin.site.register(Publisher)
 admin.site.register(Journal)
 admin.site.register(Link, LinkAdmin)
+admin.site.register(File, FileAdmin)
