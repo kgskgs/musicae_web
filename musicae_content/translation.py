@@ -9,7 +9,7 @@ class PersonTranslationOptions(TranslationOptions):
 
 @register(Publication)
 class PublicationTranslationOptions(TranslationOptions):
-    fields = ('title', 'abstract', 'published_place', "bib_info",)
+    fields = ('title', 'abstract', 'published_place', "bib_info","language")
 
 
 @register(pTopic)

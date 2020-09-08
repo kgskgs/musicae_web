@@ -97,7 +97,9 @@ class Publication(models.Model):
                               null=True, on_delete=models.SET_NULL)
     keywords = models.ManyToManyField(pKeyword,
                                       symmetrical=False, blank=True)
-    bib_info = models.CharField(max_length=255, blank=True,
+    bib_info = models.CharField(max_length=1000, blank=True,
+                                null=True)
+    language = models.CharField(max_length=255, blank=True,
                                 null=True)
 
     file = models.FileField(upload_to='publications/', blank=True)

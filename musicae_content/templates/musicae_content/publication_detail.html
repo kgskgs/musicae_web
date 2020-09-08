@@ -2,8 +2,8 @@
 {% load i18n %}
 
 {% block content %}
-<h3>{{publication.title}}</h3>
-<h4 class="w3-margin-bottom">
+<div class="pubTitle">{{publication.title}}</div>
+<div class="pubText w3-margin-bottom">
 {% trans "Автор:" %} 
 {% for prof in publication.authors.all %}
 {% if publication.internal %}
@@ -15,16 +15,25 @@
 | {{publication.get_ptype_display}}
 | {% trans "Тема:" %} {{publication.topic.text}}
 | {% trans "Добавена:" %} {{publication.added|date:'d.m.Y'}}
-</h4>
+</div>
 <div class="w3-container w3-margin-bottom">
 {{publication.abstract}}
 </div>
+{% if publication.language %}
+<h5>
+{% trans "Език:" %} {{publication.language}}
+</h5>
+<h5>
+{% endif %}  
+{% if publication.bib_info %}
 <h5>
 {% trans "Цитирай:" %} {{publication.bib_info}}
 </h5>
 <h5>
+{% endif %}  
 {% trans "Ключови думи:" %} {% for keyword in publication.keywords.all %}<div class="w3-border w3-round-xxlarge w3-container w3-show-inline">{{keyword.text}}</div> {% endfor %}
 </h5>
+<br/><br/>
 {% if publication.file %}
 <a href="{{publication.file.url}}" target="_blank" download="{{publication.filename}}" class="w3-button w3-border w3-large">{% trans "Свали" %}</a>
 {% endif %}

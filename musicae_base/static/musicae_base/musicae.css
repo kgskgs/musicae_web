@@ -40,6 +40,9 @@ h6{font-size:21px;}
 .menu-text{font-size:20px;}
 div{font-size:20px;}
 
+.pubTitle{font-size:34px !important;}
+.pubText{font-size:24px !important;}
+
 .menuBar {
     position: sticky;
     top: 0;
