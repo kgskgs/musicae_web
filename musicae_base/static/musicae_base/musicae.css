@@ -75,9 +75,15 @@ div{font-size:20px;}
         margin: 0px 0px 20px;
     }
 
-    .no-padding-small{
+    .noPaddingSmall{
       padding-left: 0px !important;
       padding-right: 0px !important;
+      width: 100%;
+    }
+
+    .noMarginSmall{
+      margin-left: 0px !important;
+      margin-right: 0px !important;
     }
 }/**/
 /*w3-small is 600px*/

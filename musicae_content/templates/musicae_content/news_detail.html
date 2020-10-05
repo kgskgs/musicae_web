@@ -4,10 +4,13 @@
 
 
 {% block content %}
-<h2>{{news.title}}</h2>
-<h5 class="w3-left">{% trans "Добавена: "%}{{news.added|date:'d-m-Y H:i'}}</h5>  <h5 class="w3-right">{% trans "Последна промяна: "%}{{news.changed|date:'d-m-Y'}}</h5> 
+<h3>{{news.title}}</h3>
+<h5 class="w3-left">{% trans "Добавена: "%}{{news.added|date:'d-m-Y H:i'}}</h5>  
+{% if news.changed %}
+<h5 class="w3-right">{% trans "Последна промяна: "%}{{news.changed|date:'d-m-Y'}}</h5> 
+{% endif %}
 <hr/>
-<div class="w3-container">
+<div class="w3-container noPaddingSmall">
 {% if news.image %}
 <img src="{{news.image.url}}" alt="img" class="w3-mobile news-det-img"/>
 {% endif %}
