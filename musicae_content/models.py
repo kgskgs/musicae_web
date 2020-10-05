@@ -138,7 +138,7 @@ class Seminar(models.Model):
 
 class News(models.Model):
     added = models.DateTimeField(auto_now_add=True)
-    changed = models.DateField(auto_now_add=True, blank=True)
+    changed = models.DateField(auto_now_add=True, blank=True, null=True)
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='news_img/', blank=True)
     content = models.TextField()

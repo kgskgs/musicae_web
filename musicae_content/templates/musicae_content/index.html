@@ -1,6 +1,7 @@
 {% extends "musicae_base/base.html" %}
 {% load i18n %}
 {% load static %}
+{% load get_item %}
 {% block extraHead %}
 <script src="{% static 'musicae_base/slide.js' %}"></script>
 {% endblock extraHead %}
@@ -12,30 +13,35 @@
 <h4>{% trans "Добре дошли на сайта на Fundamenta musicae."%}</h4>
 </div>
 
-{% if show_news %}
-<div class="w3-center"><h3>{% trans "Новини"%}<br/>
-<button class="w3-button mus-hover-ochre w3-medium" onclick="plusDivs(-1)">&#10094;</button>
-<button class="w3-button mus-hover-ochre w3-medium" onclick="plusDivs(+1)">&#10095;</button>
-</h3>
-{% if show_arrows %}
+{% for newsGrp in newsListBig %}
+{% with loopInd=forloop.counter0|stringformat:"s" %}
+{# {{newsGrp}}<br/>{{newsGrp|get_item:"show_news"}}<br/><br/> #}
 
+<!---->
+{% if newsGrp|get_item:"show_news" %}
+
+<div class="w3-center"><h4>{{newsGrp|get_item:"news_name"}}<br/>
+{% if newsGrp|get_item:"show_arrows" %}
+<button class="w3-button mus-hover-ochre w3-medium" onclick="plusDivs(-1, {{loopInd}})">&#10094;</button>
+<button class="w3-button mus-hover-ochre w3-medium" onclick="plusDivs(+1, {{loopInd}})">&#10095;</button>
 {% endif %}
+</h4>
+
 </div>
 
-<div class="w3-row w3-margin-bottom">
-{% for news_grp in news_nested %}
-<div class="slide_container w3-animate-opacity">
-{% for news in news_grp %}
+<div class="w3-row w3-margin-bottom newsGrpParent">
+{% for news_grp_small in newsGrp|get_item:"news_nested" %}
+<div class="{{'slide_container'|add:loopInd}} w3-animate-opacity">
+{% for news in news_grp_small %}
 <div class="w3-third w3-margin-bottom">
     <div class="w3-card-4 newsLarge" style="margin:auto"> 
     {% if news.image %}
     <div class="news-img" style="background-image: url('{{news.image.url}}');" >
     </div>
-    <!--img src="{{news.image.url}}" alt="img" style="width:100%"; width: 100%; object-fit: contain'-->
     {% endif %}
-    <header class="w3-container mus-highlight w3-center">
-      <h4>{{news.title}}</h4>
-      <h5>{{news.added|date:'d.m.Y'}}</h5>  
+    <header class="w3-container mus-highlight w3-center breakword">
+      <h5>{{news.title}}</h5>
+      <h6>{{news.added|date:'d.m.Y'}}</h6>  
     </header>
     <div class="news-summary">
     {{news.content}}
@@ -49,7 +55,8 @@
 </div>
 
 {% endif %}
-
+{% endwith %}
+{% endfor %}
 
 <div class="w3-content w3-large">
 {% if links %}

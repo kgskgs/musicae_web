@@ -5,7 +5,7 @@
 
 {% block content %}
 <h2>{{news.title}}</h2>
-<h5>{{news.added|date:'d-m-Y H:i'}}</h5>  <h5 class="w3-left">{{news.changed|date:'d-m-Y'}}</h5> 
+<h5 class="w3-left">{% trans "Добавена: "%}{{news.added|date:'d-m-Y H:i'}}</h5>  <h5 class="w3-right">{% trans "Последна промяна: "%}{{news.changed|date:'d-m-Y'}}</h5> 
 <hr/>
 <div class="w3-container">
 {% if news.image %}

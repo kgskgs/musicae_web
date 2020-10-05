@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView
 from django.conf import settings
 from django.db.models import Q
 from .models import *
+from django.db import connection
 
 import datetime
 import shlex
@@ -10,15 +11,17 @@ import operator
 from functools import reduce
 import re
 
+
 def mobile(request):
     """Return True if the request comes from a mobile device."""
 
-    MOBILE_AGENT_RE=re.compile(r".*(iphone|mobile|androidtouch)",re.IGNORECASE)
+    MOBILE_AGENT_RE = re.compile(r".*(iphone|mobile|androidtouch)", re.IGNORECASE)
 
     if MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']):
         return True
     else:
         return False
+
 
 class PersonList(ListView):
     model = Person
@@ -37,18 +40,27 @@ class PersonDetail(DetailView):
 
 
 def index(request):
-    news = News.objects.all()
-    if request.user_agent.is_mobile:
-        news_nested = [[news[i]] for i in range(len(news))]
-    else:
-        news_nested = [news[i:i+3] for i in range(0, len(news), 3)]
+    newsListBig = []
     context = {
-        "news_nested": news_nested, 
-        "show_arrows": len(news_nested) > 1,
-        "show_news": len(news) > 0,
         "links": Link.objects.all(),
-        "dev" : request.user_agent.device.family
+        "dev": request.user_agent.device.family,
     }
+    for i in range(1, 6):
+        news = News.objects.filter(ntype=i)
+        if request.user_agent.is_mobile:
+            news_nested = [[news[i]] for i in range(len(news))]
+        else:
+            news_nested = [news[i:i + 3] for i in range(0, len(news), 3)]
+
+        newsListBig.append({
+            "news_nested": news_nested,
+            "show_arrows": len(news_nested) > 1,
+            "show_news": len(news) > 0,
+            "news_name": News.types(i).label
+        }
+        )
+
+    context["newsListBig"] = newsListBig
     return render(request, 'musicae_content/index.html', context)
 
 
@@ -57,13 +69,19 @@ def PublicationList(request, internal):
 
     context['types'] = Publication.ptypes
 
-    context['ystart'] = 1900
-    context['yend'] = datetime.date.today().year
-    context['yrange'] = range(context['ystart'] + 1, context['yend'] - 1)
+    #context['ystart'] = 1900
+    #context['yend'] = datetime.date.today().year
+
     context['searchMax'] = 15
     context['serachRange'] = range(context['searchMax'])
 
-    # print()
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT MIN(published_year) FROM musicae_content_publication")
+        context['ystart'] = cursor.fetchone()[0]
+        cursor.execute("SELECT MAX(published_year) FROM musicae_content_publication")
+        context['yend'] = cursor.fetchone()[0]
+
+    context['yrange'] = range(context['ystart'] + 1, context['yend'])
 
     if request.method == 'GET':
         if internal:

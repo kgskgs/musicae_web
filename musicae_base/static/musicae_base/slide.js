@@ -1,18 +1,29 @@
-var slideIndex = 1;
-window.onload = function(){ showDivs(slideIndex) }
+var slideIndex = [];
 
-function plusDivs(n) {
-  showDivs(slideIndex += n);
+window.onload = function(){ 
+
+  for (var i = 0; i < document.getElementsByClassName("newsGrpParent").length; i++) {
+    slideIndex.push(1);
+    showDivs(1, i);
+  }
+    
 }
 
-function showDivs(n) {
-  console.log(document.getElementsByClassName("slide_container"), slideIndex)
+function plusDivs(n, ind) {
+  showDivs(slideIndex[ind] += n, ind);
+}
+
+function showDivs(n, ind) {
+  
   var i;
-  var x = document.getElementsByClassName("slide_container");
-  if (n > x.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = x.length} ;
+  var x = document.getElementsByClassName("slide_container"+ind);
+
+  console.log(x, slideIndex)
+
+  if (n > x.length) {slideIndex[ind] = 1}
+  if (n < 1) {slideIndex[ind] = x.length} ;
   for (i = 0; i < x.length; i++) {
     x[i].style.display = "none";
   }
-  x[slideIndex-1].style.display = "block";
+  x[slideIndex[ind]-1].style.display = "block";
 }
