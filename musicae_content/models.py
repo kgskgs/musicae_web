@@ -138,9 +138,20 @@ class Seminar(models.Model):
 
 class News(models.Model):
     added = models.DateTimeField(auto_now_add=True)
+    changed = models.DateField(auto_now_add=True, blank=True)
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='news_img/', blank=True)
     content = models.TextField()
+
+    @forDjango
+    class types(models.IntegerChoices):
+        new = 1, _('Новини')
+        sch = 2, _('Учебна дейност')
+        stu = 3, _('Студентска работилница')
+        com = 4, _('Коментари и анализи')
+        son = 5, _('Fundamenta Musicae in sonis')
+
+    ntype = models.IntegerField(choices=types.choices, default=1)
 
     def __str__(self):
         return self.title

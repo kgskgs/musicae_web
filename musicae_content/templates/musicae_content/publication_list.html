@@ -100,15 +100,17 @@
         <span id="thArrowD1" class="w3-hide">▼</span>
         <span id="thArrowU1" class="w3-hide">▲</span>
       </th>
+      <!--
       <th  class="w3-large" onclick="sortTable(2, 'pubTable')">
         {% trans "Тема" %}
         <span id="thArrowD2" class="w3-hide">▼</span>
         <span id="thArrowU2" class="w3-hide">▲</span>
       </th>
-      <th class="w3-right-align w3-large" onclick="sortTable(3, 'pubTable')">
+     -->
+      <th class="w3-right-align w3-large" onclick="sortTable(2, 'pubTable')">
         {% trans "Публикувана" %}
-        <span id="thArrowD3" class="w3-show-inline">▼</span>
-        <span id="thArrowU3" class="w3-hide">▲</span>
+        <span id="thArrowD2" class="w3-show-inline">▼</span>
+        <span id="thArrowU2" class="w3-hide">▲</span>
       </th>
     </tr>
   </thead>
@@ -117,7 +119,7 @@
   <tr onclick="window.open('/publications/{{publication.pk}}', '_self');" style="cursor:pointer" class="w3-large mus-hover-ochre">
     <td>{{publication.title}}</td>
     <td>{% for member in publication.authors.all %}{{member.name}}&nbsp;{% endfor %}</td>
-    <td>{{publication.topic.text}}</td>
+    <!--<td>{{publication.topic.text}}</td>-->
     <td  class="w3-right-align">{{publication.published_year}}</td>
   </tr>
   
