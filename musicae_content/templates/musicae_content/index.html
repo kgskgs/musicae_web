@@ -20,13 +20,11 @@
 <!---->
 {% if newsGrp|get_item:"show_news" %}
 
-<div class="w3-center"><h4>{{newsGrp|get_item:"news_name"}}<br/>
+<div class="w3-center"><h3>{{newsGrp|get_item:"news_name"}}<br/></h3>
 {% if newsGrp|get_item:"show_arrows" %}
 <button class="w3-button mus-hover-ochre w3-medium" onclick="plusDivs(-1, {{loopInd}})">&#10094;</button>
 <button class="w3-button mus-hover-ochre w3-medium" onclick="plusDivs(+1, {{loopInd}})">&#10095;</button>
 {% endif %}
-</h4>
-
 </div>
 
 <div class="w3-row w3-margin-bottom newsGrpParent">
