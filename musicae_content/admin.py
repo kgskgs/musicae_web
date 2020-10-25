@@ -16,7 +16,7 @@ class PublicationAdmin(admin.ModelAdmin):
 
 class NewsAdmin(admin.ModelAdmin):
     ordering = ('-added',)
-    list_display = ['title', 'added']
+    list_display = ['title', 'ntype', 'added']
 
 
 class SeminarsAdmin(admin.ModelAdmin):

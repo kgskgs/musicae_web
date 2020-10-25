@@ -27,7 +27,7 @@
 {% endif %}
 </div>
 
-<div class="w3-row w3-margin-bottom newsGrpParent">
+<div class="w3-row w3-margin-bottom newsGrpParent newsGrpParent" id="{{'newsGrpParent_'|add:loopInd}}">
 {% for news_grp_small in newsGrp|get_item:"news_nested" %}
 <div class="{{'slide_container'|add:loopInd}} w3-animate-opacity">
 {% for news in news_grp_small %}

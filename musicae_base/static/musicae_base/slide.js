@@ -1,10 +1,13 @@
-var slideIndex = [];
+var slideIndex = {};
 
 window.onload = function(){ 
 
-  for (var i = 0; i < document.getElementsByClassName("newsGrpParent").length; i++) {
-    slideIndex.push(1);
-    showDivs(1, i);
+  var parents = document.getElementsByClassName("newsGrpParent")
+  for (var i = 0; i < parents.length; i++) {
+    var id = parents[i].id.split("_")[1]
+    slideIndex[id] = 1;
+
+    showDivs(1, id);
   }
     
 }
@@ -18,7 +21,7 @@ function showDivs(n, ind) {
   var i;
   var x = document.getElementsByClassName("slide_container"+ind);
 
-  console.log(x, slideIndex)
+  console.log(ind, x, slideIndex)
 
   if (n > x.length) {slideIndex[ind] = 1}
   if (n < 1) {slideIndex[ind] = x.length} ;
@@ -27,3 +30,5 @@ function showDivs(n, ind) {
   }
   x[slideIndex[ind]-1].style.display = "block";
 }
+
+
