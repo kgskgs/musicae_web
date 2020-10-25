@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if "DJANGO_KEY" in os.environ:
     SECRET_KEY = os.environ["DJANGO_KEY"]
     DEBUG = False
-    ALLOWED_HOSTS = [os.environ["DJANGO_HOST"]]
+    ALLOWED_HOSTS = os.environ["DJANGO_HOST"].split()
     db_pass = os.environ["DJANGO_DB_PASS"]
 else:
     # SECURITY WARNING: keep the secret key used in production secret!
@@ -143,6 +143,9 @@ LANGUAGES = (
     ('de', gettext('German')),
 )
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale')        
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
