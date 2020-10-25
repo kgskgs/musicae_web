@@ -26,6 +26,19 @@ if "DJANGO_KEY" in os.environ:
     DEBUG = False
     ALLOWED_HOSTS = os.environ["DJANGO_HOST"].split()
     db_pass = os.environ["DJANGO_DB_PASS"]
+
+    # SSL support
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # session expire at browser close
+    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+    # wsgi scheme
+    os.environ['wsgi.url_scheme'] = 'https'
+
 else:
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = '^h&(m4c7uyc59_0clkbn#j782lkz@-#^9^0-q@&)=)@j@q%w8#'
