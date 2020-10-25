@@ -21,7 +21,7 @@ class ContactForm(forms.Form):
     content = forms.CharField(label=_("Съобщение:"), required=True, error_messages=errs,
                               widget=forms.Textarea(attrs=attrs),
                               )
-    captcha = CaptchaField(label=_(""), error_messages={"invalid" : _("Отговоръте е грешен! Опитайте отново.")})
+    captcha = CaptchaField(label=_(""), error_messages={"invalid" : _("Отговорът е грешен! Опитайте отново.")})
 
     # def __init__(self, *args, **kwargs):
     #     super(ContactForm, self).__init__(*args, **kwargs)

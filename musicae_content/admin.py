@@ -19,6 +19,7 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ['title', 'ntype', 'added']
 
 
+
 class SeminarsAdmin(admin.ModelAdmin):
     list_display = ['title', 'semester', 'active']
 

@@ -9,8 +9,8 @@
 
 {% block content %}
 
-<div class="w3-padding"> 
-<h5>{% trans "Добре дошли на сайта на Fundamenta musicae."%}</h5>
+<div class="w3-padding w3-margin w3-justify noMarginSmall"> 
+<h5>{% trans "Добре дошли на сайта на Fundamenta musicae - академичен, научноизследователски и педагогически център, състоящ се от преподаватели, доктори, докторанти и студенти при Теоретико-композиторския и диригентски факултет към Националната музикална академия &quot;Проф. Панчо Владигеров&quot;." %}</h5>
 </div>
 
 {% for newsGrp in newsListBig %}
@@ -34,7 +34,7 @@
 <div class="w3-third w3-margin-bottom">
     <div class="w3-card-4 newsLarge" style="margin:auto"> 
     {% if news.image %}
-    <div class="news-img" style="background-image: url('{{news.image.url}}');" >
+    <div class="news-img" style="background-image: url('{{news.image.url}}'); background-position: center;" >
     </div>
     {% endif %}
     <header class="w3-container mus-highlight w3-center breakword">
