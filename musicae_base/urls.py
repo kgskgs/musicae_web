@@ -4,7 +4,7 @@ from .models import Page
 
 
 urlpatterns = [
-    path('contact/', views.contact, name='contact'),
+    path('contacts/', views.contact, name='contacts'),
 ]
 
 extraPages = Page.objects.all()
