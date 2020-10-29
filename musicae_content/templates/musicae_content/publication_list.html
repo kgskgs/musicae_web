@@ -16,7 +16,7 @@
 
 <h2 class="w3-margin-bottom">{% trans "Публикации" %}<br/></h2>
 
-<form action="/publications" name="searchForm"  method="post" onsubmit="return validateForm(event)"> {% csrf_token %}
+<form action="{% url 'publication_lst' %}" name="searchForm"  method="post" onsubmit="return validateForm(event)"> {% csrf_token %}
 <div class="w3-bar mus-table-darker w3-border-top w3-border-left w3-border-right w3-padding searchBar">
   <input name="title" type="text" class="w3-input w3-bar-item  w3-white w3-mobile w3-border w3-show" style="width: 500px;" placeholder="{% trans "Заглавие"%}" />
   <button type="submit" id="search1" class="w3-bar-item w3-button mus-hover-ochre mus-highlight w3-mobile w3-show">{% trans "Търси" %}</button>
