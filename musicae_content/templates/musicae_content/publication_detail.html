@@ -7,7 +7,7 @@
 {% trans "Автор:" %} 
 {% for prof in publication.authors.all %}
 {% if publication.internal %}
-<a href="/members/{{prof.pk}}">{{prof.name}}</a> 
+<a href="{% url 'members_det' prof.pk %}">{{prof.name}}</a> 
 {% else %}
 {{prof.name}}
 {% endif %}

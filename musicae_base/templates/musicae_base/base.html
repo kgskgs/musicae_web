@@ -5,9 +5,10 @@
   <meta charset="utf-8">
 
 
-  <title>Fundamenta Musicae</title>
+  <title>{% block meta_title %}Fundamenta Musicae{% endblock %}</title>
   <meta name="author" content="">
-  <meta name="description" content="">
+  <meta name="description" content="{% block meta_description %}{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% load i18n %}
   {% load static %}
@@ -46,15 +47,15 @@
       {% for item in menuItems %}
         {% if item.children.exists %}
           <div class="w3-dropdown-hover w3-mobile menu-text">
-            <a href="{{ item.target }}" class="w3-button mus-hover-ochre w3-mobile">{{item.text}}</a>
+            <a href="{% url item.target %}" class="w3-button mus-hover-ochre w3-mobile">{{item.text}}</a>
             <div class="w3-dropdown-content w3-bar-block w3-card-4 w3-mobile">
             {% for child in item.children.all %}
-              <a href="{{ child.target }}" class="w3-bar-item w3-button w3-hover mus-hover-ochre w3-mobile">{{child.text}}</a>
+              <a href="{% url child.target %}" class="w3-bar-item w3-button w3-hover mus-hover-ochre w3-mobile">{{child.text}}</a>
             {% endfor %}
             </div>
           </div>
         {% else %}
-          <a href="{{ item.target }}" class="w3-bar-item w3-button w3-hover mus-hover-ochre w3-mobile menu-text">{{item.text}}</a>
+          <a href="{% url item.target %}" class="w3-bar-item w3-button w3-hover mus-hover-ochre w3-mobile menu-text">{{item.text}}</a>
         {% endif %}
         
       {% endfor %}

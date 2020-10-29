@@ -43,7 +43,7 @@
     </header>
     <div class="news-summary">
     {{news.content}}
-    <a href="/news/{{news.pk}}" class="news-more"><div class='w3-brown w3-round-xxlarge w3-padding' style='display:inline'>{% trans "Прочети още"%}</div></a>
+    <a href="{% url 'news_det' news.pk %}" class="news-more"><div class='w3-brown w3-round-xxlarge w3-padding' style='display:inline'>{% trans "Прочети още"%}</div></a>
     </div>
     </div>
 </div>

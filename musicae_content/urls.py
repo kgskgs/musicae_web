@@ -1,10 +1,10 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
     path('members', views.PersonList.as_view(), name='members_lst'),
     path('members/<int:pk>', views.PersonDetail.as_view(), name='members_det'),
-    path('seminars', views.seminars, name='seminars'),
+    path('seminars?prof=<int:person_pk>', views.seminars, name='seminars'),
     #path('news', views.NewsList.as_view(), name='news'),
     path('news/<int:pk>', views.NewsDetail.as_view(), name='news_det'),
     path('publications', views.PublicationList, {'internal': True}, name='publication_lst'),

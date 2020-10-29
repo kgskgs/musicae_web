@@ -44,7 +44,7 @@ urlpatterns += i18n_patterns(
    path('', include('musicae_content.urls')),
    path('', include('musicae_base.urls')),
 
-   #prefix_default_language=False   
+   prefix_default_language=False
 )
 
 

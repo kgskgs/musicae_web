@@ -118,7 +118,7 @@
   </thead>
 {% for publication in publications %}
   
-  <tr onclick="window.open('/publications/{{publication.pk}}', '_self');" style="cursor:pointer" class="w3-large mus-hover-ochre">
+  <tr onclick="window.open('{% url 'publications_det' publication.pk %}', '_self');" style="cursor:pointer" class="w3-large mus-hover-ochre">
     <td>{{publication.title}}</td>
     <td>{% for member in publication.authors.all %}{{member.name}}&nbsp;{% endfor %}</td>
     <!--<td>{{publication.topic.text}}</td>-->

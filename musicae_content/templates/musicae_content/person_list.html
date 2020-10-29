@@ -20,7 +20,7 @@
   </thead>
 {% for member in object_list %}
   
-  <tr onclick="window.open('/members/{{member.pk}}', '_self');" style="cursor:pointer" class="w3-large mus-hover-ochre">
+  <tr onclick="window.open('{% url 'members_det' member.pk %}', '_self');" style="cursor:pointer" class="w3-large mus-hover-ochre">
     <td>{{ member.name }}</td>
     <td>{{ member.short_description }}</td>
   </tr>

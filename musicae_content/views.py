@@ -149,12 +149,12 @@ class PublicationDetail(DetailView):
     model = Publication
 
 
-def seminars(request):
+def seminars(request, person_pk):
     #todayMonth = datetime.date.today().month
 
-    prof_id = request.GET['prof']
-    active = Seminar.objects.filter(profs__id=prof_id)
-    prof = Person.objects.get(pk=prof_id)
+    #prof_id = request.GET['prof']
+    active = Seminar.objects.filter(profs__id=person_pk)
+    prof = Person.objects.get(pk=person_pk)
 
     context = {
         "seminars": active,
