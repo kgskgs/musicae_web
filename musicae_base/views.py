@@ -11,8 +11,12 @@ from operator import __add__, __sub__
 
 
 def PageView(request, link):
+    page = get_object_or_404(Page, link=link)
     context = {
-        "content": get_object_or_404(Page, link=link).content
+        "content": page.content,
+        "title": f"{page.link.text} - Fundamenta Musicae",
+        "description": page.description,
+        "keywords": page.keywords
     }
 
     return render(request, 'musicae_base/genericPage.html', context)

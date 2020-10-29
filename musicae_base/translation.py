@@ -9,4 +9,4 @@ class NewsTranslationOptions(TranslationOptions):
 
 @register(Page)
 class PageTranslationOptions(TranslationOptions):
-    fields = ('content',)
+    fields = ('content', 'description', 'keywords')

@@ -1,6 +1,14 @@
 {% extends "musicae_base/base.html" %}
 
 {% load i18n %}
+
+
+{% block meta_title %}{% trans "Колегия" %} - Fundamenta Musicae{% endblock %}
+
+{% block meta_description %}{% trans "Тук можете да се запознаете с настоящите членове на Fundamenta musicae: да видите обзор на техните биографии, професионални интереси и да разгледате част от техните публикации." %}{% endblock meta_description %}
+{% block meta_keywords %}{% trans "Fundamenta musicae, колегия, членове, биография, интереси, публикации, ръководител, координатор, секретар, списък" %}{% endblock meta_keywords %}
+
+
 {% block content %}
 <div class="w3-container w3-margin-bottom">
 <h2>{%trans "Колегия"%}</h2>

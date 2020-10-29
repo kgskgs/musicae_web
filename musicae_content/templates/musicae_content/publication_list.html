@@ -6,9 +6,13 @@
 <script src="{% static 'musicae_content/publication_list.js' %}"></script>
 {% endblock extraHead %}
 
+
+{% block meta_title %}{% trans "Публикации" %} - Fundamenta Musicae{% endblock %}
+
+{% block meta_description %}{% trans "Тук можете да разгледате и да свалите публикации от членове на Fundamenta, които са качени на сайта." %}{% endblock meta_description %}
+{% block meta_keywords %}{% trans "Fundamenta musicae, публикации, статия, монография, сборник, книга, учебник, дисертация, дипломна работа, музикална, философия, педагогика" %}{% endblock meta_keywords %}
+
 {% block content %}
-
-
 
 <h2 class="w3-margin-bottom">{% trans "Публикации" %}<br/></h2>
 
