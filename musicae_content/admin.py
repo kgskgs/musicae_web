@@ -27,7 +27,7 @@ class LinkAdmin(admin.ModelAdmin):
     list_display = ['url']
 
 class FileAdmin(admin.ModelAdmin):
-    list_display = ['title', 'get_url']
+    list_display = ['title', 'get_file_url']
 
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Publication, PublicationAdmin)

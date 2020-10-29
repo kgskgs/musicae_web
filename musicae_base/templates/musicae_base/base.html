@@ -21,6 +21,11 @@
 
 <body>
 
+<form action="{% url 'set_language' %}" method="post" id="lang_form">{% csrf_token %}
+    <input name="language" type="hidden" id="lang_form_input"/>
+
+</form>  
+
 <div class="background mus-background-dark"> 
 <div class="display-wrapper">
 

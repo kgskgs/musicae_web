@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.urls import reverse
 
 import datetime
 import os
@@ -61,6 +62,9 @@ class Person(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("members_det", args=[self.pk])
+
 
 class Publication(models.Model):
     added = models.DateTimeField(auto_now_add=True)
@@ -110,9 +114,15 @@ class Publication(models.Model):
     def filename(self):
         return os.path.basename(self.file.name)
 
+    def get_file_url(self):
+        return self.file.url
+
     class Meta:
         ordering = ["-published_year"]
         get_latest_by = "-published_year"
+
+    def get_absolute_url(self):
+        return reverse("publications_det", args=[self.pk])
 
 
 class Seminar(models.Model):
@@ -160,6 +170,9 @@ class News(models.Model):
         ordering = ["-added"]
         get_latest_by = "-added"
 
+    def get_absolute_url(self):
+        return reverse("news_det", args=[self.pk])
+
 
 class Link(models.Model):
     url = models.URLField()
@@ -170,5 +183,5 @@ class File(models.Model):
     file = models.FileField(upload_to='files/', blank=True)
     title = models.CharField(max_length=255)
 
-    def get_url(self):
+    def get_file_url(self):
         return self.file.url

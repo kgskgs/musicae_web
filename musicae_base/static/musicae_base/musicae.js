@@ -8,8 +8,8 @@ function flipMenu() {
 }
 
 function setLang(lang){
-  document.cookie = "django_language="+lang+";path=/"; 
-  location.reload();
+  document.getElementById("lang_form_input").value = lang;
+  document.getElementById("lang_form").submit();
 }
 
 // Get the modal
