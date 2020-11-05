@@ -154,6 +154,8 @@ USE_TZ = True
 
 
 def gettext(s): return s
+
+
 LANGUAGES = (
     ('bg', gettext('Bulgarian')),
     ('en', gettext('English')),
@@ -161,7 +163,7 @@ LANGUAGES = (
 )
 
 LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'locale')        
+    os.path.join(BASE_DIR, 'locale')
 ]
 
 # Static files (CSS, JavaScript, Images)
@@ -175,15 +177,26 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # Email
+if "DJANGO_EMAIL_HOST" in os.environ:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.environ["DJANGO_EMAIL_HOST"]
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = 'django'
+    EMAIL_HOST_PASSWORD = os.environ["DJANGO_EMAIL_PASS"]
+    EMAIL_USE_TLS = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'testing@example.com'
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = False
-EMAIL_PORT = 1025
+    DEFAULT_FROM_EMAIL = os.environ["DJANGO_EMAIL_FROM"]
+    CONTACT_EMAILS = os.environ["DJANGO_EMAIL_CONTACTS"].split()
 
-CONTACT_EMAILS = ["test_mail@example.com"]
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DEFAULT_FROM_EMAIL = 'testing@example.com'
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_USE_TLS = False
+    EMAIL_PORT = 1025
+
+    CONTACT_EMAILS = ["test_mail@example.com"]
 
 # Captcha
 

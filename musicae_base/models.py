@@ -31,3 +31,7 @@ class Page(models.Model):
 
     def __str__(self):
         return self.link.text
+
+
+class Contact(models.Model):
+    time = models.DateTimeField(auto_now_add=True)

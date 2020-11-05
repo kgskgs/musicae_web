@@ -317,3 +317,9 @@ body {
   background-color: #e4ce7c;
 }
 
+#btn-download{
+    margin: auto;
+    display: block;
+    max-width: 200px;
+    margin-bottom: 15px;
+}

@@ -2,9 +2,7 @@
 {% load i18n %}
 
 
-{% if keywords %}{% block meta_keywords %}{% for keyword in publication.keywords.all %}
-{{keyword.text}}, 
-{% endfor %}{% endblock meta_keywords %}{% endif %}
+{% if keywords %}{% block meta_keywords %}{% for keyword in publication.keywords.all %}{{keyword.text}},{% endfor %}{% endblock meta_keywords %}{% endif %}
 
 {% block content %}
 <div class="pubTitle">{{publication.title}}</div>
@@ -40,6 +38,6 @@
 </h5>
 <br/><br/>
 {% if publication.file %}
-<a href="{{publication.file.url}}" target="_blank" download="{{publication.filename}}" class="w3-button w3-border w3-large">{% trans "Свали" %}</a>
+<a href="{{publication.file.url}}" target="_blank" download="{{publication.filename}}" class="w3-button w3-border w3-large" id="btn-download">{% trans "Свали" %}</a>
 {% endif %}
 {% endblock content %}

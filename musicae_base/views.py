@@ -1,10 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Page
+from .models import Page, Contact
 from .forms import ContactForm
 from musicae_web import settings
 
 from django.core.mail import EmailMessage
-from django.shortcuts import redirect
 from django.template.loader import get_template
 from django.utils.translation import gettext_lazy as _
 from operator import __add__, __sub__
@@ -45,13 +44,12 @@ def contact(request):
 
     if request.method == 'POST':
 
-        print(form.is_valid())
-        print(form.errors)
-
         if form.is_valid():
             contact_name = request.POST.get('contact_name', '')
             contact_email = request.POST.get('contact_email', '')
             form_content = request.POST.get('content', '')
+            c = Contact()
+            c.save(force_insert=True)
 
             template = get_template('musicae_base/contact_email.txt')
             mail_context = {
@@ -62,10 +60,10 @@ def contact(request):
             content = template.render(mail_context)
 
             email = EmailMessage(
-                "New contact form submission",
+                f"contact form submission #{c.pk}", #
                 content,
-                "Fundamenta Musicae",
-                settings.CONTACT_EMAILS,
+                #"Fundamenta Musicae",
+                to=settings.CONTACT_EMAILS,
                 headers={'Reply-To': contact_email}
             )
             # print(email)
