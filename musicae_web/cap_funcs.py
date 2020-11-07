@@ -28,7 +28,7 @@ class add_sub_challange():
 
         print(f"challange class: {self.mod} {self.op}")
 
-        for i in range(5):
+        for i in range(4):
             digit = random.randint(lo, hi)
             ret += str(digit)
             res += str(self.op(digit, self.mod))
