@@ -78,7 +78,10 @@ class Publication(models.Model):
         stu = 4, _("Студия")
         art = 5, _("Статия")
         doc = 6, _("Доклад")
-        tex = 7, _("Учебник/учебно помагало")
+        tex = 7, _("Учебник")
+        hab = 8, _("Хабилитация")
+        onl = 9, _("Онлайн материал")
+        elb = 10, _("Електронна книга")
 
     ptype = models.IntegerField(choices=ptypes.choices)
     title = models.CharField(max_length=255)

@@ -32,7 +32,7 @@
   <h4>{%trans "Публикации"%}</h4>
   <ul>
   {% for pub in person.publication_set.all %} 
-  <li><a href="{% url 'publications_det' pub.pk %}">{{pub.title}}</a>, {{pub.get_ptype_display}}, {{pub.published_year}} </li>
+  <li class="w3-left-align"><a href="{% url 'publications_det' pub.pk %}">{{pub.title}}</a>, {{pub.get_ptype_display}}, {{pub.published_year}} </li>
   {% endfor %}
   </ul>
   {% endif %}

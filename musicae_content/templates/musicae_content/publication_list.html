@@ -7,14 +7,14 @@
 {% endblock extraHead %}
 
 
-{% block meta_title %}{% trans "Публикации" %} - Fundamenta Musicae{% endblock %}
+{% block meta_title %}{% trans "Библиотека" %} - Fundamenta Musicae{% endblock %}
 
 {% block meta_description %}{% trans "Тук можете да разгледате и да свалите публикации от членове на Fundamenta, които са качени на сайта." %}{% endblock meta_description %}
-{% block meta_keywords %}{% trans "Fundamenta musicae, публикации, статия, монография, сборник, книга, учебник, дисертация, дипломна работа, музикална, философия, педагогика" %}{% endblock meta_keywords %}
+{% block meta_keywords %}{% trans "Fundamenta musicae публикации, музикална философия статия, философия на музиката статия, книга музикална философия, книга философия на музиката, сборник музикална философия, учебник философия музика, дипломна работа философия музика, домашно философия музика, издание философия музика, библиография философия на музиката, библиография музикална философия" %}{% endblock meta_keywords %}
 
 {% block content %}
 
-<h2 class="w3-margin-bottom">{% trans "Публикации" %}<br/></h2>
+<h2 class="w3-margin-bottom">{% trans "Библиотека" %}<br/></h2>
 
 <form action="{% url 'publication_lst' %}" name="searchForm"  method="post" onsubmit="return validateForm(event)"> {% csrf_token %}
 <div class="w3-bar mus-table-darker w3-border-top w3-border-left w3-border-right w3-padding searchBar">

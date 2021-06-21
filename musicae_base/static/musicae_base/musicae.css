@@ -60,15 +60,15 @@ div{font-size:22px;}
 }
 
 @media (max-width:600px) { 
-    .menuBar {
+    /*.menuBar {
         position: fixed;
 
-        width: 100vw; /* viewport width */
-        height: 100vh; /* viewport height */
+        width: 100vw; 
+        height: 100vh; 
         overflow-y: scroll;
         overflow-x: hidden;
         overscroll-behavior: contain;
-    }
+    }*/
 
     .menuIcon{
       position: fixed !important;

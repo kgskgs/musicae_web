@@ -63,7 +63,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'django.contrib.sitemaps'
+    'django.contrib.sitemaps',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 SITE_ID = 1
