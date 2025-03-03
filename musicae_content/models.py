@@ -97,7 +97,8 @@ class Publication(models.Model):
     published_year = models.PositiveIntegerField(
         validators=[
             MinValueValidator(1900),
-            MaxValueValidator(datetime.date.today().year)])
+            MaxValueValidator(2100)
+            ])
     published_place = models.CharField(max_length=255, blank=True)
 
     topic = models.ForeignKey(pTopic,
