@@ -100,7 +100,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": os.environ.get("DJANGO_DB_NAME", "musicae_db"),
-        "USER": os.environ.get("DJANGO_DB_USER", "django"),
+        "USER": os.environ.get("DJANGO_DB_USER", "kakehavata"),
         "PASSWORD": os.environ.get("DJANGO_DB_PASS", "TheHobbit123!"),
         "HOST": os.environ.get("DJANGO_DB_HOST", "127.0.0.1"),
         "PORT": os.environ.get("DJANGO_DB_PORT", "3306"),
