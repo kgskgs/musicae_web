@@ -37,13 +37,14 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
+     path("ckeditor/", include("ckeditor_uploader.urls")), 
+         
 ]
 
 
 urlpatterns += i18n_patterns(
    path('', include('musicae_content.urls')),
    path('', include('musicae_base.urls')),
-
    prefix_default_language=False
 )
 

@@ -1,0 +1,21 @@
+{
+  "scripts": {
+    "watch": "npx tailwindcss -i ./musicae_base/static/musicae_base/input.css -o ./musicae_base/static/musicae_base/main.css --watch"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.19"
+  },
+  "name": "musicae_web-master_26",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tailwind.config.js",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.17",
+    "autoprefixer": "^10.4.22",
+    "postcss": "^8.5.6"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

@@ -9,7 +9,7 @@ class PersonTranslationOptions(TranslationOptions):
 
 @register(Publication)
 class PublicationTranslationOptions(TranslationOptions):
-    fields = ('title', 'abstract', 'published_place', "bib_info","language")
+    fields = ('title', 'abstract',)
 
 
 @register(pTopic)
@@ -21,21 +21,10 @@ class pTopicTranslationOptions(TranslationOptions):
 class pKeywordTranslationOptions(TranslationOptions):
     fields = ('text',)
 
-
-@register(Seminar)
-class SeminarTranslationOptions(TranslationOptions):
-    fields = ('title', 'time', 'place', 'description',)
-
-
-@register(News)
-class NewsTranslationOptions(TranslationOptions):
-    fields = ('title', 'content',)
-
-
-@register(Publisher)
-class PublisherTranslationOptions(TranslationOptions):
-    fields = ('name',)
-
 @register(Link)
 class LinkTranslationOptions(TranslationOptions):
     fields = ('text',)
+
+@register(ResearchSection)
+class ResearchSectionTR(TranslationOptions):
+    fields = ('title', 'body')

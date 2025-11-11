@@ -1,0 +1,103 @@
+{% extends "musicae_base/base.html" %}
+{% load i18n static %}
+{% load i18n url_i18n %}
+
+{% block head_extra %}
+
+<title>{% trans "За нас" %} | Fundamenta Musicae</title>
+
+{# canonical & hreflang #}
+<link rel="canonical" href="{% url 'musicae_base:about' %}">
+<link rel="alternate" href="{{ request.get_full_path|translate_url:'bg' }}" hreflang="bg">
+<link rel="alternate" href="{{ request.get_full_path|translate_url:'en' }}" hreflang="en">
+<link rel="alternate" href="{{ request.get_full_path|translate_url:'de' }}" hreflang="de">
+
+{# Meta description that lists up to 3 section titles, with a clean fallback #}
+<meta name="description" content="
+{% if sections and sections|length > 0 %}
+{% trans 'Център за музикална философия и хуманитаристика — секции:' %} 
+{% for s in sections|slice:':3' %}{% if not forloop.first %}, {% endif %}{{ s.title|striptags }}{% endfor %}
+{% else %}
+{% trans 'Център за музикална философия и хуманитаристика: хоризонт, история и изследователски направления.' %}
+{% endif %}
+">
+
+{# Open Graph #}
+<meta property="og:type" content="website">
+<meta property="og:title" content="{% trans 'За нас | Fundamenta Musicae' %}">
+<meta property="og:description" content="
+{% if sections and sections|length > 0 %}
+{% trans 'Секции:' %} {% for s in sections|slice:':3' %}{% if not forloop.first %}, {% endif %}{{ s.title|striptags }}{% endfor %}
+{% else %}
+{% trans 'Мисия и изследователски теми: музикална философия, феноменология, педагогика и др.' %}
+{% endif %}
+">
+<meta property="og:url" content="{% url 'musicae_base:about' %}">
+<meta property="og:image" content="{{ STATIC_URL }}musicae_base/og/about.jpg">
+
+{# Twitter #}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{% trans 'За нас | Fundamenta Musicae' %}">
+<meta name="twitter:description" content="
+{% if sections and sections|length > 0 %}
+{% trans 'Секции:' %} {% for s in sections|slice:':3' %}{% if not forloop.first %}, {% endif %}{{ s.title|striptags }}{% endfor %}
+{% else %}
+{% trans 'Мисия и изследователски теми: музикална философия, феноменология, педагогика и др.' %}
+{% endif %}
+">
+
+{# Optional JSON-LD (static description is fine) #}
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"AboutPage",
+  "name":"{% filter escapejs %}{% trans 'За нас | Fundamenta Musicae' %}{% endfilter %}",
+  "url":"{% url 'musicae_base:about' %}",
+  "description":"{% filter escapejs %}{% trans 'Център за музикална философия и хуманитаристика: хоризонт, история и изследователски направления.' %}{% endfilter %}"
+}
+</script>
+<style>
+  @media (min-width: 1024px){
+    :root{ --outset: 2rem; --para-measure: 90ch; }
+    @media (min-width: 1280px){ :root{ --outset: 2.5rem; --para-measure: 95ch; } }
+    @media (min-width: 1536px){ :root{ --outset: 3rem; --para-measure: 100ch; } }
+    .tile{ text-align:left; }
+    .tile--left{ width: calc(50% + var(--outset)); margin-left: calc(-1 * var(--outset)); }
+    .tile--right{ width: calc(50% + var(--outset)); margin-left: 50%; }
+    .tile p{ max-width: var(--para-measure); }
+  }
+  .text-mission-bg * { color: var(--color-bg-light) !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+  {% for s in sections %}
+    {% with left=forloop.counter0|divisibleby:2 %}
+      <section class="pt-24 {% if left %}pb-16 bg-[var(--color-bg-light)]{% else %}pb-20 bg-[var(--color-surface)]{% endif %} px-6 md:px-12 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto">
+          <div class="tile {% if left %}tile--left{% else %}tile--right text-mission-bg{% endif %}">
+            <h2 class="text-h2 font-display {% if left %}text-[var(--color-text-dark)] mb-8{% else %}mb-6{% endif %}">
+              {{ s.title }}
+            </h2>
+
+            {% if s.person %}
+              <p class="mb-4 text-lg {% if left %}text-[var(--color-text-dark)]{% endif %}">
+                <a href="{% url 'members_det' s.person.pk %}" class="{% if left %}text-accent {% endif %}underline hover:no-underline">
+                  {{ s.person.name }}
+                </a>
+              </p>
+            {% endif %}
+
+            <div class="text-body">{{ s.body|safe }}</div>
+          </div>
+        </div>
+      </section>
+    {% endwith %}
+  {% empty %}
+    <section class="py-24 px-6 md:px-12">
+      <div class="max-w-3xl mx-auto">
+        <p class="text-lg opacity-70">{% trans "Няма раздели." %}</p>
+      </div>
+    </section>
+  {% endfor %}
+{% endblock %}

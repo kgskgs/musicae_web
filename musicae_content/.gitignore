@@ -1,0 +1,21 @@
+# dependencies / envs
+node_modules/
+.venv/
+venv/
+
+# build artifacts
+dist/
+build/
+out/
+
+# Python
+__pycache__/
+*.pyc
+
+# logs
+*.log
+
+# editor/OS noise
+.vscode/
+.DS_Store
+Thumbs.db

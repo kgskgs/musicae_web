@@ -1,6 +1,5 @@
 from django.contrib.sitemaps import Sitemap
-from musicae_base.models import Page
-from musicae_content.models import Person, Publication, News, File
+from musicae_content.models import Person, Publication, File
 from itertools import chain
 from django.urls import reverse
 

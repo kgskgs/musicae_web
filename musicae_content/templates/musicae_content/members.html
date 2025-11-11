@@ -1,0 +1,105 @@
+{% extends "musicae_base/base.html" %}
+{% load static i18n %}
+
+{% block head_extra %}
+{% load i18n url_i18n %}
+
+<title>{% trans "Членове" %} | Fundamenta Musicae</title>
+<link rel="canonical" href="{% url 'members_lst' %}">
+<link rel="alternate" href="{{ request.get_full_path|translate_url:'bg' }}" hreflang="bg">
+<link rel="alternate" href="{{ request.get_full_path|translate_url:'en' }}" hreflang="en">
+<link rel="alternate" href="{{ request.get_full_path|translate_url:'de' }}" hreflang="de">
+
+<meta name="description" content="{% trans 'Запознайте се с колектива на Fundamenta Musicae — профили, интереси и публикации.' %}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{% trans 'Членове | Fundamenta Musicae' %}">
+<meta property="og:description" content="{% trans 'Профили, интереси и публикации на членовете на центъра.' %}">
+<meta property="og:url" content="{% url 'members_lst' %}">
+<meta property="og:image" content="{{ STATIC_URL }}musicae_base/og/members.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{% trans 'Членове | Fundamenta Musicae' %}">
+<meta name="twitter:description" content="{% trans 'Профили, интереси и публикации на членовете на центъра.' %}">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage",
+"name":"{% filter escapejs %}{% trans 'Членове | Fundamenta Musicae' %}{% endfilter %}",
+"url":"{% url 'members_lst' %}"}
+</script>
+{% endblock %}
+
+{% block content %}
+
+  <section class="pt-24 pb-16 px-6 md:px-12 border-t border-gray-200">
+    <div class="max-w-7xl mx-auto">
+      <div class="kinetic-reveal mb-6">
+        <h1 class="text-h2 font-display">
+          {% trans "Членове" %}
+        </h1>
+      </div>
+
+      <p class="text-body text-measure-max kinetic-reveal" data-delay="0.1">
+        {% blocktrans %}
+        В Fundamenta Musicae се занимаваме с интердисциплинарни изследвания, които свързват музиката с философията,
+        естетиката, педагогиката и хуманитарните науки, разглеждайки музиката както като творческа практика, така и като
+        област на задълбочено теоретично изследване. Нашите разнообразни интереси обхващат феноменологията на
+        музикалния опит, както и неговите културни, етични и образователни измерения.
+        {% endblocktrans %}
+      </p>
+    </div>
+  </section>
+
+ <section class="pt-10 pb-24 px-6 md:px-12 border-t border-gray-200" style="background-color: var(--color-bg-soft);">
+  <div class="max-w-7xl mx-auto">
+    <!-- Wider cards so long text fits more comfortably -->
+    <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 kinetic-reveal" data-delay="0.1">
+
+      {% for person in persons %}
+        <article class="card-item-row group h-full">
+          <!-- Make the whole card flex so content can grow naturally -->
+          <a href="{{ person.get_absolute_url }}" class="block h-full focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]">
+            <figure class="w-full overflow-hidden">
+              {% if person.image %}
+                <img
+                  src="{{ person.image.url }}"
+                  alt="{{ person.name }}"
+                  loading="lazy"
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  style="aspect-ratio: 1/1;">
+              {% else %}
+                <img
+                  src="{% static 'musicae_base/Profile_avatar_placeholder_large.png' %}"
+                  alt="{% trans 'Placeholder member' %}"
+                  loading="lazy"
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  style="aspect-ratio: 1/1;">
+              {% endif %}
+            </figure>
+
+            <div class="card-item-content p-5">
+              <h3 class="text-lg font-semibold">
+                {{ person.name }}
+              </h3>
+
+              {% if person.title %}
+                <p class="role text-sm text-gray-700 mt-1">
+                  {{ person.title }}
+                </p>
+              {% endif %}
+
+              {% if person.currentResearch %}
+  <p class="current-research">{{ person.currentResearch|safe }}</p>
+              {% endif %}
+            </div>
+          </a>
+        </article>
+      {% empty %}
+        <div class="col-span-full text-body">
+          {% trans "Няма членове." %}
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

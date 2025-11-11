@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.utils.translation import gettext_lazy as _
+from ckeditor.fields import RichTextField  # or TextField if you prefer
 
 class UrlItem(models.Model):
     text = models.CharField(max_length=255)
@@ -17,20 +18,13 @@ class UrlItem(models.Model):
         return self.text
 
 
-class Page(models.Model):
-    link = models.OneToOneField(
-        UrlItem,
-        on_delete=models.CASCADE,
-        primary_key=True,
-        related_name='page_for',
-    )
-    content = models.TextField()
-
-    keywords = models.CharField(max_length=255, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    class Meta:
+        verbose_name = "Research Theme"
+        verbose_name_plural = "Research Themes"
+        ordering = []
 
     def __str__(self):
-        return self.link.text
+        return self.title or str(self.link.text)
 
 
 class Contact(models.Model):

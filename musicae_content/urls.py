@@ -1,16 +1,19 @@
-from django.urls import path, re_path
-from . import views
+from django.urls import path
+from . import views as content_views
 
 urlpatterns = [
-    path('members', views.PersonList.as_view(), name='members_lst'),
-    path('members/<int:pk>', views.PersonDetail.as_view(), name='members_det'),
-    path('seminars?prof=<int:person_pk>', views.seminars, name='seminars'),
-    #path('news', views.NewsList.as_view(), name='news'),
-    path('news/<int:pk>', views.NewsDetail.as_view(), name='news_det'),
-    path('publications', views.PublicationList, {'internal': True}, name='publication_lst'),
-    path('publications/<int:pk>', views.PublicationDetail.as_view(), name='publications_det'),
-    path('library', views.PublicationList, {'internal': False}, name='library_lst'),
-    #path('lib', views.PublicationList, {'internal': False}, name='library_lst'),
-    path('', views.index, name='index'),
-    #path('seminars/archive', views.seminars_archive, name='seminars_archive'),
+    path("", content_views.home, name="home"),
+
+    path("members/", content_views.PersonList.as_view(), name="members_lst"),
+    path("members/<int:pk>/", content_views.PersonDetail.as_view(), name="members_det"),
+
+    path("library/", content_views.PublicationList.as_view(), {"internal": True}, name="library_lst"),
+
+    path("publications/<int:pk>/", content_views.PublicationDetail.as_view(), name="publications_det"),
+
+    path("about/", content_views.about, name="about"),
+    path("about/<slug:slug>/", content_views.about_detail, name="about_detail"),
+
+    path("research/", content_views.research_list, name="research_list"),
+    path("research/<slug:slug>/", content_views.research_detail, name="research_detail"),
 ]
