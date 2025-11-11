@@ -9,7 +9,7 @@ django-ranged-response==0.2.0
 django-simple-captcha==0.5.17
 django-user-agents==0.4.0
 mysqlclient==1.4.6
-Pillow==8.4.0
+Pillow==10.3.0
 sqlparse==0.4.4
 pytz==2023.3                # tzdata not needed; pytz works on Py 3.6
 ua-parser==0.16.1
