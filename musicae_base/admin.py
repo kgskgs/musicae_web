@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UrlItem, Page
+from .models import UrlItem
 
 
 class UrlItemAdmin(admin.ModelAdmin):
@@ -7,4 +7,3 @@ class UrlItemAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UrlItem, UrlItemAdmin)
-admin.site.register(Page)

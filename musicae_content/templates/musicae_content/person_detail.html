@@ -1,47 +1,268 @@
-{% extends "musicae_base/base.html" %}
-{% load static %}
+{% extends "musicae_base\base.html" %}
+{% load static i18n url_i18n %} 
+
+{% block head_extra %}
 {% load i18n %}
 
-{% block meta_title %}{{person.name}} - Fundamenta Musicae{% endblock %}
+<title>{{ person.name }} | Fundamenta Musicae</title>
+<link rel="canonical" href="{{ person.get_absolute_url }}">
+<link rel="alternate" href="{{ request.get_full_path|translate_url:'bg' }}" hreflang="bg">
+<link rel="alternate" href="{{ request.get_full_path|translate_url:'en' }}" hreflang="en">
+<link rel="alternate" href="{{ request.get_full_path|translate_url:'de' }}" hreflang="de">
+
+<meta name="description" content="{% blocktrans with n=person.name %}Профил на {{ n }} – биография, изследователски интереси и публикации.{% endblocktrans %}">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="{{ person.name }} | Fundamenta Musicae">
+<meta property="og:description" content="{% blocktrans with n=person.name %}Профил на {{ n }} – биография, изследователски интереси и публикации.{% endblocktrans %}">
+<meta property="og:url" content="{{ person.get_absolute_url }}">
+<meta property="og:image" content="{% if person.image %}{{ person.image.url }}{% else %}{{ STATIC_URL }}musicae_base/og/member-default.jpg{% endif %}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ person.name }} | Fundamenta Musicae">
+<meta name="twitter:description" content="{% blocktrans with n=person.name %}Профил на {{ n }} – биография, изследователски интереси и публикации.{% endblocktrans %}">
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person",
+"name":"{{ person.name|escape }}",
+{% if person.title %}"jobTitle":"{{ person.title|escape }}",{% endif %}
+{% if person.image %}"image":"{{ person.image.url }}",{% endif %}
+"url":"{{ person.get_absolute_url }}",
+"affiliation":{"@type":"Organization","name":"Fundamenta Musicae"}}
+</script>
+{% endblock %}
+
+
 
 {% block content %}
-
-<div class="w3-row w3-section">
-
-<div class="w3-quarter w3-container sticky-sidebar">
-<h3>{{person.name}}</h3>
-<h5><i>{{person.title}}</i></h5>
-{% if person.image %}
-<img class="w3-padding" src="{{person.image.url}}" style="max-width:100%"/>
-{% endif %}
-</div>
+<div class="bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
 
-<div class="w3-rest w3-container w3-section noPaddingSmall w3-justify">
-  {% if person.bio %}
-  <h4>{%trans "Биография"%}</h4>
-  <p>{{person.bio}}</p>
-  <hr>
-  {% endif %}
-  {% if person.currentResearch %}
-  <h4>{%trans "Професионални интереси"%}</h4>
-  <p>{{person.currentResearch}}</p>
-  <hr>
-  {% endif %}
-  {% if person.publication_set.exists %}
-  <h4>{%trans "Публикации"%}</h4>
-  <ul>
-  {% for pub in person.publication_set.all %} 
-  <li class="w3-left-align"><a href="{% url 'publications_det' pub.pk %}">{{pub.title}}</a>, {{pub.get_ptype_display}}, {{pub.published_year}} </li>
+    <!-- Breadcrumbs (as per Advice Pillar 1) -->
+    <nav aria-label="Breadcrumb" class="mb-8">
+      <ol role="list" class="flex items-center space-x-2 text-sm">
+        <li>
+          <div>
+            <!-- NOTE: Update '#' to your home URL, e.g., {% url 'home' %} -->
+            <a href="/" class="text-gray-500 hover:text-gray-700">{% trans "Начало" %}</a>
+          </div>
+        </li>
+        <li>
+          <div class="flex items-center">
+            <svg class="flex-shrink-0 h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+            </svg>
+            <!-- NOTE: Update 'members_list' to your actual members list URL name -->
+            <a href="{% url 'members_lst' %}" class="ml-2 text-gray-500 hover:text-gray-700">{% trans "Членове" %}</a>
+          </div>
+        </li>
+        <li>
+          <div class="flex items-center">
+            <svg class="flex-shrink-0 h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+            </svg>
+            <span class="ml-2 font-medium text-gray-700">{{ person.name }}</span>
+          </div>
+        </li>
+      </ol>
+    </nav>
+
+    <!-- Main Profile Layout (2-Column Grid) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+
+      <!-- Left Column (Sidebar) -->
+      <aside class="md:col-span-1 space-y-6">
+        
+        <!-- Photo -->
+        {% if person.image %}
+          <img class="w-full h-auto rounded-lg shadow-lg object-cover aspect-square" src="{{ person.image.url }}" alt="{{ person.name }}">
+        {% else %}
+          <div class="w-full rounded-lg shadow-lg aspect-square bg-gray-200 flex items-center justify-center">
+            <svg class="w-16 h-16 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A1.5 1.5 0 0118 21.75H6a1.5 1.5 0 01-1.499-1.632z" />
+            </svg>
+          </div>
+        {% endif %}
+
+        <!-- Name & Title -->
+        <div class="text-center md:text-left">
+          <h1 class="font-display text-h2 text-gray-900">{{ person.name }}</h1>
+          <p class="text-2xl text-accent font-medium">{{ person.title }}</p>
+        </div>
+
+        <!-- ORCID iD (Static placeholder as per advice) -->
+        <div class="flex flex-wrap items-center gap-2 text-lg text-gray-700">
+  {% for member in publication.authors.all %}
+    <span class="inline-flex items-center gap-2">
+      <a
+        href="{% url 'members_det' member.pk %}"
+        class="no-underline text-gray-700 hover:text-[var(--color-surface)] transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-surface)] rounded-sm"
+      >{{ member.name }}</a>
+
+      {% if member.orcid %}
+        <a
+          href="https://orcid.org/{{ member.orcid }}"
+          target="_blank" rel="noopener"
+          class="inline-flex items-center group"
+          aria-label="ORCID: {{ member.orcid }}"
+          title="ORCID: {{ member.orcid }}"
+        >
+          <svg class="h-5 w-5 text-green-600 opacity-90 group-hover:opacity-100 transition-opacity"
+               viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.384h2.75v10.151h-2.75V4.384zM8.744 15.82c-.732 0-1.326.594-1.326 1.326s.594 1.326 1.326 1.326c.732 0 1.326-.594 1.326-1.326s-.594-1.326-1.326-1.326zM13.61 7.232v7.3h2.75V8.528c0-2.384 1.705-2.544 2.294-2.544v-2.75s-1.822.007-3.232 1.456V7.232z"/>
+          </svg>
+        </a>
+      {% endif %}
+    </span>{% if not forloop.last %}, {% endif %}
   {% endfor %}
-  </ul>
-  {% endif %}
-
-  {% if person.seminar_set.exists %}
-  <h5><a href="{% url 'seminars' person.pk %}">{%trans "Преподавани дисциплини"%}</a></h5>
-  {% endif %}
-</div>
 </div>
 
+        
+        <!-- Contact / External Links (Using short_description) -->
+        <div>
+    <h2 class="text-xl font-display font-bold text-gray-900 border-b pb-2 mb-3">{% trans "Връзки" %}</h2>
+    
+    <div class="bio-content text-base">
 
-{% endblock content %}
+        {% if person.email %}
+            <p>
+                <strong>{% trans "Имейл" %}:</strong> 
+                <a href="mailto:{{ person.email }}" class="text-accent hover:underline">
+                    {{ person.email }}
+                </a>
+            </p>
+        {% endif %}
+        
+        {% if person.website_url %}
+            <ul class="list-disc pl-5 mt-2">
+                <li><a href="{{ person.website_url }}" target="_blank" class="text-accent hover:underline">{% trans "Лична страница" %}</a></li>
+            </ul>
+        {% endif %}
+
+        {% comment %}
+        {% if not person.email and not person.website_url %}
+          <ul class="list-disc pl-5 mt-2">
+            <li><a href="#" class="text-accent hover:underline">{% trans "Други връзки" %}</a></li>
+          </ul>
+        {% endif %}
+        {% endcomment %}
+        
+    </div>
+</div>
+
+      </aside>
+
+      <!-- Right Column (Main Content) -->
+      <main class="md:col-span-2 space-y-12">
+        
+        <!-- Biography -->
+        <section>
+          <h2 class="text-3xl font-display font-bold text-gray-900 border-b pb-3 mb-4">{% trans "Биография" %}</h2>
+          <!-- Using .bio-content class from main.css for styling -->
+          <div class="bio-content">
+            {{ person.bio|safe }}
+          </div>
+        </section>
+
+        <!-- Research Interests -->
+        <section>
+          <h2 class="text-3xl font-display font-bold text-gray-900 border-b pb-3 mb-4">{% trans "Изследователски области" %}</h2>
+          
+          <!-- 
+            JS-POWERED SOLUTION (List Version):
+            We pass the raw string to a hidden div, then use JavaScript
+            in the 'scripts' block to split it and create a simple <ul> list.
+          -->
+          
+          <!-- 1. Hidden data source -->
+          {% if person.currentResearch %}
+            <div id="research-keywords-data" class="hidden">{{ person.currentResearch }}</div>
+          {% endif %}
+          
+          <!-- 2. Target container (now a <ul>) for JS to populate -->
+          <ul id="research-keywords-container" class="bio-content list-disc pl-5 space-y-1">
+            <!-- JavaScript will populate this area -->
+          </ul>
+        </section>
+
+
+        <!-- Publications (Dynamic) -->
+        <section>
+  <h2 class="text-3xl font-display font-bold text-gray-900 border-b pb-3 mb-4">{% trans "Публикации" %}</h2>
+<ul class="publication-list">
+  {% for pub in person.publications.all %}
+    <li class="publication-item">
+
+      <p class="pub-meta">{{ pub.get_ptype_display }} / {{ pub.published_year }}</p>
+
+      <a href="{{ pub.get_absolute_url }}" class="pub-title">
+        {{ pub.title }}
+      </a>
+
+      <p class="pub-abstract-toggle">
+        {% if pub.bib_info %}
+          {{ pub.bib_info|safe }}
+        
+        {% elif pub.journal_txt %}
+          {% trans "In" %}: <em>{{ pub.journal_txt }}</em>
+        
+        {% elif pub.publisher_txt %}
+          {{ pub.publisher_txt }}{% if pub.published_place %}, {{ pub.published_place }}{% endif %}
+        
+        {% endif %}
+      </p>
+
+      {% if pub.abstract %}
+      <details class="pub-abstract">
+        <summary class="pub-abstract-toggle">{% trans "Абстракт" %}</summary>
+        <p class="text-body">{{ pub.abstract|safe }}</p>
+      </details>
+      {% endif %}
+
+    </li>
+  {% empty %}
+    <li class="text-body">{% trans "Няма публикации." %}</li>
+  {% endfor %}
+</ul>
+</section>
+
+      </main>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+  // Wait for the page to load
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    // 1. Find the hidden div with your keywords
+    const dataElement = document.getElementById('research-keywords-data');
+    
+    // 2. Find the visible list container
+    const container = document.getElementById('research-keywords-container');
+
+    if (dataElement && container) {
+      // 3. Get the raw text, which includes HTML tags from CKEditor
+      const rawText = dataElement.textContent;
+      
+      // **THE FIX:** 4. Strip all HTML tags from the text
+      // This regular expression replaces any text enclosed in < and > with an empty string.
+      const cleanText = rawText.replace(/<[^>]*>/g, '');
+      
+      // 5. Split the cleaned text into an array (assuming keywords are comma-separated)
+      let keywords = cleanText.split(','); 
+
+      // 6. Clean up each keyword: trim whitespace and filter out any resulting empty strings
+      keywords = keywords
+        .map(kw => kw.trim())
+        .filter(kw => kw.length > 0);
+
+      // 7. Join the cleaned keywords with a comma and space (", ")
+      container.textContent = keywords.join(', ');
+    }
+  });
+</script>
+{% endblock %}

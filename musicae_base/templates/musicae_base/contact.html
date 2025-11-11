@@ -1,40 +1,151 @@
 {% extends "musicae_base/base.html" %}
-{% load i18n %}
-{% load static %}
-{% block extraHead %}
-<script src="{% static 'musicae_base/contact.js' %}"></script>
-{% endblock extraHead %}
+{% load static i18n %}
+
+{% block title %}Fundamenta Musicae | {% trans "Контакти" %}{% endblock %}
+
+{% block head_extra %}
+<style>
+  /* Make the view's success/fail flags work without W3CSS */
+  .w3-hide { display: none !important; }
+  .w3-show { display: block !important; }
+
+  /* ---- Centered variant of your tile layout ---- */
+  /* Base: center text on all screens */
+  .tile { text-align: center; }
+  .tile p { margin-left: auto; margin-right: auto; }
+
+  /* Mirror alignment and readable line width (kept from your original) */
+  @media (min-width: 1024px){
+    :root{
+      --outset: 2rem;
+      --para-measure: 90ch;
+    }
+    @media (min-width: 1280px){
+      :root{ --outset: 2.5rem; --para-measure: 95ch; }
+    }
+    @media (min-width: 1536px){
+      :root{ --outset: 3rem; --para-measure: 100ch; }
+    }
+
+    /* Override the split layout: both tiles are centered blocks */
+    .tile--left,
+    .tile--right{
+      width: min(100%, var(--para-measure));
+      margin: 0 auto; /* Center horizontally */
+    }
+
+    .tile p{ max-width: var(--para-measure); }
+  }
+
+  /* Right-side sections originally inverted colors; keep that look */
+  .text-mission-bg * {
+    color: var(--color-bg-light) !important;
+  }
+
+  /* Anchor offset so jumping to #contact doesn't hide under header (if needed) */
+  .anchor-offset {
+    position: relative;
+    top: -88px; /* tweak if header height differs */
+    height: 0;
+    visibility: hidden;
+  }
+
+  /* Force white text for the whole section (and everything inside) */
+  .section-on-surface, .section-on-surface * {
+    color: #fff !important;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<h2>{% trans "Контакт" %}</h2>
-<form role="form" action="" method="post">
-    {% csrf_token %}
 
-    <div class="w3-panel w3-red contactResult w3-large {{failClass}}">{% trans "Съобщението не е изпратено" %}</div>
-    <div class="w3-panel w3-green contactResult w3-large {{successClass}}">{% trans "Съобщението е изпратено успешно" %}</div>
-
-    <h4><label for="{{ form.contact_name.id_for_label }}">{{ form.contact_name.label }}</label></h4>
-    <div class="w3-panel w3-red contactErrMsg">{{ form.contact_name.errors }}</div>
-    {{ form.contact_name }}    
-    <h4><label for="{{ form.contact_email.id_for_label }}">{{ form.contact_email.label }}</label></h4>
-    <div class="w3-panel w3-red contactErrMsg">{{ form.contact_email.errors }}</div>
-    {{ form.contact_email }}
-    <h4><label for="{{ form.content.id_for_label }}">{{ form.content.label }}</label></h4>
-    <div class="w3-panel w3-red contactErrMsg">{{ form.content.errors }}</div>
-    {{ form.content }}
-
-    <div class="w3-content w3-center w3-large">
-    <label for="{{ form.captcha.id_for_label }}">{{capInstruction}}:<br/></label>
-    <div class="w3-panel w3-red contactErrMsg">{{ form.captcha.errors }}</div>
-    {{form.captcha}}
+<!-- HERO (centered) -->
+<section class="pt-24 pb-16 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
+  <div class="max-w-7xl mx-auto">
+    <div class="tile tile--left">
+      <h1 class="text-h2 font-display mb-6 text-[var(--color-text-dark)]">{% trans "Контакти" %}</h1>
+      <p class="text-body">
+        {% blocktrans %}Свържете се с нас – ще се радваме да ви отговорим възможно най-скоро.{% endblocktrans %}
+      </p>
+      <p class="text-sm mt-4 opacity-80">
+        {% blocktrans %}Пишете ни директно на{% endblocktrans %} <a href="mailto:centre@fundamentamusicae.bg" class="underline hover:no-underline">centre@fundamentamusicae.bg</a>
+      </p>
     </div>
-    <div class="w3-content w3-center w3-margin-top">
-    <button type="submit" class="w3-button w3-border"><b>{% trans "Изпрати" %}</b></button>
+  </div>
+</section>
+
+<!-- Invisible anchor for #contact (lands below hero) -->
+<div id="contact" class="anchor-offset"></div>
+
+<!-- ALERTS (centered container) -->
+<section class="pt-8 pb-4 px-6 md:px-12 bg-[var(--color-surface)] border-t border-gray-200 section-on-surface">
+  <div class="max-w-7xl mx-auto">
+    <div class="tile tile--right">
+      <div class="{{ successClass }} p-4 mb-6 mx-auto text-lg md:text-xl leading-relaxed" style="max-width:56rem;">
+        <strong class="block mb-2 text-xl md:text-2xl font-semibold">{% trans "Съобщението е изпратено." %}</strong>
+        <span class="block md:block opacity-90">{% trans "Благодарим ви! Ще се свържем с вас при първа възможност." %}</span>
+      </div>
+
+      <div class="{{ failClass }} p-4 mb-6 mx-auto text-lg md:text-xl leading-relaxed" style="max-width:56rem;">
+        <strong class="block mb-2 text-xl md:text-2xl font-semibold">{% trans "Възникна грешка." %}</strong>
+        <span class="block md:block opacity-90">{% trans "Моля, проверете полетата по-долу и опитайте отново." %}</span>
+      </div>
     </div>
-
-    <span id="err_blank" class="w3-hide">{% trans "Това поле е задължително" %}</span>
-    <span id="err_mail" class="w3-hide">{% trans "Въведете валиден имейл адрес" %}</span>
-</form>
+  </div>
+</section>
 
 
-{% endblock content %}
+<!-- FORM (fully centered) -->
+<section class="pt-16 pb-24 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
+  <div class="max-w-7xl mx-auto">
+    <div class="tile tile--left">
+      <form method="post" class="grid grid-cols-1 gap-6 mx-auto" style="max-width: 48rem;">
+        {% csrf_token %}
+
+        <!-- Name -->
+        <div class="text-left">
+          <label for="id_contact_name" class="block text-sm font-medium text-gray-700 mb-1">
+            {% trans "Вашето име" %}
+          </label>
+          <input
+            type="text" id="id_contact_name" name="contact_name" required
+            class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[var(--color-surface)]"
+            placeholder="{% trans 'Име и фамилия' %}"
+            value="{{ form.contact_name.value|default_if_none:'' }}">
+        </div>
+
+        <!-- Email -->
+        <div class="text-left">
+          <label for="id_contact_email" class="block text-sm font-medium text-gray-700 mb-1">
+            {% trans "Имейл" %}
+          </label>
+          <input
+            type="email" id="id_contact_email" name="contact_email" required
+            class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[var(--color-surface)]"
+            placeholder="name@example.com"
+            value="{{ form.contact_email.value|default_if_none:'' }}">
+        </div>
+
+        <!-- Message -->
+        <div class="text-left">
+          <label for="id_content" class="block text-sm font-medium text-gray-700 mb-1">
+            {% trans "Съобщение" %}
+          </label>
+          <textarea
+            id="id_content" name="content" rows="6" required
+            class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[var(--color-surface)]"
+            placeholder="{% trans 'Напишете вашето съобщение тук…' %}">{{ form.content.value|default_if_none:'' }}</textarea>
+        </div>
+
+        <div class="flex items-center justify-center gap-4">
+          <button type="submit" class="btn-contrast">
+            {% trans "Изпрати" %}
+          </button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

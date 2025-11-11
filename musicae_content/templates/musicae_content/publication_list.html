@@ -1,203 +1,196 @@
 {% extends "musicae_base/base.html" %}
-{% load i18n %}
+{% load i18n url_i18n static %}
 
-{% load static %}
-{% block extraHead %}
-<script src="{% static 'musicae_content/publication_list.js' %}"></script>
-{% endblock extraHead %}
+{% block head_extra %}
+
+  <title>{% trans "Библиотека" %} | Fundamenta Musicae</title>
+  <link rel="canonical" href="{% url 'library_lst' %}">
+  <link rel="alternate" href="{{ request.get_full_path|translate_url:'bg' }}" hreflang="bg">
+  <link rel="alternate" href="{{ request.get_full_path|translate_url:'en' }}" hreflang="en">
+  <link rel="alternate" href="{{ request.get_full_path|translate_url:'de' }}" hreflang="de">
+
+  <meta name="description" content="{% trans 'Публикации от членовете на Fundamenta Musicae — статии, книги, изследвания.' %}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{% trans 'Библиотека | Fundamenta Musicae' %}">
+  <meta property="og:description" content="{% trans 'Разгледайте и свалете публикации от нашия колектив.' %}">
+  <meta property="og:url" content="{% url 'library_lst' %}">
+  <meta property="og:image" content="{{ STATIC_URL }}musicae_base/og/library.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% trans 'Библиотека | Fundamenta Musicae' %}">
+  <meta name="twitter:description" content="{% trans 'Разгледайте и свалете публикации от нашия колектив.' %}">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CollectionPage",
+  "name":"{% filter escapejs %}{% trans 'Библиотека | Fundamenta Musicae' %}{% endfilter %}",
+  "url":"{% url 'library_lst' %}"}
+  </script>
+
+  <script src="{% static 'musicae_content/publication_list.js' %}"></script>
+  <script>
+  // Simple client-side sorter for the publication list
+  (function () {
+    document.addEventListener('DOMContentLoaded', function () {
+      const list = document.querySelector('.publication-list');
+      if (!list) return;
+
+      const controls = document.getElementById('sort-controls');
+      const buttons = controls ? Array.from(controls.querySelectorAll('.btn-sort')) : [];
+      const originalItems = Array.from(list.querySelectorAll('.publication-item'));
+
+      // Default: sort by year DESC on load
+      let currentKey = 'year';
+      let ascending = false;
+      sortAndRender(currentKey, ascending);
+
+      // Wire up buttons
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const key = btn.dataset.sort;
+
+          // Toggle order if clicking the same key; otherwise pick default order
+          if (currentKey === key) {
+            ascending = !ascending;
+          } else {
+            currentKey = key;
+            ascending = key === 'year' ? false : true;
+          }
+
+          // Visual state
+          buttons.forEach((b) => {
+            b.classList.remove('ring-2', 'ring-indigo-500', 'bg-gray-50');
+            b.setAttribute('aria-pressed', 'false');
+            const arr = b.querySelector('.sort-arrow');
+            if (arr) arr.remove();
+          });
+          btn.classList.add('ring-2', 'ring-indigo-500', 'bg-gray-50');
+          btn.setAttribute('aria-pressed', 'true');
+          const arrow = document.createElement('span');
+          arrow.className = 'sort-arrow ml-1';
+          arrow.textContent = ascending ? '↑' : '↓';
+          btn.appendChild(arrow);
+
+          sortAndRender(currentKey, ascending);
+        });
+      });
+
+      function sortAndRender(key, asc) {
+        const items = Array.from(list.querySelectorAll('.publication-item'));
+        const sorted = items.sort((a, b) => compare(a, b, key, asc));
+        sorted.forEach((el) => list.appendChild(el)); // Re-append in sorted order
+      }
+
+      function compare(aEl, bEl, key, asc) {
+        let a = aEl.dataset[key] ?? '';
+        let b = bEl.dataset[key] ?? '';
+
+        if (key === 'year') {
+          const ai = parseInt(a, 10) || 0;
+          const bi = parseInt(b, 10) || 0;
+          return asc ? ai - bi : bi - ai;
+        }
+
+        const cmp = a.localeCompare(b, undefined, { sensitivity: 'base' });
+        return asc ? cmp : -cmp;
+      }
+    });
+  })();
+  </script>
+
+  {# ✅ Add this style block below your script #}
+  <style>
+    /* Thin right stripe for visual accent */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 6px; /* thickness of the stripe */
+      height: 100vh;
+      background-color: var(--color-surface);
+      z-index: 50;
+      pointer-events: none; /* prevent blocking clicks */
+    }
+  </style>
+{% endblock head_extra %}
 
 
-{% block meta_title %}{% trans "Библиотека" %} - Fundamenta Musicae{% endblock %}
-
-{% block meta_description %}{% trans "Тук можете да разгледате и да свалите публикации от членове на Fundamenta, които са качени на сайта." %}{% endblock meta_description %}
-{% block meta_keywords %}{% trans "Fundamenta musicae публикации, музикална философия статия, философия на музиката статия, книга музикална философия, книга философия на музиката, сборник музикална философия, учебник философия музика, дипломна работа философия музика, домашно философия музика, издание философия музика, библиография философия на музиката, библиография музикална философия" %}{% endblock meta_keywords %}
 
 {% block content %}
 
-<h2 class="w3-margin-bottom">{% trans "Библиотека" %}<br/></h2>
 
-<form action="{% url 'publication_lst' %}" name="searchForm"  method="post" onsubmit="return validateForm(event)"> {% csrf_token %}
-<div class="w3-bar mus-table-darker w3-border-top w3-border-left w3-border-right w3-padding searchBar">
-  <input name="title" type="text" class="w3-input w3-bar-item  w3-white w3-mobile w3-border w3-show" style="width: 500px;" placeholder="{% trans "Заглавие"%}" />
-  <button type="submit" id="search1" class="w3-bar-item w3-button mus-hover-ochre mus-highlight w3-mobile w3-show">{% trans "Търси" %}</button>
-  <button class="w3-bar-item w3-button mus-hover-ochre mus-highlight w3-mobile w3-right" onclick="accordeonFlipSearch('1')" type="button">{% trans "Детайлно търсене" %} <span id="arrowR1" class="w3-hide">▶</span><span id="arrowD1" class="w3-show-inline">▼</span></button>
-</div>
-<div id="filter1" class="w3-row-padding w3-hide mus-table-darker w3-border-bottom w3-border-left w3-border-right">
-<!---->
-{% for i in serachRange%}
-<div class="w3-row w3-margin-top {% if i == 0 %}w3-show{% else %}w3-hide{% endif %}" id="srch-{{i}}">
-  <select name="srch-logic-{{i}}" class="w3-select w3-border w3-col" style="width:75px"> 
-      <option value="1">{% trans "И" %}</option>
-      <option value="0">{% trans "ИЛИ" %}</option>
-      <option value="-1">{% trans "И НЕ" %}</option>
-  </select>
-  <select name="srch-type-{{i}}" class="w3-select w3-border w3-col" style="width:150px"> 
-      <option value="title">{% trans "Заглавие" %}</option>
-      <option value="authors__name">{% trans "Автор" %}</option>
-      <option value="topic__text">{% trans "Тема" %}</option>
-      <option value="keywords__text">{% trans "Ключови думи" %}</option>
-      <option value="publisher__name">{% trans "Издателство" %}</option>
-  </select>
-  <div class="w3-rest w3-mobile">
-  <input name="srch-txt-{{i}}" id="srch-txt-{{i}}" type="text" class="w3-white w3-mobile w3-border w3-input w3-col"/>
-  </div>
-</div>
-{% endfor %}
-<div class="w3-row w3-center">
-    <a id="btn-less" class="w3-button mus-hover-ochre w3-large w3-circle w3-large mus-highlight w3-disabled" style="width:43px"  onclick="hidePrev()"><b>-</b></a>
-    <a id="btn-more" class="w3-button mus-hover-ochre w3-large w3-circle w3-large mus-highlight w3-margin-left w3-enabled" style="width:43px" onclick="showNext()"><b>+</b></a>
-</div>
+<div class="max-w-6xl mx-auto px-4 py-8 md:py-12">
 
-<div class="w3-row">
-  <div class="w3-threequarter">
-    {% trans "Вид" %}: <a href="javascript:void(0)" class="w3-small" onclick="checkAll('types')">({% trans "избери всички" %})</a><br/>
-    <div class="flex-container">
-    {% for type in types %}
-    <label for="type_{{type}}" class="flex-inner">
-    <input class="w3-check" name="types" type="checkbox" checked="checked" id="type_{{type}}" value="{{type}}">
-    {{type.label}}
-    </label><br/>
-    {% endfor %}  
-    </div>
-  </div>
-  <div class="w3-quarter">
-    {% trans "Издадена" %}:<br/><br/>
-    <label for="sdate">{% trans "От" %}</label>
-    <select type="text" id="sdate" name="sdate" class="w3-select w3-border year-select" autocomplete="off">
-      <option value="{{ystart}}" selected>{{ystart}}</option>
-      {% for i in yrange %}
-      <option value="{{i}}">{{i}}</option>
-      {% endfor %}
-      <option value="{{yend}}" >{{yend}}</option>
-    </select>
-    <br/><br/>
-    <label for="edate">{% trans "До" %}</label>
-    <select type="text" id="edate" name="edate" class="w3-select w3-border year-select" autocomplete="off">
-      <option value="{{ystart}}" >{{ystart}}</option>
-      {% for i in yrange %}
-      <option value="{{i}}">{{i}}</option>
-      {% endfor %}
-      <option value="{{yend}}" selected>{{yend}}</option>
-    </select>
-  </div>
+ <h2 class="text-h2 font-display mb-4" data-i18n="h2_library">
+  {% trans "Библиотека" %}
+</h2>
+
+<!-- Sort controls -->
+<div id="sort-controls" class="mb-8 flex flex-wrap items-center gap-2 text-sm">
+  <span class="text-gray-600">{% trans "Подреди по:" %}</span>
+
+  <button type="button"
+          class="btn-sort px-3 py-1 rounded-md border border-gray-300 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          data-sort="year"
+          data-order="desc"
+          aria-pressed="true">
+    {% trans "Дата" %} <span class="sort-arrow ml-1">↓</span>
+  </button>
+
+  <button type="button"
+          class="btn-sort px-3 py-1 rounded-md border border-gray-300 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          data-sort="type"
+          data-order="asc">
+    {% trans "Тип" %}
+  </button>
+
+  <button type="button"
+          class="btn-sort px-3 py-1 rounded-md border border-gray-300 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          data-sort="title"
+          data-order="asc">
+    {% trans "Име" %}
+  </button>
 </div>
 
+<ul class="publication-list mt-4">
+  {% for publication in publications %}
+    <li class="publication-item"
+        data-year="{{ publication.published_year|default:0 }}"
+        data-type="{{ publication.get_ptype_display|lower }}"
+        data-title="{{ publication.title|lower }}">
+      <p class="pub-meta">{{ publication.get_ptype_display }} / {{ publication.published_year }}</p>
+
+      <a href="{{ publication.get_absolute_url }}" class="pub-title">
+        {{ publication.title }}
+      </a>
+
+      <p class="text-body pub-bib">
+        <span class="text-lg text-gray-600">
+          {% for member in publication.authors.all %}
+            <a href="{% url 'members_det' member.pk %}"
+               class="text-gray-700 hover:text-indigo-600 hover:underline underline-offset-2 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-sm">
+              {{ member.name }}
+            </a>{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </span>
+        <br>
+      </p>
+
+      {% if publication.abstract %}
+      <details class="pub-abstract">
+        <summary class="pub-abstract-toggle">{% trans "Show Abstract" %}</summary>
+        <p class="text-body">{{ publication.abstract|safe }}</p>
+      </details>
+      {% endif %}
+    </li>
+  {% empty %}
+    <li class="text-body">{% trans "Няма намерени публикации" %}</li>
+  {% endfor %}
+</ul>
 
 
-<div class="w3-row w3-center w3-padding">
-<button type="submit" id="search2" class="w3-button mus-hover-ochre mus-highlight w3-mobile w3-hide w3-large" style="margin:auto" style="z-index:0">{% trans "Търси" %}</button>
 </div>
-</div>
-<input type="number" id="detailed" name="detailed" class="w3-hide" value="0"/>
-</form>
 
-{% if publications %}
-<div class="pubTableWrap">
-<table class="w3-table-all w3-hoverable w3-margin-bottom" id="pubTable"> 
-  <thead>
-    <tr class="mus-table-darker">
-      <th  class="w3-large" onclick="sortTable(0, 'pubTable')">
-        {% trans "Заглавие" %}
-        <span id="thArrowD0" class="w3-hide">▼</span>
-        <span id="thArrowU0" class="w3-hide">▲</span>
-      </th>
-      <th  class="w3-large" onclick="sortTable(1, 'pubTable')">
-        {% trans "Автор" %}
-        <span id="thArrowD1" class="w3-hide">▼</span>
-        <span id="thArrowU1" class="w3-hide">▲</span>
-      </th>
-      <!--
-      <th  class="w3-large" onclick="sortTable(2, 'pubTable')">
-        {% trans "Тема" %}
-        <span id="thArrowD2" class="w3-hide">▼</span>
-        <span id="thArrowU2" class="w3-hide">▲</span>
-      </th>
-     -->
-      <th class="w3-right-align w3-large" onclick="sortTable(2, 'pubTable')">
-        {% trans "Публикувана" %}
-        <span id="thArrowD2" class="w3-show-inline">▼</span>
-        <span id="thArrowU2" class="w3-hide">▲</span>
-      </th>
-    </tr>
-  </thead>
-{% for publication in publications %}
-  
-  <tr onclick="window.open('{% url 'publications_det' publication.pk %}', '_self');" style="cursor:pointer" class="w3-large mus-hover-ochre">
-    <td>{{publication.title}}</td>
-    <td>{% for member in publication.authors.all %}{{member.name}}&nbsp;{% endfor %}</td>
-    <!--<td>{{publication.topic.text}}</td>-->
-    <td  class="w3-right-align">{{publication.published_year}}</td>
-  </tr>
-  
-{% endfor %}
-</table>
-</div>
-{% else %}
-<h3>{% trans "Няма намерени публикации" %}</h3>
-{% endif %}
-
-<script>
-var srchDisplayed = 0
-
-document.getElementById("detailed").value = 0;
-
-function showNext(){
-  console.log(srchDisplayed)
-  if (srchDisplayed < {{searchMax|add:"-1"}}){
-    var next = document.getElementById("srch-"+(srchDisplayed+1).toString());
-    next.className = next.className.replace("w3-hide", "w3-show");
-    srchDisplayed += 1;
-    if (srchDisplayed == {{searchMax|add:"-1"}}) {
-      var btnNext = document.getElementById("btn-more");
-      btnNext.className = btnNext.className.replace("w3-enabled", "w3-disabled");
-    }
-    if (srchDisplayed > 0) {
-      var btnPrev = document.getElementById("btn-less");
-      btnPrev.className = btnPrev.className.replace("w3-disabled", "w3-enabled");
-    }
-    detailed.value=srchDisplayed+1
-  }
-}
-
-function hidePrev(){
-  console.log(srchDisplayed)
-  if (srchDisplayed > 0){
-    var next = document.getElementById("srch-"+(srchDisplayed).toString());
-    next.className = next.className.replace("w3-show", "w3-hide");
-    document.getElementById("srch-txt-"+(srchDisplayed).toString()).value = ''
-    srchDisplayed -= 1;
-    if (srchDisplayed == 0) {
-      var btnPrev = document.getElementById("btn-less");
-      btnPrev.className = btnPrev.className.replace("w3-enabled", "w3-disabled");
-    }
-    if (srchDisplayed < {{searchMax|add:"-1"}}) {
-      var btnNext = document.getElementById("btn-more");
-      btnNext.className = btnNext.className.replace("w3-disabled", "w3-enabled");
-    }
-    detailed.value=srchDisplayed+1
-  }
-}
-
-
-function validateForm(evt){
-  var sdate = document.forms["searchForm"]["sdate"].value;
-  var edate = document.forms["searchForm"]["edate"].value;
-
-  
-  if (evt.submitter.id=="search1" && 
-    document.getElementsByName("title")[0].value.length==0){
-      evt.preventDefault();
-      return false;
-  }
-
-  if (sdate > edate){
-    alert('{% trans "Началната дата трябва да е преди крайната дата." %}');
-    return false;
-  }
-}
-
-
-</script> 
 
 
 {% endblock content %}
+

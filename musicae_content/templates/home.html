@@ -1,0 +1,576 @@
+{% load static i18n url_i18n random_image %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'bg' }}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fundamenta Musicae | Center for Musical Philosophy and Humanities</title>
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#000000" />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- Splide CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" />
+
+  <!-- Your site CSS -->
+  <link rel="stylesheet" href="{% static 'musicae_base/main.css' %}" />
+
+  <!-- Minimal fixes that preserve desktop structure -->
+  <style>
+    /* 1) Ensure vertical stacking by default (desktop unaffected) */
+    html, body { block-size: 100%; }
+    body { display: block; }
+    header, main, footer { display: block; inline-size: 100%; }
+
+    html { scroll-behavior: smooth; }
+    section[id],
+    [id][role="region"] {
+      scroll-margin-top: var(--header-h, 96px);
+    }
+
+    /* If some wrapper is flex on small screens, force column only below md */
+    @media (max-width: 767.98px) {
+      body > .flex { flex-direction: column !important; }
+      .layout { flex-direction: column !important; }
+      .layout > * { min-width: 0; }
+    }
+    
+
+    /* 2) Mobile menu panel visibility (toggled by your JS via .visible) */
+    #mobile-menu-panel {
+      display: none;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: saturate(140%) blur(6px);
+    }
+    #mobile-menu-panel.visible { display: flex; }
+
+    /* Optional: nicer <details> summary in mobile submenu */
+    #mobile-menu-panel details.mobile-collapsible > summary {
+      list-style: none;
+      cursor: pointer;
+    }
+    #mobile-menu-panel details.mobile-collapsible > summary::-webkit-details-marker { display: none; }
+    #mobile-menu-panel details[open] summary svg { transform: rotate(180deg); transition: transform .2s ease; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    }
+
+    @media (min-width: 768px) {
+  #mobile-menu-toggle { display: none !important; }
+  header nav[aria-label="Main navigation"] { display: block !important; }
+  #mobile-menu-panel { display: none !important; opacity:0 !important; visibility:hidden !important; }
+}
+  </style>
+</head>
+
+<body class="antialiased">
+
+  <!-- FIXED HEADER / NAVIGATION -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+  <div class="container header-row">
+      <a class="brand anchor-link" href="{% url 'home' %}">
+        <span class="brand__name">Fundamenta Musicae</span>
+      </a>
+
+      <!-- Desktop Navigation (UNCHANGED) -->
+      <nav aria-label="{% trans 'Main navigation' %}" class="hidden md:block">
+        <ul class="nav-links">
+          <li><a id="nav-about" class="nav-link btn anchor-link" href="{% url 'home' %}">{% trans "Начало" %}</a></li>
+          <li class="relative group">
+            <a id="nav-about"
+               class="nav-link btn anchor-link {% if request.resolver_match.url_name == 'about' or request.resolver_match.url_name == 'about_detail' %}is-active{% endif %}"
+               href="{% url 'about' %}">
+              {% trans "За нас" %}
+            </a>
+
+            {% if about_children %}
+              <ul class="dropdown">
+                {% for rp in about_children %}
+                  <li>
+                    <a href="{% url 'about_detail' rp.slug %}" class="dropdown-link">
+                      {{ rp.name }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+          <li><a id="nav-members" class="nav-link btn anchor-link" href="#members">{% trans "Членове" %}</a></li>
+          <li><a id="nav-library" class="nav-link btn anchor-link" href="#publications">{% trans "Библиотека" %}</a></li>
+          <li><a id="nav-contact" class="nav-link btn anchor-link" href="#contact">{% trans "Контакти" %}</a></li>
+
+          <!-- Language Switcher -->
+          <li class="lang" id="lang-switcher">
+            <a class="lang-link" href="{{ request.get_full_path|translate_url:'bg' }}"
+              {% if LANGUAGE_CODE|lower == 'bg' %}aria-current="page"{% endif %}>BG</a>
+            <span>&nbsp;|&nbsp;</span>
+            <a class="lang-link" href="{{ request.get_full_path|translate_url:'en' }}"
+              {% if LANGUAGE_CODE|lower == 'en' %}aria-current="page"{% endif %}>EN</a>
+            <span>&nbsp;|&nbsp;</span>
+            <a class="lang-link" href="{{ request.get_full_path|translate_url:'de' }}"
+              {% if LANGUAGE_CODE|lower == 'de' %}aria-current="page"{% endif %}>DE</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Mobile Menu Button (UNCHANGED) -->
+      <button id="mobile-menu-toggle" class="md:hidden btn-contrast p-2 rounded-lg -mr-2" aria-label="{% trans 'Open menu' %}">
+        <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Panel (REWRITTEN to mirror desktop) -->
+  <div id="mobile-menu-panel" class="fixed inset-0 z-40 p-6 flex-col md:hidden">
+    <nav id="mobile-menu-links" aria-label="{% trans 'Mobile navigation' %}" class="space-y-3">
+      <!-- Начало -->
+      <a id="mobile-nav-home" class="nav-link btn anchor-link" href="{% url 'home' %}">
+        {% trans "Начало" %}
+      </a>
+
+      <!-- За нас (+ children if present) -->
+      {% if about_children %}
+        <details class="mobile-collapsible">
+          <summary class="nav-link btn flex items-center justify-between">
+            <span>{% trans "За нас" %}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <ul class="pl-4 mt-2 space-y-2">
+            <li>
+              <a id="mobile-nav-about" href="{% url 'about' %}"
+                 class="dropdown-link anchor-link {% if request.resolver_match.url_name == 'about' %}is-active{% endif %}">
+                {% trans "За нас" %}
+              </a>
+            </li>
+            {% for rp in about_children %}
+              <li>
+                <a href="{% url 'about_detail' rp.slug %}"
+                   class="dropdown-link anchor-link {% if request.resolver_match.url_name == 'about_detail' and request.resolver_match.kwargs.slug == rp.slug %}is-active{% endif %}">
+                  {{ rp.name }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </details>
+      {% else %}
+        <a id="mobile-nav-about" class="nav-link btn anchor-link {% if request.resolver_match.url_name == 'about' or request.resolver_match.url_name == 'about_detail' %}is-active{% endif %}" href="{% url 'about' %}">
+          {% trans "За нас" %}
+        </a>
+      {% endif %}
+
+      <!-- Sections -->
+      <a id="mobile-nav-members" class="nav-link btn anchor-link" href="#members">{% trans "Членове" %}</a>
+      <a id="mobile-nav-library" class="nav-link btn anchor-link" href="#publications">{% trans "Библиотека" %}</a>
+      <a id="mobile-nav-contact" class="nav-link btn anchor-link" href="#contact">{% trans "Контакти" %}</a>
+    </nav>
+
+    <!-- Mobile Language Switcher (link-based to auto-close via your JS) -->
+    <div class="lang mt-6" id="mobile-lang-switcher" aria-label="{% trans 'Language' %}">
+      <a class="lang-link" href="{{ request.get_full_path|translate_url:'bg' }}"
+         {% if LANGUAGE_CODE|lower == 'bg' %}aria-current="page"{% endif %}>BG</a>
+      <span>&nbsp;|&nbsp;</span>
+      <a class="lang-link" href="{{ request.get_full_path|translate_url:'en' }}"
+         {% if LANGUAGE_CODE|lower == 'en' %}aria-current="page"{% endif %}>EN</a>
+      <span>&nbsp;|&nbsp;</span>
+      <a class="lang-link" href="{{ request.get_full_path|translate_url:'de' }}"
+         {% if LANGUAGE_CODE|lower == 'de' %}aria-current="page"{% endif %}>DE</a>
+    </div>
+  </div>
+
+
+  <main class="w-full">
+   
+    <!-- HERO SECTION -->
+    <section id="hero" class="sticky-h1-container bg-[var(--color-bg-soft)] overflow-hidden relative ch-splash">
+      <div class="sticky-h1 p-4">
+        <h1 class="text-h1 font-display leading-[1.1]">Fundamenta Musicae</h1>
+        <p class="text-2xl md:text-5xl font-light text-gray-600 mt-4 tracking-normal lead muted">
+          {% trans "Център за музикална философия и хуманитаристика" %}
+        </p>
+      </div>
+      <div class="absolute bottom-24 animate-bounce text-gray-600" aria-hidden="true">
+      <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </div>
+    </section>
+
+    <!-- ABOUT -->
+   <section id="about" class="pt-24 pb-20 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200 overflow-hidden">
+  <div class="max-w-7xl mx-auto">
+    <!-- match the publications header row -->
+    <div class="flex items-center justify-between mb-12 kinetic-reveal">
+      <h2 class="text-h2 font-display text-[var(--color-text-dark)]">
+        {% trans "Хоризонт" %}
+      </h2>
+      <a href="{% url 'about' %}" class="btn-accent">
+        {% trans "За нас" %}
+      </a>
+    </div>
+
+    <p class="text-body text-measure-max kinetic-reveal" data-delay="0.1">
+       {% blocktrans %}
+  Хоризонтът на Центъра е развитието на понятийност, произтичаща от фундаментални интуиции за музикалното, 
+  и процедури за преминаване между непосредствения музикален опит и различни форми на рефлексивен дискурс.
+  Това включва както разработки в областта на музикалната философия, така и работа в различни хуманитарни и приложни области.
+  Центърът има за цел да осигури база за развитие на музикалнофилософски възгледи и подходи, като организира редовни срещи за споделяне и обсъждане на идеи и съвместна редакторска работа.
+  {% endblocktrans %}
+  </div>
+</section>
+
+    <!-- PUBLICATIONS -->
+    <section id="publications" class="pt-24 pb-20 px-6 md:px-12 bg-[var(--color-bg-soft)] border-t border-gray-200 overflow-hidden">
+       <div class="max-w-7xl mx-auto">
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-12 kinetic-reveal">
+            <h2 class="text-h2 font-display text-[var(--color-text-dark)] min-w-0 basis-full sm:basis-auto leading-tight">
+              {% trans "Последни публикации" %}
+            </h2>
+            <a href="{% url 'library_lst' %}" class="btn-accent shrink-0 whitespace-nowrap mt-2 sm:mt-0">
+              {% trans "Библиотека" %}
+            </a>
+          </div>
+
+        <div id="publications-slider" class="splide kinetic-reveal" aria-label="{% trans 'Recent Publications Slider' %}" data-delay="0.1">
+          <div class="splide__track">
+            <ul class="splide__list" id="publications-list">
+              {% for pub in publications %}
+                <li class="splide__slide">
+                  <a href="{{ pub.get_absolute_url }}" class="card-item-row flex-col">
+                <img
+                  src="{% if pub.banner %}{{ pub.banner.url }}{% else %}{% random_banner_static %}{% endif %}"
+                  alt="{{ pub.title }}"
+                  loading="lazy"
+                  class="w-full aspect-auto">
+                <div class="card-item-content">
+                      <h3>{{ pub.title }}</h3>
+
+                      {% with has_authors=pub.authors.all.exists %}
+                        {% if has_authors %}
+                          <p class="author">
+                           {% for a in pub.authors.all %}
+                            {{ a.name }}{% if not forloop.last %}, {% endif %}
+                          {% endfor %}
+                          </p>
+                        {% endif %}
+                      {% endwith %}
+
+                      <p class="description">
+                        {{ pub.abstract|default_if_none:''|striptags|truncatechars:220|safe }}
+                      </p>
+                    </div>
+                  </a>
+                </li>
+              {% empty %}
+                <li class="splide__slide">
+                  <a href="#" class="card-item-row">
+                    <img src="{% static 'musicae_base/big_banner.jpg' %}" alt="{% trans 'Placeholder publication' %}" loading="lazy">
+                    <div class="card-item-content">
+                      <h3>{% trans "Няма публикации" %}</h3>
+                      <p class="author">&nbsp;</p>
+                      <p class="description">{% trans "" %}</p>
+                    </div>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MUSICAL PHILOSOPHY -->
+    <section id="musphi" class="pt-24 pb-20 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-h2 font-display mb-12 text-[var(--color-text-dark)] kinetic-reveal">
+          {% trans "Какво е музикалната философия?" %}
+        </h2>
+        <p class="text-body text-measure-max kinetic-reveal" data-delay="0.1">
+          {% blocktrans %}
+          Музикалната философия започва със строго поставяне на въпросa за свързаността между музика и философия. Тя работи на границата, където говоренето за музика вече е проблем, 
+          и държи на опита говоренето за музиката да не скъсва радикално с това, което самата музика ни „говори“. 
+          Музикалната философия се занимава с начина, по който самото съществуване на музиката зависи от конкретната моя битийна позиция към нея, и с начините на напускане на тази позиция. 
+          В този смисъл музикалната философия е съвременна философия: тя става възможна едва след като самоочевидността на музиката в европейския свят се разколебава и музиката се превръща в проблем. 
+          {% endblocktrans %}
+        </p>
+      </div>
+    </section>
+
+    <!-- MEMBERS -->
+    <section id="members" class="pt-24 pb-20 px-6 md:px-12 bg-[var(--color-bg-soft)] border-t border-gray-200 overflow-hidden">
+      <div class="max-w-7xl mx-auto">
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-12 kinetic-reveal">
+            <h2 class="text-h2 font-display text-[var(--color-text-dark)] min-w-0 basis-full sm:basis-auto leading-tight">
+              {% trans "Членове" %}
+            </h2>
+            <a href="{% url 'members_lst' %}" class="btn-accent shrink-0 whitespace-nowrap mt-2 sm:mt-0">
+              {% trans "Всички членове" %}
+            </a>
+          </div>
+        <div id="members-slider" class="splide kinetic-reveal" aria-label="{% trans 'Members Slider' %}" data-delay="0.1">
+          <div class="splide__track">
+            <ul class="splide__list" id="members-list">
+              {% for m in members %}
+                <li class="splide__slide">
+                  <a href="{{ m.get_absolute_url }}" class="card-item-row">
+                    {% if m.image %}
+                      <img src="{{ m.image.url }}" alt="{{ m.name }}" loading="lazy">
+                    {% else %}
+                      <img src="{% static 'musicae_base/Profile_avatar_placeholder_large.png' %}" alt="{% trans 'Placeholder member' %}" loading="lazy">
+                    {% endif %}
+                    <div class="card-item-content">
+                      <h3>{{ m.name }}</h3>
+                      {% if m.title %}<p class="role">{{ m.title }}</p>{% endif %}
+                    </div>
+                  </a>
+                </li>
+              {% empty %}
+                <li class="splide__slide">
+                  <a href="#" class="card-item-row">
+                    <img src="{% static 'musicae_base/Profile_avatar_placeholder_large.png' %}" alt="{% trans 'Placeholder member' %}" loading="lazy" style="aspect-ratio: 1 / 1;">
+                    <div class="card-item-content">
+                      <h3>{% trans "Няма членове." %}</h3>
+                      <p class="role">{% trans "" %}</p>
+                    </div>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MUSICAL PHILOSOPHY AND THE HUMANITIES -->
+    <section id="musphi" class="pt-24 pb-20 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-h2 font-display mb-12 text-[var(--color-text-dark)] kinetic-reveal">
+          {% trans "Музикалната хуманитаристика" %}
+        </h2>
+        <p class="text-body text-measure-max kinetic-reveal" data-delay="0.1">
+          {% blocktrans %}
+          Музикалната хуманитаристика обединява направления и подходи в хуманитаристиката, при които музиката се схваща не просто като предмет, а като изходна позиция. 
+          Музикалната хуманитаристика се занимава с форми на хуманитарно мислене, които изследват музикалния човек или човека като музикален – човека, връхлетен от музика. 
+          Тя цели да посочи мястото на музиката в постметафизическия свят и да направи резултатите съпоставими и съобщими в рамките на човешките науки, 
+          преодолявайки тяхната обичайна методологическа релативност спрямо музикалното.
+          {% endblocktrans %}
+        </p>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="pt-24 pb-28 px-6 md:px-12 bg-[var(--color-bg-soft)] border-t border-gray-200">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-h2 font-display mb-12 text-[var(--color-text-dark)] kinetic-reveal">
+      {% trans "Контакти" %}
+    </h2>
+
+    <div class="kinetic-reveal" data-delay="0.2">
+      <a id="btn-contact-main" href="mailto:centre@fundamentamusicae.bg" class="btn-contrast px-8 py-4 inline-block text-xl rounded-xl shadow-lg font-bold">
+        {% trans "Пиши ни" %}
+      </a>
+    </div>
+  </div>
+</section>
+  </main>
+
+  <footer class="p-6 text-center text-gray-500 text-sm border-t border-gray-200 bg-white">
+    © {% now "Y" %} Fundamenta Musicae. {% trans "Всички права запазени." %}
+  </footer>
+
+  <!-- Base JS (shared across pages; no Splide init here) -->
+  <script type="module">
+    // Pick and expose a theme globally so child templates can re-use it.
+    const themes = ['ch-theme-black','ch-theme-green','ch-theme-lila','ch-theme-yellow','ch-theme-blue','ch-theme-orange'];
+    const chosen = themes[Math.floor(Math.random()*themes.length)];
+    window.__chThemeChosen = chosen;
+
+    // Scroll-Triggered Kinetic Effect
+    const applyScrollKinetic = () => {
+      if (!('IntersectionObserver' in window)) return;
+      const sections = document.querySelectorAll('.kinetic-reveal');
+      sections.forEach(s => s.classList.remove('visible'));
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+      }, { root: null, rootMargin: '0px', threshold: 0.1 });
+      sections.forEach((section, index) => {
+        const delay = section.dataset.delay || (index % 3) * 0.1;
+        section.style.setProperty('--delay', `${delay}s`);
+        obs.observe(section);
+      });
+    };
+
+    // Mobile Menu Toggle
+    const setupMobileMenu = () => {
+      const toggleBtn = document.getElementById('mobile-menu-toggle');
+      const menuPanel = document.getElementById('mobile-menu-panel');
+      const iconOpen = document.getElementById('menu-icon-open');
+      const iconClose = document.getElementById('menu-icon-close');
+
+      const toggleMenu = (forceClose = false) => {
+        const isVisible = menuPanel.classList.contains('visible');
+        if (forceClose || isVisible) {
+          menuPanel.classList.remove('visible');
+          iconOpen.classList.remove('hidden');
+          iconClose.classList.add('hidden');
+          document.body.style.overflow = '';
+        } else {
+          menuPanel.classList.add('visible');
+          iconOpen.classList.add('hidden');
+          iconClose.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        }
+      };
+
+      toggleBtn?.addEventListener('click', () => toggleMenu());
+      menuPanel?.addEventListener('click', (e) => {
+        if (e.target.classList.contains('anchor-link') || e.target.closest('.lang-link')) toggleMenu(true);
+      });
+    };
+
+    // Smooth scroll with header offset
+   const setupSmoothAnchors = () => {
+  const headerEl = document.querySelector('header');
+
+  document.body.addEventListener('click', (e) => {
+    const link = e.target.closest('.anchor-link');
+    if (!link) return;
+
+    const href = link.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
+
+    const target = document.getElementById(href.substring(1));
+    if (!target) return;
+
+    e.preventDefault();
+
+    const headerH = headerEl?.offsetHeight || 0;
+    const top = target.getBoundingClientRect().top + window.pageYOffset - headerH;
+
+    // Smooth scroll first
+    window.scrollTo({ top, behavior: 'smooth' });
+
+    // After any reflow (lazy Splide mount, font load), snap to correct spot
+    setTimeout(() => {
+      const newHeaderH = headerEl?.offsetHeight || 0;
+      const correction = target.getBoundingClientRect().top + window.pageYOffset - newHeaderH;
+      window.scrollTo({ top: correction, behavior: 'auto' });
+    }, 400);
+  });
+};
+
+    const setHeaderVar = () => {
+    const h = document.querySelector('header')?.offsetHeight || 96;
+    document.documentElement.style.setProperty('--header-h', `${h}px`);
+  };
+    window.addEventListener('load', setHeaderVar);
+    window.addEventListener('resize', setHeaderVar);
+    document.fonts?.ready?.then(setHeaderVar);
+
+    window.addEventListener('load', () => {
+      document.body?.setAttribute('data-theme', chosen);        // ← add this
+      document.querySelector('header')?.setAttribute('data-theme', chosen);
+      applyScrollKinetic();
+      setupMobileMenu();
+      setupSmoothAnchors();
+    });
+  </script>
+
+ <script type="module">
+  import Splide from 'https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.esm.js';
+
+  // Mount only when the slider actually enters the viewport (fixes zero-height on mobile)
+  function initSmartSplide(root, perPage = 3) {
+    if (!root || root.dataset.mounted === 'true') return;
+
+    const list  = root.querySelector('.splide__list');
+    const count = list ? list.children.length : 0;
+
+    const base = {
+      gap: '1.5rem',
+      perPage,
+      perMove: 1,
+      breakpoints: { 1024: { perPage: 2 }, 768: { perPage: 1 } },
+      autoHeight: true,
+    };
+
+    const options =
+      count <= 1
+        ? { ...base, type: 'slide', perPage: 1, arrows: false, pagination: false, drag: false }
+      : count <= perPage
+        ? { ...base, type: 'slide', perPage: Math.min(count, perPage), arrows: true, pagination: false }
+        : { ...base, type: 'loop', arrows: true, pagination: true };
+
+    const mount = () => {
+      if (root.dataset.mounted === 'true') return;
+      new Splide(root, options).mount();
+      root.dataset.mounted = 'true';
+    };
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { mount(); io.disconnect(); }
+        });
+      }, { threshold: 0.1 });
+      io.observe(root);
+    } else {
+      // Fallback for very old browsers
+      mount();
+    }
+  }
+
+  // Optional: ensure sections don’t collapse before mount
+  // (You can also do this in CSS)
+  function ensureMinSlideHeight() {
+    const css = `
+      #publications-slider .splide__slide,
+      #members-slider .splide__slide { min-block-size: 120px; }
+    `;
+    const style = document.createElement('style');
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  // Theme + initializers
+  window.addEventListener('load', () => {
+    const theme = window.__chThemeChosen || 'ch-theme-black';
+    document.getElementById('hero')?.setAttribute('data-theme', theme);
+
+    ensureMinSlideHeight();
+
+    // Mount when visible
+    initSmartSplide(document.getElementById('publications-slider'), 3);
+    initSmartSplide(document.getElementById('members-slider'), 3);
+  });
+
+  // Keep your resize handler for the mobile menu
+  window.addEventListener('resize', () => {
+    const menuPanel = document.getElementById('mobile-menu-panel');
+    const iconOpen  = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+
+    if (window.innerWidth >= 768 && menuPanel?.classList.contains('visible')) {
+      menuPanel.classList.remove('visible');
+      iconOpen?.classList.remove('hidden');
+      iconClose?.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  });
+</script>
+
+</body>
+</html>

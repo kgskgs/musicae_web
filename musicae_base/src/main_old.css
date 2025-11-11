@@ -1,0 +1,755 @@
+/* 1. Import all of Tailwind's styles */
+@import "tailwindcss";
+
+/* * 2. Tell Tailwind where to scan for classes.
+ * These paths are relative to THIS file (musicae_base/src/main.css)
+ */
+
+/* This one path finds all templates in all apps */
+@source "../../**/templates/**/*.html";
+
+/* This one path finds all Python/JS files */
+@source "../../**/*.{py,js,ts,jsx,tsx}";
+
+/* 1. Color Palette & CSS Vars */
+:root {
+  --h1-size: clamp(2.8rem, 7vw + 0.7rem, 6.3rem);
+  --h2-size: clamp(2.1rem, 4.9vw + 0.7rem, 4.2rem);
+  --p-size: clamp(1.125rem, 1vw + 0.8rem, 1.5rem);
+
+  --color-bg-light: #FFFFFF;
+  --color-bg-soft: #F9F9F9;
+  --color-text-dark: #222222;
+  --color-text-secondary: #555555;
+  --color-accent: #005A9C;
+  --color-text-light: #F5F5FF;
+
+  --header-height: 96px;
+  --bg: var(--color-bg-light);
+}
+
+/* 2. Typography */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-bg-light);
+  color: var(--color-text-dark);
+  scroll-behavior: smooth;
+}
+
+.font-display {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: normal;
+  line-height: 1.2;
+}
+
+.text-h1 { font-size: var(--h1-size); }
+.text-h2 { font-size: var(--h2-size);  max-inline-size: 100%;  }
+.text-body { font-size: var(--p-size); line-height: 1.5; color: var(--color-text-secondary); }
+
+.text-measure-max { max-width: 70ch; }
+
+
+
+/* 3. Animation */
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(30px); clip-path: inset(0 0 100% 0); }
+  100% { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0% 0); }
+}
+
+.kinetic-reveal { opacity: 0; transform: translateY(30px); will-change: transform, opacity, clip-path; }
+.kinetic-reveal.visible {
+  animation: fade-in-up 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+.sticky-h1-container { height: 100vh; display: flex; align-items: center; justify-content: center; }
+.sticky-h1 { position: sticky; top: 50%; transform: translateY(-50%); text-align: center; z-index: 10; color: var(--color-text-dark); }
+
+.btn-contrast {
+  /* --- Base Button Styles --- */
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+  transition: all .2s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+
+  /* --- Default State (for Dark Backgrounds) --- */
+  background-color: var(--color-accent);
+  color: var(--color-text-light); /* Usually white */
+  border: 1px solid transparent;
+}
+
+.btn-contrast:hover {
+  /* --- Hover State (Fixed) --- */
+  background: var(--color-bg-soft); /* A light hover background */
+  color: var(--color-text-light); /* <-- THE FIX: Text stays white/light */
+  border: 1px solid var(--color-surface);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.1),
+              inset 0 1px 0 rgb(255 255 255 / 0.3);
+}
+
+/* 4. Card Styles */
+.card-item-row {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--color-bg-light);
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--color-text-dark);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-item-row:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+.card-item-row img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 820 / 1030;  /* <-- THIS IS THE FIX */
+  object-fit: cover;   /* 'cover' is fine, it will fill the width */
+  border-bottom: 1px solid #e5e7eb;
+}
+.card-item-content { padding: 1.5rem; flex-grow: 1; }
+.card-item-content h3 { font-size: 1.5rem; font-weight: 700; color: var(--color-text-dark); margin-bottom: 0.5rem; }
+.card-item-content .role, .card-item-content .author {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.75rem;
+}
+/* 3-line clamp for descriptions */
+.card-item-content .description {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(0.9rem * 1.5 * 3);
+}
+
+/* 5. Splide Theme Overrides */
+.splide__slide { padding: 0.5rem 0; }
+.splide__pagination__page.is-active {
+  background: var(--color-surface);
+  transform: scale(1.2);
+}
+
+.splide__arrow {
+  background: var(--color-surface);
+  border: 1px solid transparent;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.05);
+  opacity: 1;
+}
+.splide__arrow:hover {
+  background: var(--color-accent);
+  border-color: var(--color-surface);
+}
+.splide__arrow svg {
+  fill: #fff;  /* white chevrons on filled surface bg */
+}
+.splide__arrow:disabled { opacity: 0.3; }
+
+/* 6. Theme tokens (global, applied from <body data-theme="...">) */
+[data-theme="ch-theme-black"]  { --color-accent:#E3A239; --color-surface:#2A4376; }
+[data-theme="ch-theme-green"]  { --color-accent:#10b981; --color-surface:#1B3B2A; }
+[data-theme="ch-theme-lila"]   { --color-accent:#8b5cf6; --color-surface:#3E1A47; }
+[data-theme="ch-theme-yellow"] { --color-accent:#f59e0b; --color-surface:#5A4713;  }
+[data-theme="ch-theme-blue"]   { --color-accent:#2563eb; --color-surface:#1A294F; }
+[data-theme="ch-theme-orange"] { --color-accent:#f97316; --color-surface:#6A2B0C; }
+
+/* (optional) Keep hero/header color treatments */
+header[data-theme="ch-theme-black"], .ch-splash[data-theme="ch-theme-black"]{  background:#2A4376; color:#E3A239;}
+header[data-theme="ch-theme-green"], .ch-splash[data-theme="ch-theme-green"]{ background:#1B3B2A; color:#A8C686; }
+header[data-theme="ch-theme-lila"],  .ch-splash[data-theme="ch-theme-lila"] { background:#3E1A47; color:#E09EC1; }
+header[data-theme="ch-theme-yellow"],.ch-splash[data-theme="ch-theme-yellow"]{ background:#5A4713; color:#E2C547; }
+header[data-theme="ch-theme-blue"],  .ch-splash[data-theme="ch-theme-blue"] { background:#1A294F; color:#68A4D4; }
+header[data-theme="ch-theme-orange"],.ch-splash[data-theme="ch-theme-orange"]{ background:#6A2B0C; color:#E78440; }
+
+header[data-theme] a, .ch-splash[data-theme] a { color: inherit; }
+.ch-splash[data-theme] .lead, .ch-splash[data-theme] .muted { color: inherit!important; }
+.ch-splash[data-theme] .sticky-h1 { color: inherit; }
+.ch-splash[data-theme] p { color: inherit; opacity: 0.8; }
+header[data-theme] .font-display { color: inherit; }
+
+/* 7. Header CSS */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg);
+  border-bottom: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  height: var(--header-height);
+}
+header .container { max-width: none; padding-inline: 24px; }
+.header-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 100%; }
+.brand { text-decoration: none; color: inherit; }
+.brand__name {
+  font-family: "EB Garamond", Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
+  letter-spacing: -0.01em;
+  margin-left: -10px;
+}
+nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 20px; align-items: center; }
+header .nav-links a {
+  color: inherit;
+  position: relative;
+  font-weight: 500;
+  font-size: 1.125rem;
+  padding: 12px 8px !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  text-decoration: none;
+}
+header .nav-links a::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -4px; height: 2px;
+  background: currentColor; transform: scaleX(0); transform-origin: left;
+  transition: transform .18s ease; opacity: .9;
+}
+header .nav-links a:hover::after,
+header .nav-links a:focus-visible::after,
+header .nav-links a[aria-current="page"]::after { transform: scaleX(1); }
+
+.lang { font-size: 0.9rem; opacity: 0.7; display: flex; gap: 0.5em; align-items: center; }
+.lang a.lang-link {
+  padding: 6px 2px; text-decoration: none; color: inherit; transition: opacity 0.2s; opacity: 0.7;
+}
+.lang a.lang-link:hover { opacity: 1; text-decoration: underline; }
+.lang a.lang-link[aria-current="page"] { opacity: 1; font-weight: 700; text-decoration: none; }
+.lang select { display: none; }
+
+.lang a.lang-link:hover::after,
+        .lang a.lang-link[aria-current="page"]::after {
+            transform: scaleX(1);
+        }
+
+.lang button.lang-link {
+    /* Required for link appearance */
+    background: none;
+    border: none;
+    padding: 6px 2px;
+    color: inherit;
+    font-size: inherit; /* inherit from .lang parent */
+    cursor: pointer;
+    line-height: inherit;
+    
+    /* Required for animation */
+    position: relative;
+    transition: opacity 0.2s;
+    opacity: 0.7;
+    text-decoration: none; 
+}
+
+/* APPLY ANIMATION TO BOTH A TAGS (Desktop) AND BUTTONS (Mobile) */
+.lang .lang-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px; 
+    height: 1px; 
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .18s ease;
+    opacity: 1;
+}
+
+.lang .lang-link:hover {
+    opacity: 1;
+}
+
+/* ACTIVATE ANIMATION ON HOVER/ACTIVE */
+.lang .lang-link:hover::after,
+.lang .lang-link[aria-current="page"]::after {
+    transform: scaleX(1);
+}
+
+.lang .lang-link[aria-current="page"] {
+    opacity: 1;
+    font-weight: 700;
+    text-decoration: none;
+}
+        
+/* Mobile menu panel */
+#mobile-menu-panel {
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  background: var(--bg);
+  padding-top: var(--header-height);
+}
+#mobile-menu-panel.visible { opacity: 1; visibility: visible; }
+#mobile-menu-links a {
+  display: block; padding: 1rem 0; font-size: 1.75rem; font-weight: 700;
+  color: inherit; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.1); opacity: 0.8; transition: opacity 0.2s;
+}
+#mobile-menu-links a:hover { opacity: 1; }
+#mobile-lang-switcher { margin-top: 1.5rem; display: flex; gap: 1.5rem; justify-content: center; }
+#mobile-lang-switcher .lang-link { font-size: 1.25rem; font-weight: 700; }
+
+/* 8. Modern Animation Styles */
+/* 8a. Scroll-Linked Hero Animation */
+@keyframes fade-out-scale {
+  to { opacity: 0; transform: scale(0.9) translateY(-50%); }
+}
+.sticky-h1-container .sticky-h1 {
+  animation: fade-out-scale linear forwards;
+  animation-timeline: view(block);
+  animation-range: 40% 80%;
+}
+
+/* 8b. View Transition Cross-Fade */
+[data-i18n="h2_about"] { view-transition-name: h2-about; }
+[data-i18n="h2_publications"] { view-transition-name: h2-publications; }
+[data-i18n="h2_musphi"] { view-transition-name: h2-musphi; }
+[data-i18n="h2_members"] { view-transition-name: h2-members; }
+[data-i18n="h2_library"] { view-transition-name: h2-library; }
+[data-i18n="h2_contact"] { view-transition-name: h2-contact; }
+::view-transition-old(root) { animation: 0.2s ease-out forwards fade-out; }
+::view-transition-new(root) { animation: 0.2s 0.1s ease-in forwards fade-in; }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* Unified accent button for the whole site */
+.btn-accent, .btn-contrast, .theme-btn {
+  background: var(--color-surface);
+  color: #fff;
+  border: 1px solid var(--color-border, rgba(0,0,0,.08)); /* 👈 add this */
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  font-size: 1.3rem;
+  transition: all .2s ease;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+}
+
+.btn-accent:hover, .btn-contrast:hover, .theme-btn:hover {
+  background: var(--color-bg-soft);            /* your existing inversion */
+  color: var(--color-surface);
+  border-color: var(--color-surface);          /* sharper outline on hover */
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+}
+
+.btn-contrast:hover,
+.btn-contrast:focus-visible {
+  color: var(--color-surface) !important;
+}
+
+
+/* Custom Bio Content Styling - Replace Prose Functionality */
+.bio-content {
+    /* * 1. SLIGHTLY SMALLER FONT SIZE
+     * Current fluid minimum is 1.125rem (~18px). 
+     * Setting this to 1.0625rem (~17px) or 1rem (~16px) makes it slightly smaller.
+     */
+    font-size: 1.1rem; 
+    line-height: 1.6; /* Slightly increase line height for better readability */
+    color: var(--color-text-secondary); 
+}
+
+/* 2. PARAGRAPH SPACING */
+.bio-content p {
+    margin-top: 0;
+    margin-bottom: 1.5em; /* Adds 1.5 times the font size as space below each paragraph */
+}
+
+/* Re-add basic list styling for CKEditor content */
+.bio-content ul,
+.bio-content ol {
+    list-style-position: outside;
+    padding-left: 1.5em; 
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.bio-content li {
+    margin-bottom: 0.5em;
+}
+
+.bio-content a {
+    color: var(--color-surface);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* 9. Publication List Styles */
+
+.publication-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 80ch; /* Constrain line length for readability */
+}
+
+.publication-item {
+  /* Replaces border-b, pb-6, and the space-y-6 (via margin-top) */
+  border-bottom: 1px solid #e5e7eb; /* Using the gray from your .card-item-row */
+  padding-bottom: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.publication-item:first-child {
+  margin-top: 0;
+}
+
+.publication-item .pub-meta {
+  /* Replaces text-sm font-medium text-accent */
+  font-size: 0.9rem; /* 14.4px */
+  font-weight: 500;
+  color: var(--color-surface);
+  margin-bottom: 0.25rem;
+}
+
+.publication-item .pub-title {
+  /* Replaces text-xl font-semibold text-gray-900 hover:text-accent */
+  display: block; /* Makes the entire title a larger click target */
+  font-size: 1.4rem; /* 22.4px - a modern, readable heading size */
+  font-weight: 700; /* Consistent with .font-display */
+  color: var(--color-text-dark);
+  text-decoration: none;
+  line-height: 1.3;
+  transition: color 0.2s ease;
+  margin-bottom: 0.5rem;
+}
+
+.publication-item .pub-title:hover,
+.publication-item .pub-title:focus-visible {
+  color: var(--color-accent);
+}
+
+.publication-item .pub-bib {
+  /* This class is added to the existing .text-body */
+  /* .text-body class already provides fluid font-size and secondary color */
+  margin-top: 0.25rem;
+}
+
+.publication-item .pub-bib em {
+  /* Styles the <em> tag for journal/publisher info */
+  font-style: italic;
+  /* Make italicized text slightly darker than surrounding secondary text */
+  color: var(--color-text-dark); 
+  opacity: 0.9;
+}
+
+.publication-item .pub-abstract {
+  /* This is the <details> element */
+  margin-top: 0.75rem;
+}
+
+.publication-item .pub-abstract-toggle {
+  /* This is the <summary> element */
+  font-size: 1rem; /* 16px */
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.publication-item .pub-abstract-toggle:hover {
+  color: var(--color-text-dark);
+}
+
+.publication-item .pub-abstract .text-body {
+  /* Adds space between the <summary> and the abstract text */
+  margin-top: 0.75rem;
+}
+
+/* Styles the "empty" message */
+.publication-list > li.text-body {
+  padding: 1rem 0;
+}
+
+.authors a {
+  color: #374151; /* or inherit */
+  text-decoration: none;
+  transition: color .15s ease;
+}
+.authors a:hover {
+  color: var(--color-surface);
+}
+.authors a:focus-visible {
+  outline: 2px solid var(--color-surface);
+  outline-offset: 2px;
+}
+
+.card-item-content .current-research {
+  font-size: 1.1rem;                /* matches .bio-content */
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+  white-space: pre-line;            /* preserve line breaks */
+  margin-top: 0.75rem;
+  overflow: visible;                /* prevent truncation */
+}
+
+.author-link{
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  text-decoration-skip-ink: auto;        /* modern */
+  -webkit-text-decoration-skip: ink;     /* Safari */
+}
+
+/* =========================
+   DESKTOP DROPDOWN (theme-inherited)
+   ========================= */
+.nav-links .group { position: relative; }
+
+.nav-links .group > .dropdown {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+  z-index: 60;
+
+  display: none;
+  width: max-content;
+  min-width: 12rem;
+  max-width: 26rem;
+  max-height: min(60vh, 28rem);
+  overflow-y: auto;
+
+  padding: 0.25rem;
+
+  /* Use the header’s colors: background = surface, text = accent */
+  background: var(--color-surface);      /* inherits header background */
+  color: inherit;           /* inherits header text color */
+
+  /* Subtle framing that works on dark headers too */
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.18);
+}
+
+.nav-links .group:hover > .dropdown,
+.nav-links .group:focus-within > .dropdown {
+  display: block;
+}
+
+/* =========================
+   ITEMS WITH LONG LABELS
+   ========================= */
+.dropdown-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  text-decoration: none;
+
+  /* Accent-on-surface via inheritance */
+  color: currentColor;     /* equals header color */
+  background: transparent; /* the dropdown already has the surface bg */
+  border-radius: 8px;
+
+  /* Long-text helpers */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* Hover/Focus: subtle lift that works across themes */
+.dropdown-link:hover,
+.dropdown-link:focus-visible {
+  background: rgba(255,255,255,.08);   /* gentle overlay on dark surfaces */
+  outline: 2px solid transparent;
+}
+
+.dropdown-link:focus-visible {
+  box-shadow: 0 0 0 2px currentColor;  /* visible keyboard focus */
+}
+
+/* Optional: tighter spacing for long lists */
+.dropdown li + li { margin-top: 2px; }
+
+/* =========================
+   STOP UNDERLINE ANIMATION
+   ON TOP-LEVEL TRIGGER WHEN
+   SUBMENU IS ACTIVE
+   ========================= */
+.nav-links .group:hover > .anchor-link::after,
+.nav-links .group:focus-within > .anchor-link::after {
+  content: none !important;
+}
+.nav-links .group:hover > .anchor-link,
+.nav-links .group:focus-within > .anchor-link {
+  text-decoration: none !important;
+}
+.nav-links .group > .anchor-link.is-active {
+  text-decoration: none;
+}
+
+/* =========================
+   MOBILE PANEL: MATCH DESKTOP THEME
+   (no JS changes; body already has data-theme)
+   ========================= */
+body[data-theme="ch-theme-black"]  #mobile-menu-panel { background:#2A4376; color:#E3A239; }
+body[data-theme="ch-theme-green"]  #mobile-menu-panel { background:#1B3B2A; color:#A8C686; }
+body[data-theme="ch-theme-lila"]   #mobile-menu-panel { background:#3E1A47; color:#E09EC1; }
+body[data-theme="ch-theme-yellow"] #mobile-menu-panel { background:#5A4713; color:#E2C547; }
+body[data-theme="ch-theme-blue"]   #mobile-menu-panel { background:#1A294F; color:#68A4D4; }
+body[data-theme="ch-theme-orange"] #mobile-menu-panel { background:#6A2B0C; color:#E78440; }
+
+/* Keep your existing base panel rules; just ensure we don't add a translucent overlay */
+#mobile-menu-panel { backdrop-filter: none; }
+
+/* Ensure mobile menu links inherit the theme text color */
+#mobile-menu-panel .nav-link,
+#mobile-menu-panel .dropdown-link,
+#mobile-menu-panel .lang-link { color: inherit; }
+
+/* Same typography for all top-level items, including “За нас” summary */
+#mobile-menu-links a,
+#mobile-menu-panel summary.nav-link {
+  display:block;
+  padding: 1rem 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,0,0,0.1); /* shows subtly on bright themes; dark themes already readable */
+  opacity: 0.8;
+  transition: opacity .2s ease;
+}
+#mobile-menu-links a:hover,
+#mobile-menu-panel summary.nav-link:hover { opacity: 1; }
+
+/* Remove default summary marker/boldness and keep the chevron you added */
+#mobile-menu-panel summary.nav-link { list-style: none; }
+#mobile-menu-panel summary.nav-link::-webkit-details-marker { display:none; }
+
+/* Submenu: force vertical stack, full width */
+#mobile-menu-panel details.mobile-collapsible > ul {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem;
+  padding-left: 1rem;   /* indent under “За нас” */
+  margin-top: 0.5rem;
+  width: 100%;
+}
+#mobile-menu-panel details.mobile-collapsible > ul > li,
+#mobile-menu-panel details.mobile-collapsible > ul > li > a {
+  display: block !important;
+  width: 100%;
+}
+
+/* Rotate the chevron when open (optional polish) */
+#mobile-menu-panel details[open] summary svg {
+  transform: rotate(180deg);
+  transition: transform .2s ease;
+}
+
+/* Make the whole mobile stack vertical even if a parent is flex-row */
+#mobile-menu-links { display:flex; flex-direction:column; gap:0.75rem; }
+
+/* Mobile language switcher: same color + spacing as desktop */
+#mobile-lang-switcher { margin-top: 1.5rem; display:flex; gap:1.5rem; justify-content:center; }
+#mobile-lang-switcher .lang-link {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: inherit;
+}
+
+/* Mobile: smaller & scrollable submenus */
+@media (max-width: 767.98px) {
+  /* Top-level items keep their size; target only the submenu list */
+  #mobile-menu-panel details.mobile-collapsible > ul {
+    /* 50% of your top-level 1.75rem → 0.875rem */
+    font-size: 0.875rem;
+    line-height: 1.4;
+
+    /* Stack tighter */
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.25rem;                /* was 0.5rem */
+    padding-left: 0.75rem;       /* was 1rem */
+    margin-top: 0.25rem;         /* was 0.5rem */
+
+    /* Make just the submenu scroll */
+    max-height: min(40vh, 16rem);
+    overflow-y: auto;
+    overscroll-behavior: contain; /* prevent panel/body scroll chaining */
+    -webkit-overflow-scrolling: touch; /* smooth iOS scroll */
+    padding-right: 0.25rem;      /* space for scrollbar */
+  }
+
+  /* Smaller tap targets inside submenu */
+  #mobile-menu-panel details.mobile-collapsible > ul > li > a.dropdown-link {
+    padding: 0.4rem 0.25rem;
+    font-weight: 600;            /* lighter than top-level’s 700 */
+    border-radius: 6px;
+  }
+
+  /* Optional: subtle custom scrollbar (mobile-safe) */
+  #mobile-menu-panel details.mobile-collapsible > ul::-webkit-scrollbar { width: 6px; }
+  #mobile-menu-panel details.mobile-collapsible > ul::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.25);
+    border-radius: 4px;
+  }
+  #mobile-menu-panel details.mobile-collapsible > ul { scrollbar-width: thin; }
+}
+/* Keep the toggle button visible when the menu is open */
+@media (max-width: 767.98px) {
+  /* Header stays fixed and above the panel */
+  header {
+    position: fixed !important;
+    top: env(safe-area-inset-top, 0);
+    left: 0;
+    right: 0;
+    z-index: 1100;                /* ↑ higher than panel */
+    height: var(--header-height);
+  }
+
+  @media (max-width: 767.98px) {
+  #hero .text-h2 {
+    overflow-wrap: anywhere;   /* prevents overflow on long words */
+    word-break: break-word;    /* legacy fallback */
+    hyphens: auto;             /* nicer breaks if language supports */
+    font-size: clamp(1.1rem, 6.5vw + 0.1rem, 1.8rem); /* slightly smaller on mobile */
+    line-height: 1.15;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:hidden {
+    display: none;
+  }
+  .md\:block {
+    display: block;
+  }
+  /* ... there would be many other 'md:' classes here too ... */
+}
+
+  /* Page content offset for fixed header */
+  body {
+    padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0));
+  }
+
+  /* Panel sits UNDER the header, fills the rest of the screen */
+  #mobile-menu-panel {
+    position: fixed !important;
+    top: calc(var(--header-height) + env(safe-area-inset-top, 0)); /* ← start below header */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1090;                /* ↓ below header */
+    padding-top: 0 !important;    /* you previously added padding-top: var(--header-height); undo it */
+  }
+}
+
+/* Prevent weird stacking contexts from beating z-index */
+header, #mobile-menu-panel { isolation: isolate; }
