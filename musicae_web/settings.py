@@ -28,12 +28,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Core settings
 SECRET_KEY = os.environ.get("DJANGO_KEY", "^dev-only-unsafe-key^")
 DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
-ALLOWED_HOSTS = [
-    "fundamentamusicae.bg",
-    "www.fundamentamusicae.bg",
-    "3.121.16.126",     # your static IP (optional but handy)
-    "127.0.0.1", "localhost"
-]
+# space-separated list → list
+def env_list(name: str, default: str = ""):
+    return [x for x in os.environ.get(name, default).split() if x]
+
+ALLOWED_HOSTS = env_list("DJANGO_HOST", "127.0.0.1 localhost")
+
+
 
 # Application definition
 INSTALLED_APPS = [
