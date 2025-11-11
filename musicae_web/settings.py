@@ -189,7 +189,8 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-# Auto field
+
+# Auto fieldasdasdasd
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # ────────────────────────────────────────────────────────────────────────────────
