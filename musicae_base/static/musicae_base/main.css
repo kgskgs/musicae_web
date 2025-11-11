@@ -1075,6 +1075,15 @@ body {
 .text-h1 {
   font-size: var(--h1-size);
 }
+
+@media (max-width: 767px) {        /* Tailwind's md breakpoint is 768px */
+  .text-h1 {
+    font-size: 2rem;            /* ≈ text-2xl */
+    line-height: 1.2;              /* tighten a bit for small screens */
+    letter-spacing: -0.01em;       /* optional: keep your tracking feel */
+  }
+}
+
 .text-h2 {
   font-size: var(--h2-size);
   max-inline-size: 100%;
@@ -2109,4 +2118,12 @@ header, #mobile-menu-panel {
       --tw-duration: initial;
     }
   }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+  .animate-bob { animation: bob 1.6s ease-in-out infinite; }
 }

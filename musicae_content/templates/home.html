@@ -195,19 +195,24 @@
   <main class="w-full">
    
     <!-- HERO SECTION -->
-    <section id="hero" class="sticky-h1-container bg-[var(--color-bg-soft)] overflow-hidden relative ch-splash">
-      <div class="sticky-h1 p-4">
-        <h1 class="text-h1 font-display leading-[1.1]">Fundamenta Musicae</h1>
-        <p class="text-2xl md:text-5xl font-light text-gray-600 mt-4 tracking-normal lead muted">
-          {% trans "Център за музикална философия и хуманитаристика" %}
-        </p>
-      </div>
-      <div class="absolute bottom-24 animate-bounce text-gray-600" aria-hidden="true">
-      <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-      </svg>
-    </div>
-    </section>
+    <section id="hero" class="sticky-h1-container bg-[var(--color-bg-soft)] relative overflow-hidden ch-splash">
+  <div class="p-4 text-center hero-inner">
+    <h1 class="text-h1 font-display leading-[1.1]">Fundamenta Musicae</h1>
+    <p class="text-2xl md:text-5xl font-light text-gray-600 mt-4 tracking-normal">
+      {% trans "Център за музикална философия и хуманитаристика" %}
+    </p>
+  </div>
+
+ <div class="absolute bottom-24 inset-x-0 flex justify-center text-gray-600" aria-hidden="true">
+  <svg class="w-12 h-12 animate-bob" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+  </svg>
+</div>
+
+
+
+</section>
+
 
     <!-- ABOUT -->
    <section id="about" class="pt-24 pb-20 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200 overflow-hidden">
