@@ -184,7 +184,7 @@ CKEDITOR_CONFIGS = {
             ["Source"],
         ],
         # point to a built CSS you control
-        "contentsCss": [STATIC_URL + "musicae_base/css/site.css"],
+        "contentsCss": [STATIC_URL + "musicae_base/main.css"],
         "extraAllowedContent": "*(*){*};a[*];img[*];figure;figcaption",
     }
 }
