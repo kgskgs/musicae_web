@@ -1,6 +1,6 @@
 # Versions compatible with Python 3.6 / Ubuntu 18.04
 asgiref==3.4.1               # Django 3.2-compatible
-Django==3.2.25               # last LTS that runs on Python 3.6
+Django==4.2.26               # last LTS that runs on Python 3.6
 django-ckeditor==5.9.0
 django-cleanup==5.2.0
 django-js-asset==1.2.2
