@@ -32,7 +32,7 @@ DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
 def env_list(name: str, default: str = ""):
     return [x for x in os.environ.get(name, default).split() if x]
 
-ALLOWED_HOSTS = env_list("DJANGO_HOST", "127.0.0.1 localhost")
+ALLOWED_HOSTS = ['fundamentamusicae.bg', 'www.fundamentamusicae.bg', '3.121.16.126', '127.0.0.1']
 
 
 
