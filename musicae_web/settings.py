@@ -32,7 +32,7 @@ DEBUG = False
 def env_list(name: str, default: str = ""):
     return [x for x in os.environ.get(name, default).split() if x]
 
-ALLOWED_HOSTS = ['fundamentamusicae.bg', 'www.fundamentamusicae.bg', '3.73.179.29', '127.0.0.1']
+ALLOWED_HOSTS = ['fundamentamusicae.bg', 'www.fundamentamusicae.bg', '3.121.16.126', '127.0.0.1']
 
 
 
@@ -142,23 +142,25 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Email (SMTP in prod, console in dev)
-if os.environ.get("DJANGO_EMAIL_HOST"):
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+if "DJANGO_EMAIL_HOST" in os.environ:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = os.environ["DJANGO_EMAIL_HOST"]
-    EMAIL_PORT = int(os.environ.get("DJANGO_EMAIL_PORT", "587"))
-    EMAIL_HOST_USER = os.environ.get("DJANGO_EMAIL_USER", "django")
-    EMAIL_HOST_PASSWORD = os.environ.get("DJANGO_EMAIL_PASS", "")
-    EMAIL_USE_TLS = os.environ.get("DJANGO_EMAIL_USE_TLS", "1") == "1"
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = 'django'
+    EMAIL_HOST_PASSWORD = os.environ["DJANGO_EMAIL_PASS"]
+    EMAIL_USE_TLS = True
 
-    DEFAULT_FROM_EMAIL = os.environ.get("DJANGO_EMAIL_FROM", "web@example.com")
-    CONTACT_EMAILS = env_list("DJANGO_EMAIL_CONTACTS", "")
+    DEFAULT_FROM_EMAIL = os.environ["DJANGO_EMAIL_FROM"]
+    CONTACT_EMAILS = os.environ["DJANGO_EMAIL_CONTACTS"].split()
+
 else:
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-    DEFAULT_FROM_EMAIL = "testing@example.com"
-    EMAIL_HOST_USER = ""
-    EMAIL_HOST_PASSWORD = ""
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DEFAULT_FROM_EMAIL = 'testing@example.com'
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
     EMAIL_USE_TLS = False
     EMAIL_PORT = 1025
+
     CONTACT_EMAILS = ["test_mail@example.com"]
 
 # CAPTCHA (kept from your version)
