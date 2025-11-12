@@ -146,7 +146,7 @@ if "DJANGO_EMAIL_HOST" in os.environ:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = os.environ["DJANGO_EMAIL_HOST"]
     EMAIL_PORT = 587
-    EMAIL_HOST_USER = 'django'
+    EMAIL_HOST_USER = 'musicae'
     EMAIL_HOST_PASSWORD = os.environ["DJANGO_EMAIL_PASS"]
     EMAIL_USE_TLS = True
 
