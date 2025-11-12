@@ -1,0 +1,836 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: .\musicae_content\templates\home.html:284 .\musicae_content\templates\home.html:346
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-11 17:19+0100\n"
+"PO-Revision-Date: 2025-11-11 17:50+0100\n"
+"Last-Translator: \n"
+"Language-Team: German <LL@li.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.8\n"
+
+#: .\musicae_base\forms.py:7 .\musicae_base\templates\musicae_base\contact.html:108
+msgid "Вашето име"
+msgstr "Ihr Name"
+
+#: .\musicae_base\forms.py:8 .\musicae_base\templates\musicae_base\contact.html:120
+#: .\musicae_content\templates\musicae_content\person_detail.html:128
+msgid "Имейл"
+msgstr "E-Mail"
+
+#: .\musicae_base\forms.py:9 .\musicae_base\templates\musicae_base\contact.html:132
+msgid "Съобщение"
+msgstr "Nachricht"
+
+#: .\musicae_base\forms.py:11
+msgid "Потвърждение"
+msgstr "Bestätigung"
+
+#: .\musicae_base\templates\404.html:10
+msgid "Страницата не е намерена"
+msgstr "Seite nicht gefunden"
+
+#: .\musicae_base\templates\500.html:10
+msgid "Сървърна грешка"
+msgstr "Serverfehler"
+
+#: .\musicae_base\templates\musicae_base\base.html:76 .\musicae_content\templates\home.html:83
+msgid "Main navigation"
+msgstr "Hauptnavigation"
+
+#: .\musicae_base\templates\musicae_base\base.html:78
+#: .\musicae_base\templates\musicae_base\base.html:133 .\musicae_content\templates\home.html:85
+#: .\musicae_content\templates\home.html:140
+#: .\musicae_content\templates\musicae_content\person_detail.html:46
+msgid "Начало"
+msgstr "Startseite"
+
+#: .\musicae_base\templates\musicae_base\base.html:83
+#: .\musicae_base\templates\musicae_base\base.html:140
+#: .\musicae_base\templates\musicae_base\base.html:164 .\musicae_content\templates\home.html:90
+#: .\musicae_content\templates\home.html:147 .\musicae_content\templates\home.html:156
+#: .\musicae_content\templates\home.html:171 .\musicae_content\templates\home.html:221
+#: .\musicae_content\templates\musicae_content\research_detail.html:7
+msgid "За нас"
+msgstr "Über uns"
+
+#: .\musicae_base\templates\musicae_base\base.html:98
+#: .\musicae_base\templates\musicae_base\base.html:169 .\musicae_content\templates\home.html:105
+#: .\musicae_content\templates\home.html:176 .\musicae_content\templates\home.html:317
+#: .\musicae_content\templates\musicae_content\members.html:7
+#: .\musicae_content\templates\musicae_content\members.html:36
+#: .\musicae_content\templates\musicae_content\person_detail.html:55
+msgid "Членове"
+msgstr "Mitglieder"
+
+#: .\musicae_base\templates\musicae_base\base.html:99
+#: .\musicae_base\templates\musicae_base\base.html:170 .\musicae_content\templates\home.html:106
+#: .\musicae_content\templates\home.html:177 .\musicae_content\templates\home.html:243
+#: .\musicae_content\templates\musicae_content\publication_list.html:6
+#: .\musicae_content\templates\musicae_content\publication_list.html:124
+msgid "Библиотека"
+msgstr "Bibliothek"
+
+#: .\musicae_base\templates\musicae_base\base.html:100
+#: .\musicae_base\templates\musicae_base\base.html:171
+#: .\musicae_base\templates\musicae_base\contact.html:4
+#: .\musicae_base\templates\musicae_base\contact.html:66 .\musicae_content\templates\home.html:107
+#: .\musicae_content\templates\home.html:178 .\musicae_content\templates\home.html:378
+msgid "Контакти"
+msgstr "Kontakt"
+
+#: .\musicae_base\templates\musicae_base\base.html:117 .\musicae_content\templates\home.html:124
+msgid "Open menu"
+msgstr "Menü öffnen"
+
+#: .\musicae_base\templates\musicae_base\base.html:130 .\musicae_content\templates\home.html:137
+msgid "Mobile navigation"
+msgstr "Mobile Navigation"
+
+#: .\musicae_base\templates\musicae_base\base.html:149
+msgid "Преглед"
+msgstr "Übersicht"
+
+#: .\musicae_base\templates\musicae_base\base.html:175 .\musicae_content\models.py:144
+#: .\musicae_content\templates\home.html:182
+msgid "Language"
+msgstr "Sprache"
+
+#: .\musicae_base\templates\musicae_base\base.html:192 .\musicae_content\templates\home.html:391
+msgid "Всички права запазени."
+msgstr "Alle Rechte vorbehalten."
+
+#: .\musicae_base\templates\musicae_base\contact.html:68
+msgid "Свържете се с нас – ще се радваме да ви отговорим възможно най-скоро."
+msgstr "Kontaktieren Sie uns – wir melden uns so bald wie möglich."
+
+#: .\musicae_base\templates\musicae_base\contact.html:71
+msgid "Пишете ни директно на"
+msgstr "Schreiben Sie uns direkt an"
+
+#: .\musicae_base\templates\musicae_base\contact.html:85
+msgid "Съобщението е изпратено."
+msgstr "Die Nachricht wurde gesendet."
+
+#: .\musicae_base\templates\musicae_base\contact.html:86
+msgid "Благодарим ви! Ще се свържем с вас при първа възможност."
+msgstr "Vielen Dank! Wir melden uns bei der ersten Gelegenheit."
+
+#: .\musicae_base\templates\musicae_base\contact.html:90
+msgid "Възникна грешка."
+msgstr "Ein Fehler ist aufgetreten."
+
+#: .\musicae_base\templates\musicae_base\contact.html:91
+msgid "Моля, проверете полетата по-долу и опитайте отново."
+msgstr "Bitte überprüfen Sie die Felder unten und versuchen Sie es erneut."
+
+#: .\musicae_base\templates\musicae_base\contact.html:113
+msgid "Име и фамилия"
+msgstr "Vor- und Nachname"
+
+#: .\musicae_base\templates\musicae_base\contact.html:137
+msgid "Напишете вашето съобщение тук…"
+msgstr "Schreiben Sie Ihre Nachricht hier …"
+
+#: .\musicae_base\templates\musicae_base\contact.html:142
+msgid "Изпрати"
+msgstr "Senden"
+
+#: .\musicae_base\templates\musicae_base\tos.html:3
+#, python-format
+msgid ""
+"\n"
+"<p>Тези условия за ползване (споразумението) регламентират достъпа до- и използването на "
+"уебсайта www.fundamentamusicae.bg (уебсайта).</p>\n"
+"<p>Молим да се запознаете със споразумението преди да започнете да разглеждате и да се "
+"възползвате от съдържанието на уебсайта. Достъпът до уебсайта и използването му от Ваша страна "
+"означава, че Вие, както и организацията, която представлявате, сте приели и сте съгласни със "
+"споразумението.</p>\n"
+"<p>1. Достъп до- и употреба на компонентите и съдържанието на уебсайта</p>\n"
+"<p>Уебсайта е собственост на академичния, научно-изследователски и педагогически център "
+"Fundamenta Musicae (FM). FM е собственик на всички компоненти на уебсайта и цялото му "
+"съдържание (включително, но не само, текстове, база данни, лого, снимки, графики, схеми, "
+"всякакви други изображения, аудио и видео материали, програмен код, дизайн), доколкото не е "
+"изрично посочен друг собственик или автор. Що се отнася до авторските текстове, по презумпция, "
+"ако друго не е указано, авторът е и собственик.</p>\n"
+"<p>Всички компоненти и цялото съдържание на уебсайта, независимо дали става въпрос са "
+"собственост на FM или за друга собственост, са защитени по закона за авторското право и "
+"останалите закони за интелектуална собственост (ЗАПСП).</p>\n"
+"<p>Уебсайта е с нетърговска цел. Вие имате право на пълен достъп до всички трудове и информации "
+"на територията на уебсайта (наричани оттук нататък „текстове”), доколкото не ги употребявате с "
+"търговска цел и ги ползвате само за лична употреба. Вие можете да визуализирате и да направите "
+"електронни копии, да изтегляте (прехвърляне и запис на информация от уебсайта) и съхранявате, "
+"както и да отпечатвате на хартиен носител части от материалите, съдържащи се в уебсайта, за "
+"Ваша лична употреба и с нетърговска цел при изричното условие, че запазите всички бележки и "
+"знаци, отнасящи се до авторските права и собствеността. Вие нямате право да възпроизвеждате, "
+"продавате, публикувате, разпространявате, променяте, показвате, използвате, пускате повторно "
+"или използвате с друга цел и извън посочените условия който и да е текст без предварителното "
+"съгласие на FM и на съответния автор в писмен вид. Същото се отнася до всички компоненти и "
+"цялото съдържание на уебсайта.</p>\n"
+"<p>Вие имате право да използвате уебсайта, както и информацията и материалите, съдържащи се и "
+"показвани на територия му, само за законни цели и по начин, който не накърнява правата и не "
+"ограничава използването и достъпа до него на трета страна.</p>\n"
+"<p>FM си запазва правото да актуализира компонентите и съдържанието на уебсайта, включително да "
+"коригира възможни грешки, неточности и пропуски, по всяко време със и без предизвестие.</p>\n"
+"<p>2. Ограничена отговорност</p>\n"
+"<p>FM и неговите представители в никакъв случай не носят отговорност за щети или загуби, "
+"включително, но не само, директни, косвени, последващи, специални, инцидентни, случайни, "
+"предизвикани или наказателни щети в резултат на- или причинени от уебсайта, от неговия софтуер, "
+"съдържание, материали или по друг начин.</p>\n"
+"<p>3. Линкове (хипервръзки)</p>\n"
+"<p>Уебсайта съдържа линкове към други уебсайтове. FM не отговаря за параметрите на евентуален "
+"Ваш контакт с тези уебсайтове и не носи отговорност за евентуални щети, породени от Вашия "
+"контакт с тях.</p>\n"
+"<p>Препратките към страници от уебсайта от страна на други уебсайтове са допустими единствено "
+"при условие, че са извършени в подходящ контекст, т.е. съгласно предназначението на уебсайта. "
+"Предназначението на уебсайта е да отразява дейността, целите и духа на FM (както те са "
+"залегнали в правилника на центъра и се защитават в процеса на неговата работа).</p>\n"
+"<p>4. Лични данни</p>\n"
+"<p>FM няма да употребява Вашите лични данни извън формата за обратна връзка, а обратната връзка "
+"се използва единствено за отговор на Ваше запитване. FM не се интересува от-, не взема участие "
+"в- и не предлага активно и пасивно получените от Вас лични данни за статистически изследвания, "
+"свързани с трансфера на данни от какъвто и да е характер. Все пак, имайте предвид, че FM не "
+"гарантира 100%% сигурност на своя сървър и бази данни и предварително Ви уведомява, че не носи "
+"отговорност при евентуални злоупотреби с Вашите лични данни от трети страни, незаконно добрали "
+"се до базите данни на FM.</p>\n"
+"<p>FM изрично си запазва правото да разкрива лична или друга информация, която сте "
+"предоставили, на трети страни при следните обстоятелства: (a) когато се изисква по закон; (б) "
+"за разследване и/или предприемане на действия срещу незаконна дейност, подозрение за "
+"злоупотреба или неупълномощено ползване на уебсайта; (в) за защита на собствеността или "
+"безопасността на нашите потребители или на други страни.</p>\n"
+"<p>5. Други</p>\n"
+"<p>В случай, че по някаква причина съд от компетентната юрисдикция реши, че някое от "
+"горепосочените условия като цяло (или част от него) е неприложимо, това условие ще продължи да "
+"се прилага до максималния допустим размер в духа на споразумението, а останалите условия ще "
+"продължат да бъдат напълно валидни и в сила.&nbsp;</p>\n"
+"<p>В случай, че FM не прояви съответната строгост да изиска поемането на отговорност от лице "
+"(или организация), нарушило дадено условие, това не означава отказ от бъдещо прилагане на "
+"съответното или друго от условията.&nbsp;</p>\n"
+"<p>Тези условия представляват цялостното споразумение между FM и посетителите на уебсайта – "
+"www.fundamentamusicae.bg.</p>\n"
+"<p>FM си запазва правото по всяко време да променя и актуализира споразумението. Използването "
+"на уебсайта след въвеждане на промени в споразумението ще означава, че Вие ги приемате и сте "
+"съгласни с тях. За евентуални промени можете да се ориентирате по датата на последната "
+"актуализация на тази страница.</p>\n"
+"<p>Дата на последната актуализация: 26 06 2013г.</p>\n"
+"<p>info@fundamentamusicae.bg</p>      \n"
+msgstr ""
+"\n"
+"<p>Diese Nutzungsbedingungen (die „Vereinbarung“) regeln den Zugang zu und die Nutzung der "
+"Website www.fundamentamusicae.bg (die „Website“).</p>\n"
+"<p>Bitte lesen Sie diese Vereinbarung, bevor Sie die Inhalte der Website aufrufen und nutzen. "
+"Ihr Zugriff auf die Website und deren Nutzung bedeuten, dass Sie – ebenso wie die von Ihnen "
+"vertretene Organisation – die Vereinbarung angenommen haben und ihr zustimmen.</p>\n"
+"<p>1. Zugriff auf und Nutzung der Komponenten und Inhalte der Website</p>\n"
+"<p>Die Website ist Eigentum des akademischen Forschungs- und Lehrzentrums Fundamenta Musicae "
+"(FM). FM ist Eigentümer aller Komponenten der Website und sämtlicher Inhalte (einschließlich, "
+"aber nicht beschränkt auf Texte, Datenbank, Logo, Fotos, Grafiken, Schemata, sonstige "
+"Abbildungen, Audio- und Videomaterialien, Programmcode, Design), sofern nicht ausdrücklich ein "
+"anderer Eigentümer oder Urheber angegeben ist. Bei Autorentexten gilt im Zweifel: Wenn nichts "
+"anderes angegeben ist, ist die Autorin/der Autor auch Rechteinhaber:in.</p>\n"
+"<p>Alle Komponenten und sämtliche Inhalte der Website – unabhängig davon, ob es sich um "
+"Eigentum von FM oder um fremdes Eigentum handelt – sind nach dem Gesetz über das Urheberrecht "
+"und die verwandten Schutzrechte (ZAPSP) sowie den übrigen Gesetzen des geistigen Eigentums "
+"geschützt.</p>\n"
+"<p>Die Website ist nicht-kommerziell. Sie haben vollen Zugriff auf alle Arbeiten und "
+"Informationen auf der Website (nachfolgend „Texte“), sofern Sie diese nicht zu kommerziellen "
+"Zwecken verwenden und sie nur für den persönlichen Gebrauch nutzen. Sie dürfen Teile der auf "
+"der Website enthaltenen Materialien ansehen, elektronische Kopien anfertigen, herunterladen "
+"(Übertragung und Speicherung von Informationen von der Website) und speichern sowie auf Papier "
+"ausdrucken – ausschließlich für Ihren persönlichen, nicht-kommerziellen Gebrauch – unter der "
+"ausdrücklichen Voraussetzung, dass Sie sämtliche Hinweise auf Urheberrechte und Eigentum "
+"beibehalten. Es ist Ihnen nicht gestattet, irgendeinen Text ohne vorherige schriftliche "
+"Zustimmung von FM und der jeweiligen Autorin/dem jeweiligen Autor zu vervielfältigen, zu "
+"verkaufen, zu veröffentlichen, zu verbreiten, zu ändern, anzuzeigen, erneut bereitzustellen "
+"oder anderweitig zu nutzen, die über die genannten Bedingungen hinausgeht. Gleiches gilt für "
+"alle Komponenten und sämtlichen Inhalt der Website.</p>\n"
+"<p>Sie dürfen die Website sowie die darauf enthaltenen und angezeigten Informationen und "
+"Materialien nur für rechtmäßige Zwecke und in einer Weise nutzen, die die Rechte Dritter nicht "
+"verletzt und deren Nutzung oder Zugang nicht einschränkt.</p>\n"
+"<p>FM behält sich das Recht vor, die Komponenten und Inhalte der Website – einschließlich der "
+"Korrektur möglicher Fehler, Ungenauigkeiten und Auslassungen – jederzeit mit oder ohne "
+"Vorankündigung zu aktualisieren.</p>\n"
+"<p>2. Haftungsbeschränkung</p>\n"
+"<p>FM und seine Vertreter haften in keinem Fall für Schäden oder Verluste, einschließlich, aber "
+"nicht beschränkt auf direkte, indirekte, Folge-, besondere, zufällige oder punitive Schäden, "
+"die aus oder im Zusammenhang mit der Website, ihrer Software, ihrem Inhalt, ihren Materialien "
+"oder anderweitig entstehen.</p>\n"
+"<p>3. Links (Hyperlinks)</p>\n"
+"<p>Die Website enthält Links zu anderen Websites. FM ist nicht verantwortlich für die "
+"Rahmenbedingungen eines etwaigen Kontakts Ihrerseits mit diesen Websites und übernimmt keine "
+"Haftung für Schäden, die aus Ihrem Kontakt mit ihnen entstehen.</p>\n"
+"<p>Verweise auf Seiten dieser Website von anderen Websites sind nur zulässig, sofern sie in "
+"einem geeigneten Kontext erfolgen, d. h. gemäß dem Zweck der Website. Der Zweck der Website "
+"besteht darin, die Tätigkeit, die Ziele und den Geist von FM (wie sie in der Ordnung des "
+"Zentrums verankert sind und im Laufe seiner Arbeit vertreten werden) widerzuspiegeln.</p>\n"
+"<p>4. Personenbezogene Daten</p>\n"
+"<p>FM verwendet Ihre personenbezogenen Daten ausschließlich im Rahmen des Kontaktformulars; "
+"dieses dient nur dazu, auf Ihre Anfrage zu antworten. FM interessiert sich nicht für – "
+"beteiligt sich nicht an und bietet weder aktiv noch passiv – die von Ihnen erhaltenen "
+"personenbezogenen Daten für statistische Untersuchungen im Zusammenhang mit Datenübertragungen "
+"jeglicher Art an. Bitte beachten Sie dennoch, dass FM keine 100%%ige Sicherheit seines Servers "
+"und seiner Datenbanken garantiert und Sie vorab darauf hinweist, dass keine Haftung für einen "
+"möglichen Missbrauch Ihrer personenbezogenen Daten durch Dritte übernommen wird, die sich "
+"unrechtmäßig Zugang zu den Datenbanken von FM verschafft haben.</p>\n"
+"<p>FM behält sich ausdrücklich das Recht vor, persönliche oder andere von Ihnen bereitgestellte "
+"Informationen an Dritte offenzulegen, wenn: (a) dies gesetzlich vorgeschrieben ist; (b) zur "
+"Untersuchung und/oder Verfolgung rechtswidriger Aktivitäten, des Verdachts auf Missbrauch oder "
+"unbefugter Nutzung der Website; (c) zum Schutz des Eigentums oder der Sicherheit unserer Nutzer "
+"oder Dritter.</p>\n"
+"<p>5. Sonstiges</p>\n"
+"<p>Sollte ein Gericht zuständiger Gerichtsbarkeit aus irgendeinem Grund entscheiden, dass eine "
+"der oben genannten Bestimmungen insgesamt (oder teilweise) nicht durchsetzbar ist, gilt diese "
+"Bestimmung im Geiste der Vereinbarung im maximal zulässigen Umfang weiter, und die übrigen "
+"Bestimmungen bleiben vollständig gültig und in Kraft.&nbsp;</p>\n"
+"<p>Sollte FM es in einem konkreten Fall unterlassen, von einer Person (oder Organisation), die "
+"gegen eine Bestimmung verstoßen hat, die Übernahme von Verantwortung zu verlangen, stellt dies "
+"keinen Verzicht auf die zukünftige Durchsetzung der betreffenden oder irgendeiner anderen "
+"Bestimmung dar.&nbsp;</p>\n"
+"<p>Diese Bedingungen stellen die vollständige Vereinbarung zwischen FM und den Besucherinnen "
+"und Besuchern der Website – www.fundamentamusicae.bg – dar.</p>\n"
+"<p>FM behält sich das Recht vor, die Vereinbarung jederzeit zu ändern und zu aktualisieren. Die "
+"Nutzung der Website nach der Einführung von Änderungen an der Vereinbarung bedeutet, dass Sie "
+"diese akzeptieren und ihnen zustimmen. Über etwaige Änderungen können Sie sich am Datum der "
+"letzten Aktualisierung auf dieser Seite orientieren.</p>\n"
+"<p>Datum der letzten Aktualisierung: 26.06.2013.</p>\n"
+"<p>info@fundamentamusicae.bg</p>\n"
+
+#: .\musicae_base\views.py:38
+#, python-brace-format
+msgid "Добавете {number} към всяка цифра"
+msgstr "Addieren Sie {number} zu jeder Ziffer"
+
+#: .\musicae_base\views.py:39
+#, python-brace-format
+msgid "Извадете {number} от всяка цифра"
+msgstr "Subtrahieren Sie {number} von jeder Ziffer"
+
+#: .\musicae_base\views.py:43
+msgid "едно"
+msgstr "eins"
+
+#: .\musicae_base\views.py:44
+msgid "две"
+msgstr "zwei"
+
+#: .\musicae_base\views.py:45
+msgid "три"
+msgstr "drei"
+
+#: .\musicae_content\models.py:96
+msgid "Монография"
+msgstr "Monografie"
+
+#: .\musicae_content\models.py:97
+msgid "Сборник"
+msgstr "Sammelband"
+
+#: .\musicae_content\models.py:98
+msgid "Дипломен/дисертационен труд"
+msgstr "Diplom-/Dissertationsarbeit"
+
+#: .\musicae_content\models.py:99
+msgid "Автореферат"
+msgstr "Autoreferat"
+
+#: .\musicae_content\models.py:100
+msgid "Студия"
+msgstr "Studie"
+
+#: .\musicae_content\models.py:101
+msgid "Статия"
+msgstr "Artikel"
+
+#: .\musicae_content\models.py:102
+msgid "Доклад"
+msgstr "Bericht"
+
+#: .\musicae_content\models.py:103
+msgid "Учебник"
+msgstr "Lehrbuch"
+
+#: .\musicae_content\models.py:104
+msgid "Хабилитация"
+msgstr "Habilitation"
+
+#: .\musicae_content\models.py:105
+msgid "Онлайн материал"
+msgstr "Online-Material"
+
+#: .\musicae_content\models.py:106
+msgid "Електронна книга"
+msgstr "E-Book"
+
+#: .\musicae_content\models.py:109 .\musicae_content\models.py:232
+msgid "Title"
+msgstr "Titel"
+
+#: .\musicae_content\models.py:110
+msgid "Abstract"
+msgstr "Zusammenfassung"
+
+#: .\musicae_content\models.py:111
+msgid "Bibliographic Info"
+msgstr "Bibliografische Angaben"
+
+#: .\musicae_content\models.py:112
+msgid "Published Place"
+msgstr "Erscheinungsort"
+
+#: .\musicae_content\models.py:118
+msgid "Type"
+msgstr "Typ"
+
+#: .\musicae_content\models.py:124
+msgid "Publisher (Text)"
+msgstr "Verlag (Text)"
+
+#: .\musicae_content\models.py:130
+msgid "Journal (Text)"
+msgstr "Zeitschrift (Text)"
+
+#: .\musicae_content\models.py:135
+msgid "Keywords (Comma Separated)"
+msgstr "Schlüsselwörter (durch Kommas getrennt)"
+
+#: .\musicae_content\models.py:138
+msgid "Enter keywords as a single block of text, separated by commas."
+msgstr "Geben Sie die Schlüsselwörter als zusammenhängenden Textblock ein, getrennt durch Kommas."
+
+#: .\musicae_content\models.py:142
+msgid "Year"
+msgstr "Jahr"
+
+#: .\musicae_content\models.py:143
+msgid "Internal Publication"
+msgstr "Interne Publikation"
+
+#: .\musicae_content\models.py:147
+msgid "Authors"
+msgstr "Autor:innen"
+
+#: .\musicae_content\models.py:148
+msgid "Topic"
+msgstr "Thema"
+
+#: .\musicae_content\models.py:155
+msgid "Banner image"
+msgstr "Bannerbild"
+
+#: .\musicae_content\models.py:156
+msgid "Image used in the Recent Publications slider."
+msgstr "Bild, das im Slider „Neueste Publikationen“ verwendet wird."
+
+#: .\musicae_content\models.py:160
+msgid "File"
+msgstr "Datei"
+
+#: .\musicae_content\models.py:163
+#: .\musicae_content\templates\musicae_content\publication_detail.html:5
+msgid "Publication"
+msgstr "Publikation"
+
+#: .\musicae_content\models.py:164
+msgid "Publications"
+msgstr "Publikationen"
+
+#: .\musicae_content\models.py:208
+msgid "Research page"
+msgstr "Forschungsseite"
+
+#: .\musicae_content\models.py:209
+msgid "Research pages"
+msgstr "Forschungsseiten"
+
+#: .\musicae_content\models.py:233
+msgid "Body (HTML allowed)"
+msgstr "Inhalt (HTML erlaubt)"
+
+#: .\musicae_content\models.py:239
+msgid "Display order (ascending)"
+msgstr "Anzeigereihenfolge (aufsteigend)"
+
+#: .\musicae_content\models.py:244
+msgid "Research section"
+msgstr "Forschungsabschnitt"
+
+#: .\musicae_content\models.py:245
+msgid "Research sections"
+msgstr "Forschungsabschnitte"
+
+#: .\musicae_content\templates\admin\musicae_content\publication\change_list.html:8
+msgid "Import BibTeX"
+msgstr "BibTeX importieren"
+
+#: .\musicae_content\templates\admin\publication_import_bibtex.html:6
+msgid "Import Publications from BibTeX"
+msgstr "Publikationen aus BibTeX importieren"
+
+#: .\musicae_content\templates\admin\publication_import_bibtex.html:8
+msgid ""
+"Upload a standard .bib file. The system will parse the entries and attempt to create new "
+"Publication records, using DOI (or Title + Year) to avoid duplicates."
+msgstr ""
+"Laden Sie eine Standard-.bib-Datei hoch. Das System analysiert die Einträge und versucht, neue "
+"Publikationsdatensätze zu erstellen; zur Vermeidung von Duplikaten werden DOI (oder Titel + "
+"Jahr) verwendet."
+
+#: .\musicae_content\templates\admin\publication_import_bibtex.html:16
+msgid "BibTeX File (.bib)"
+msgstr "BibTeX-Datei (.bib)"
+
+#: .\musicae_content\templates\admin\publication_import_bibtex.html:30
+msgid "Upload and Import"
+msgstr "Hochladen und importieren"
+
+#: .\musicae_content\templates\home.html:202
+msgid "Център за музикална философия и хуманитаристика"
+msgstr "Zentrum für Musikphilosophie und Geisteswissenschaften"
+
+#: .\musicae_content\templates\home.html:218
+msgid "Хоризонт"
+msgstr "Horizont"
+
+#: .\musicae_content\templates\home.html:226
+msgid ""
+"\n"
+"  Хоризонтът на Центъра е развитието на понятийност, произтичаща от фундаментални интуиции за "
+"музикалното, \n"
+"  и процедури за преминаване между непосредствения музикален опит и различни форми на "
+"рефлексивен дискурс.\n"
+"  Това включва както разработки в областта на музикалната философия, така и работа в различни "
+"хуманитарни и приложни области.\n"
+"  Центърът има за цел да осигури база за развитие на музикалнофилософски възгледи и подходи, "
+"като организира редовни срещи за споделяне и обсъждане на идеи и съвместна редакторска работа.\n"
+"  "
+msgstr ""
+"\n"
+"  Der Horizont des Zentrums ist die Entwicklung einer Begrifflichkeit, die aus grundlegenden "
+"Intuitionen des Musikalischen hervorgeht, \n"
+"  sowie Verfahren für den Übergang zwischen unmittelbarer musikalischer Erfahrung und "
+"verschiedenen Formen reflektierenden Diskurses.\n"
+"  Dies umfasst sowohl Arbeiten auf dem Gebiet der Musikphilosophie als auch Tätigkeiten in "
+"verschiedenen geistes- und anwendungswissenschaftlichen Feldern.\n"
+"  Das Zentrum hat zum Ziel, eine Basis für die Entwicklung musikphilosophischer Sichtweisen und "
+"Ansätze zu schaffen, indem es regelmäßige Treffen zum Austausch und zur Diskussion von Ideen "
+"sowie zur gemeinsamen redaktionellen Arbeit organisiert.\n"
+"  "
+
+#: .\musicae_content\templates\home.html:240
+msgid "Последни публикации"
+msgstr "Neueste Publikationen"
+
+#: .\musicae_content\templates\home.html:247
+msgid "Recent Publications Slider"
+msgstr "Slider „Neueste Publikationen“"
+
+#: .\musicae_content\templates\home.html:280
+msgid "Placeholder publication"
+msgstr "Platzhalter-Publikation"
+
+#: .\musicae_content\templates\home.html:282
+msgid "Няма публикации"
+msgstr "Keine Publikationen"
+
+#: .\musicae_content\templates\home.html:299
+msgid "Какво е музикалната философия?"
+msgstr "Was ist Musikphilosophie?"
+
+#: .\musicae_content\templates\home.html:302
+msgid ""
+"\n"
+"          Музикалната философия започва със строго поставяне на въпросa за свързаността между "
+"музика и философия. Тя работи на границата, където говоренето за музика вече е проблем, \n"
+"          и държи на опита говоренето за музиката да не скъсва радикално с това, което самата "
+"музика ни „говори“. \n"
+"          Музикалната философия се занимава с начина, по който самото съществуване на музиката "
+"зависи от конкретната моя битийна позиция към нея, и с начините на напускане на тази позиция. \n"
+"          В този смисъл музикалната философия е съвременна философия: тя става възможна едва "
+"след като самоочевидността на музиката в европейския свят се разколебава и музиката се превръща "
+"в проблем. \n"
+"          "
+msgstr ""
+"\n"
+"          Musikphilosophie beginnt mit der strengen Stellung der Frage nach dem Zusammenhang "
+"zwischen Musik und Philosophie. Sie arbeitet an der Grenze, an der das Sprechen über Musik "
+"selbst problematisch wird, \n"
+"          und besteht darauf, dass dieses Sprechen die Erfahrung dessen, was die Musik „uns "
+"sagt“, nicht radikal abtrennt. \n"
+"          Musikphilosophie beschäftigt sich damit, wie die Existenz der Musik von meiner "
+"konkreten Seinsposition zu ihr abhängt – und mit den Weisen, in denen diese Position aufgegeben "
+"wird.\n"
+"          In diesem Sinn ist die Musikphilosophie eine zeitgenössische Philosophie: Sie wird "
+"erst möglich, nachdem die Selbstverständlichkeit der Musik in der europäischen Welt ins Wanken "
+"geraten ist und Musik zum Problem wird. \n"
+"          "
+
+#: .\musicae_content\templates\home.html:320
+msgid "Всички членове"
+msgstr "Alle Mitglieder"
+
+#: .\musicae_content\templates\home.html:323
+msgid "Members Slider"
+msgstr "Mitglieder-Slider"
+
+#: .\musicae_content\templates\home.html:332 .\musicae_content\templates\home.html:343
+#: .\musicae_content\templates\musicae_content\members.html:71
+msgid "Placeholder member"
+msgstr "Platzhalter-Mitglied"
+
+#: .\musicae_content\templates\home.html:345
+#: .\musicae_content\templates\musicae_content\members.html:97
+msgid "Няма членове."
+msgstr "Keine Mitglieder."
+
+#: .\musicae_content\templates\home.html:361
+msgid "Музикалната хуманитаристика"
+msgstr "Musikalische Geisteswissenschaft"
+
+#: .\musicae_content\templates\home.html:364
+msgid ""
+"\n"
+"          Музикалната хуманитаристика обединява направления и подходи в хуманитаристиката, при "
+"които музиката се схваща не просто като предмет, а като изходна позиция. \n"
+"          Музикалната хуманитаристика се занимава с форми на хуманитарно мислене, които "
+"изследват музикалния човек или човека като музикален – човека, връхлетен от музика. \n"
+"          Тя цели да посочи мястото на музиката в постметафизическия свят и да направи "
+"резултатите съпоставими и съобщими в рамките на човешките науки, \n"
+"          преодолявайки тяхната обичайна методологическа релативност спрямо музикалното.\n"
+"          "
+msgstr ""
+"\n"
+"          Die musikalische Geisteswissenschaft bündelt Richtungen und Ansätze, in denen Musik "
+"nicht nur als Gegenstand, sondern als Ausgangspunkt begriffen wird. \n"
+"          Sie beschäftigt sich mit Formen geisteswissenschaftlichen Denkens, die den "
+"musikalischen Menschen – den vom Musikalischen berührten Menschen – untersuchen. \n"
+"          Ihr Ziel ist es, den Ort der Musik in der postmetaphysischen Welt zu bestimmen und "
+"Ergebnisse innerhalb der Humanwissenschaften vergleichbar und kommunizierbar zu machen, \n"
+"          wobei die übliche methodologische Relativität gegenüber dem Musikalischen überwunden "
+"wird.\n"
+"          "
+
+#: .\musicae_content\templates\home.html:383
+msgid "Пиши ни"
+msgstr "Schreiben Sie uns"
+
+#: .\musicae_content\templates\musicae_content\members.html:13
+msgid "Запознайте се с колектива на Fundamenta Musicae — профили, интереси и публикации."
+msgstr ""
+"Lernen Sie das Team von Fundamenta Musicae kennen — Profile, Interessen und Publikationen."
+
+#: .\musicae_content\templates\musicae_content\members.html:15
+#: .\musicae_content\templates\musicae_content\members.html:20
+#: .\musicae_content\templates\musicae_content\members.html:25
+msgid "Членове | Fundamenta Musicae"
+msgstr "Mitglieder | Fundamenta Musicae"
+
+#: .\musicae_content\templates\musicae_content\members.html:16
+#: .\musicae_content\templates\musicae_content\members.html:21
+msgid "Профили, интереси и публикации на членовете на центъра."
+msgstr "Profile, Interessen und Publikationen der Mitglieder des Zentrums."
+
+#: .\musicae_content\templates\musicae_content\members.html:41
+msgid ""
+"\n"
+"        В Fundamenta Musicae се занимаваме с интердисциплинарни изследвания, които свързват "
+"музиката с философията,\n"
+"        естетиката, педагогиката и хуманитарните науки, разглеждайки музиката както като "
+"творческа практика, така и като\n"
+"        област на задълбочено теоретично изследване. Нашите разнообразни интереси обхващат "
+"феноменологията на\n"
+"        музикалния опит, както и неговите културни, етични и образователни измерения.\n"
+"        "
+msgstr ""
+"\n"
+"        Bei Fundamenta Musicae betreiben wir interdisziplinäre Forschung, die Musik mit "
+"Philosophie, Ästhetik, Pädagogik und den Geisteswissenschaften verbindet. Wir betrachten Musik "
+"sowohl als kreative Praxis als auch als Bereich vertiefter theoretischer Untersuchung. Unsere "
+"vielfältigen Interessen umfassen die Phänomenologie der musikalischen Erfahrung sowie ihre "
+"kulturellen, ethischen und bildungsbezogenen Dimensionen.\n"
+"        "
+
+#: .\musicae_content\templates\musicae_content\person_detail.html:13
+#: .\musicae_content\templates\musicae_content\person_detail.html:16
+#: .\musicae_content\templates\musicae_content\person_detail.html:21
+#, python-format
+msgid "Профил на %(n)s – биография, изследователски интереси и публикации."
+msgstr "Profil von %(n)s – Biografie, Forschungsinteressen und Publikationen."
+
+#: .\musicae_content\templates\musicae_content\person_detail.html:122
+msgid "Връзки"
+msgstr "Links"
+
+#: .\musicae_content\templates\musicae_content\person_detail.html:137
+msgid "Лична страница"
+msgstr "Persönliche Website"
+
+#: .\musicae_content\templates\musicae_content\person_detail.html:160
+msgid "Биография"
+msgstr "Biografie"
+
+#: .\musicae_content\templates\musicae_content\person_detail.html:169
+msgid "Изследователски области"
+msgstr "Forschungsgebiete"
+
+#: .\musicae_content\templates\musicae_content\person_detail.html:191
+msgid "Публикации"
+msgstr "Publikationen"
+
+#: .\musicae_content\templates\musicae_content\person_detail.html:207
+msgid "In"
+msgstr "In"
+
+#: .\musicae_content\templates\musicae_content\person_detail.html:217
+#: .\musicae_content\templates\musicae_content\publication_detail.html:108
+msgid "Абстракт"
+msgstr "Zusammenfassung"
+
+#: .\musicae_content\templates\musicae_content\person_detail.html:224
+msgid "Няма публикации."
+msgstr "Keine Publikationen."
+
+#: .\musicae_content\templates\musicae_content\publication_detail.html:62
+msgid "Назад към библиотека"
+msgstr "Zurück zur Bibliothek"
+
+#: .\musicae_content\templates\musicae_content\publication_detail.html:97
+msgid "Ключови думи"
+msgstr "Schlüsselwörter"
+
+#: .\musicae_content\templates\musicae_content\publication_detail.html:120
+msgid "Достъп"
+msgstr "Zugang"
+
+#: .\musicae_content\templates\musicae_content\publication_detail.html:123
+msgid "Свали / Виж PDF"
+msgstr "PDF herunterladen/ansehen"
+
+#: .\musicae_content\templates\musicae_content\publication_detail.html:125
+msgid "No hosted file is available for this record."
+msgstr "Für diesen Eintrag ist keine gehostete Datei verfügbar."
+
+#: .\musicae_content\templates\musicae_content\publication_detail.html:136
+msgid "Цитирай"
+msgstr "Zitieren"
+
+#: .\musicae_content\templates\musicae_content\publication_detail.html:170
+msgid "Download BibTeX"
+msgstr "BibTeX herunterladen"
+
+#: .\musicae_content\templates\musicae_content\publication_detail.html:185
+msgid "Download RIS"
+msgstr "RIS herunterladen"
+
+#: .\musicae_content\templates\musicae_content\publication_list.html:12
+msgid "Публикации от членовете на Fundamenta Musicae — статии, книги, изследвания."
+msgstr "Publikationen der Mitglieder von Fundamenta Musicae — Artikel, Bücher, Studien."
+
+#: .\musicae_content\templates\musicae_content\publication_list.html:14
+#: .\musicae_content\templates\musicae_content\publication_list.html:19
+#: .\musicae_content\templates\musicae_content\publication_list.html:24
+msgid "Библиотека | Fundamenta Musicae"
+msgstr "Bibliothek | Fundamenta Musicae"
+
+#: .\musicae_content\templates\musicae_content\publication_list.html:15
+#: .\musicae_content\templates\musicae_content\publication_list.html:20
+msgid "Разгледайте и свалете публикации от нашия колектив."
+msgstr "Durchsuchen Sie die Publikationen unseres Kollektivs und laden Sie diese herunter."
+
+#: .\musicae_content\templates\musicae_content\publication_list.html:129
+msgid "Подреди по:"
+msgstr "Sortieren nach:"
+
+#: .\musicae_content\templates\musicae_content\publication_list.html:136
+msgid "Дата"
+msgstr "Datum"
+
+#: .\musicae_content\templates\musicae_content\publication_list.html:143
+msgid "Тип"
+msgstr "Typ"
+
+#: .\musicae_content\templates\musicae_content\publication_list.html:150
+msgid "Име"
+msgstr "Name"
+
+#: .\musicae_content\templates\musicae_content\publication_list.html:180
+msgid "Show Abstract"
+msgstr "Abstract anzeigen"
+
+#: .\musicae_content\templates\musicae_content\publication_list.html:186
+msgid "Няма намерени публикации"
+msgstr "Keine Publikationen gefunden"
+
+#: .\musicae_content\templates\musicae_content\research.html:4
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:7
+#: .\musicae_content\templates\musicae_content\research_list.html:4
+msgid "Изследователски теми"
+msgstr "Forschungsthemen"
+
+#: .\musicae_content\templates\musicae_content\research.html:47
+#: .\musicae_content\templates\musicae_content\research_detail.html:99
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:141
+#: .\musicae_content\templates\musicae_content\research_list.html:47
+msgid "Няма раздели."
+msgstr "Keine Abschnitte."
+
+#: .\musicae_content\templates\musicae_content\research_detail.html:18
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:18
+msgid "Център за музикална философия и хуманитаристика — секции:"
+msgstr "Zentrum für Musikphilosophie und Geisteswissenschaften — Sektionen:"
+
+#: .\musicae_content\templates\musicae_content\research_detail.html:21
+#: .\musicae_content\templates\musicae_content\research_detail.html:56
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:21
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:56
+msgid ""
+"Център за музикална философия и хуманитаристика: хоризонт, история и изследователски "
+"направления."
+msgstr ""
+"Zentrum für Musikphilosophie und Geisteswissenschaften: Horizont, Geschichte und "
+"Forschungsrichtungen."
+
+#: .\musicae_content\templates\musicae_content\research_detail.html:27
+#: .\musicae_content\templates\musicae_content\research_detail.html:40
+#: .\musicae_content\templates\musicae_content\research_detail.html:54
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:27
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:40
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:54
+msgid "За нас | Fundamenta Musicae"
+msgstr "Über uns | Fundamenta Musicae"
+
+#: .\musicae_content\templates\musicae_content\research_detail.html:30
+#: .\musicae_content\templates\musicae_content\research_detail.html:43
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:30
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:43
+msgid "Секции:"
+msgstr "Sektionen:"
+
+#: .\musicae_content\templates\musicae_content\research_detail.html:32
+#: .\musicae_content\templates\musicae_content\research_detail.html:45
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:32
+#: .\musicae_content\templates\musicae_content\research_detail_single_column.html:45
+msgid "Мисия и изследователски теми: музикална философия, феноменология, педагогика и др."
+msgstr "Mission und Forschungsthemen: Musikphilosophie, Phänomenologie, Pädagogik u. a."
+
+#: .\musicae_web\settings.py:165
+msgid "Bulgarian"
+msgstr "Bulgarisch"
+
+#: .\musicae_web\settings.py:166
+msgid "English"
+msgstr "Englisch"
+
+#: .\musicae_web\settings.py:167
+msgid "German"
+msgstr "Deutsch"
