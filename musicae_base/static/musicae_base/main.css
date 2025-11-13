@@ -1535,7 +1535,7 @@ header .nav-links a:hover::after, header .nav-links a:focus-visible::after, head
 }
 .bio-content p {
   margin-top: 0;
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
 }
 .bio-content ul, .bio-content ol {
   list-style-position: outside;
@@ -1625,8 +1625,7 @@ header .nav-links a:hover::after, header .nav-links a:focus-visible::after, head
 }
 .card-item-content .current-research {
   margin-top: 0.75rem;
-  white-space: pre-line;
-}
+  }
 
 .author-link {
   text-decoration: underline;
@@ -2122,4 +2121,12 @@ header, #mobile-menu-panel {
     50% { transform: translateY(10px); }
   }
   .animate-bob { animation: bob 1.6s ease-in-out infinite; }
+}
+
+
+/* In member cards, remove bottom margin after the last paragraph/list in currentResearch */
+.card-item-content .current-research p:last-child,
+.card-item-content .current-research ul:last-child,
+.card-item-content .current-research ol:last-child {
+  margin-bottom: 0;
 }
