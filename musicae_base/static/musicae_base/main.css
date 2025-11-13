@@ -1627,6 +1627,10 @@ header .nav-links a:hover::after, header .nav-links a:focus-visible::after, head
   margin-top: 0.75rem;
   }
 
+.card-item-content .bio-content.current-research p {
+  margin-bottom: 0 !important;
+}
+
 .author-link {
   text-decoration: underline;
   text-decoration-thickness: 1px;
