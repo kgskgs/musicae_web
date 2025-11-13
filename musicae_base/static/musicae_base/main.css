@@ -1627,10 +1627,6 @@ header .nav-links a:hover::after, header .nav-links a:focus-visible::after, head
   margin-top: 0.75rem;
   }
 
-.card-item-content .bio-content.current-research p {
-  margin-bottom: 0 !important;
-}
-
 .author-link {
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -2139,4 +2135,8 @@ header, #mobile-menu-panel {
 
 html {
   font-size: 16px; /* or whatever you’re using on your machine */
+}
+
+.card-item-content .bio-content.current-research p {
+  margin-bottom: 0 !important;
 }
