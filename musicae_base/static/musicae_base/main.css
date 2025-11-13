@@ -2123,10 +2123,16 @@ header, #mobile-menu-panel {
   .animate-bob { animation: bob 1.6s ease-in-out infinite; }
 }
 
-
-/* In member cards, remove bottom margin after the last paragraph/list in currentResearch */
 .card-item-content .current-research p:last-child,
 .card-item-content .current-research ul:last-child,
 .card-item-content .current-research ol:last-child {
   margin-bottom: 0;
+}
+
+.bio-content.current-research > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+html {
+  font-size: 16px; /* or whatever you’re using on your machine */
 }
