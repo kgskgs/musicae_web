@@ -97,8 +97,6 @@
           </li>
            <li><a id="nav-members" class="nav-link btn anchor-link" href="{% url 'members_lst' %}">{% trans "Членове" %}</a></li>
           <li><a id="nav-library" class="nav-link btn anchor-link" href="{% url 'library_lst' %}">{% trans "Библиотека" %}</a></li>
-          <li>  <a id="nav-contact" class="nav-link btn anchor-link" href="{% url 'musicae_base:contact' %}">    {% trans "Контакти" %}  </a></li>
-
         <!-- Language Switcher -->
           <li class="lang" id="lang-switcher">
             <a class="lang-link" href="{{ request.get_full_path|translate_url:'bg' }}"
@@ -168,7 +166,6 @@
       <!-- Sections -->
       <a id="mobile-nav-members" class="nav-link btn anchor-link" href="{% url 'members_lst' %}">{% trans "Членове" %}</a>
       <a id="mobile-nav-library" class="nav-link btn anchor-link" href="{% url 'library_lst' %}">{% trans "Библиотека" %}</a>
-      <a id="mobile-nav-contact" class="nav-link btn anchor-link" href="{% url 'musicae_base:contact' %}">{% trans "Контакти" %}</a>
     </nav>
 
     <!-- Mobile Language Switcher (link-based to auto-close via your JS) -->
