@@ -2134,27 +2134,33 @@ html {
 }
 
 
+
+header nav[aria-label="Main navigation"] {
+  display: none;
+}
+
+#mobile-menu-toggle {
+  display: inline-flex;
+}
+
+
 @media (max-width: 1149.98px) {
- 
   header nav[aria-label="Main navigation"] {
     display: none !important;
   }
-
-
   #mobile-menu-toggle {
     display: inline-flex !important;
   }
 }
 
+
 @media (min-width: 1150px) {
   header nav[aria-label="Main navigation"] {
     display: block !important;
   }
-
   #mobile-menu-toggle {
     display: none !important;
   }
-
   #mobile-menu-panel {
     display: none !important;
     opacity: 0 !important;

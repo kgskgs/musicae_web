@@ -53,11 +53,6 @@
       * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
     }
 
-    @media (min-width: 768px) {
-  #mobile-menu-toggle { display: none !important; }
-  header nav[aria-label="Main navigation"] { display: block !important; }
-  #mobile-menu-panel { display: none !important; opacity:0 !important; visibility:hidden !important; }
-}
   </style>
 
   {% block head_extra %}{% endblock %}
@@ -73,7 +68,7 @@
       </a>
 
       <!-- Desktop Navigation (UNCHANGED) -->
-      <nav aria-label="{% trans 'Main navigation' %}" class="hidden md:block">
+      <nav aria-label="{% trans 'Main navigation' %}">
         <ul class="nav-links">
           <li><a id="nav-about" class="nav-link btn anchor-link" href="{% url 'home' %}">{% trans "Начало" %}</a></li>
           <li class="relative group">
@@ -112,7 +107,7 @@
       </nav>
 
       <!-- Mobile Menu Button (UNCHANGED) -->
-      <button id="mobile-menu-toggle" class="md:hidden btn-contrast p-2 rounded-lg -mr-2" aria-label="{% trans 'Open menu' %}">
+      <button id="mobile-menu-toggle" class="btn-contrast p-2 rounded-lg -mr-2" aria-label="{% trans 'Open menu' %}">
         <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
@@ -124,7 +119,7 @@
   </header>
 
   <!-- Mobile Menu Panel (REWRITTEN to mirror desktop) -->
-  <div id="mobile-menu-panel" class="fixed inset-0 z-40 p-6 flex-col md:hidden">
+  <div id="mobile-menu-panel" class="fixed inset-0 z-40 p-6 flex-col">
     <nav id="mobile-menu-links" aria-label="{% trans 'Mobile navigation' %}" class="space-y-3">
       <!-- Начало -->
       <a id="mobile-nav-home" class="nav-link btn anchor-link" href="{% url 'home' %}">
