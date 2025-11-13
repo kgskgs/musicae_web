@@ -1821,15 +1821,7 @@ body[data-theme="ch-theme-orange"] #mobile-menu-panel {
       line-height: 1.15;
     }
   }
-  @media (min-width: 768px) {
-    .md\:hidden {
-      display: none;
-    }
-    .md\:block {
-      display: block;
-    }
-  }
-  body {
+body {
     padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0));
   }
   #mobile-menu-panel {
@@ -2139,4 +2131,33 @@ html {
 
 .card-item-content .bio-content.current-research p {
   margin-bottom: 0 !important;
+}
+
+
+@media (max-width: 1149.98px) {
+ 
+  header nav[aria-label="Main navigation"] {
+    display: none !important;
+  }
+
+
+  #mobile-menu-toggle {
+    display: inline-flex !important;
+  }
+}
+
+@media (min-width: 1150px) {
+  header nav[aria-label="Main navigation"] {
+    display: block !important;
+  }
+
+  #mobile-menu-toggle {
+    display: none !important;
+  }
+
+  #mobile-menu-panel {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
 }
