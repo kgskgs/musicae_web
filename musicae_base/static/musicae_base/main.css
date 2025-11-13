@@ -2136,3 +2136,7 @@ header, #mobile-menu-panel {
 html {
   font-size: 16px; /* or whatever you’re using on your machine */
 }
+
+.card-item-content .bio-content.current-research p {
+  margin-bottom: 0 !important;
+}
