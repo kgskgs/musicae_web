@@ -85,9 +85,10 @@
                   {{ person.title }}
                 </p>
               {% endif %}
-
               {% if person.currentResearch %}
-  <p class="current-research text-sm text-gray-700">{{ person.currentResearch|safe }}</p>
+                <div class="bio-content current-research">
+                  {{ person.currentResearch|safe }}
+                </div>
               {% endif %}
             </div>
           </a>
