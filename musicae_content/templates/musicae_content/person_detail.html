@@ -175,7 +175,9 @@
           
           <!-- 1. Hidden data source -->
           {% if person.currentResearch %}
-            <div id="research-keywords-data" class="hidden">{{ person.currentResearch }}</div>
+            <div id="research-keywords-data" class="hidden">
+              {{ person.currentResearch|safe }}
+            </div>
           {% endif %}
           
           <!-- 2. Target container (now a <ul>) for JS to populate -->
