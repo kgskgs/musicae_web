@@ -10,23 +10,19 @@
 <link rel="alternate" href="{{ request.get_full_path|translate_url:'en' }}" hreflang="en">
 <link rel="alternate" href="{{ request.get_full_path|translate_url:'de' }}" hreflang="de">
 
-<meta name="description" content="{% blocktrans with n=person.name %}Профил на {{ n }} – биография, изследователски интереси и публикации.{% endblocktrans %}">
-<meta property="og:type" content="profile">
-<meta property="og:title" content="{{ person.name }} | Fundamenta Musicae">
-<meta property="og:description" content="{% blocktrans with n=person.name %}Профил на {{ n }} – биография, изследователски интереси и публикации.{% endblocktrans %}">
-<meta property="og:url" content="{{ person.get_absolute_url }}">
-<meta property="og:image" content="{% if person.image %}{{ person.image.url }}{% else %}{{ STATIC_URL }}musicae_base/og/member-default.jpg{% endif %}">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ person.name }} | Fundamenta Musicae">
-<meta name="twitter:description" content="{% blocktrans with n=person.name %}Профил на {{ n }} – биография, изследователски интереси и публикации.{% endblocktrans %}">
-
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person",
 "name":"{{ person.name|escape }}",
 {% if person.title %}"jobTitle":"{{ person.title|escape }}",{% endif %}
 {% if person.image %}"image":"{{ person.image.url }}",{% endif %}
 "url":"{{ person.get_absolute_url }}",
-"affiliation":{"@type":"Organization","name":"Fundamenta Musicae"}}
+"affiliation":{"@type":"Organization","name":"Fundamenta Musicae"}
+{% comment %} --- ADDED BLOCK --- {% endcomment %}
+{% if person.currentResearch %}
+, "keywords":"{{ person.currentResearch|striptags|escapejs }}"
+{% endif %}
+{% comment %} --- END ADDED BLOCK --- {% endcomment %}
+}
 </script>
 {% endblock %}
 

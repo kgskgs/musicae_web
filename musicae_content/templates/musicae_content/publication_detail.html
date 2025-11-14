@@ -11,15 +11,6 @@
 <link rel="alternate" href="{{ request.get_full_path|translate_url:'en' }}" hreflang="en">
 <link rel="alternate" href="{{ request.get_full_path|translate_url:'de' }}" hreflang="de">
 
-<meta name="description" content="{{ object.abstract|default_if_none:''|striptags|truncatechars:160 }}">
-<meta property="og:type" content="article">
-<meta property="og:title" content="{{ object.title }}">
-<meta property="og:description" content="{{ object.abstract|default_if_none:''|striptags|truncatechars:200 }}">
-<meta property="og:url" content="{{ object.get_absolute_url }}">
-<meta property="og:image" content="{% if object.banner %}{{ object.banner.url }}{% else %}{{ STATIC_URL }}musicae_base/og/publication-default.jpg{% endif %}">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ object.title }}">
-<meta name="twitter:description" content="{{ object.abstract|default_if_none:''|striptags|truncatechars:200 }}">
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ScholarlyArticle",
@@ -29,6 +20,12 @@
 {% if object.published_year %}"datePublished":"{{ object.published_year }}",{% endif %}
 "author":[{% for a in object.authors.all %}{"@type":"Person","name":"{{ a.name|escape }}"}{% if not forloop.last %},{% endif %}{% endfor %}],
 "publisher":{"@type":"Organization","name":"Fundamenta Musicae"},
+
+
+{% if object.keywords_txt %}
+"keywords":"{{ object.keywords_txt|escapejs }}",
+{% endif %}
+
 "description":"{{ object.abstract|default_if_none:''|striptags|truncatechars:200|escapejs }}"}
 </script>
 
