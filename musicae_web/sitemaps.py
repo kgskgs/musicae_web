@@ -24,6 +24,7 @@ class ModelObjSitemap(Sitemap):
             Person.objects.all(),
             Publication.objects.all(),
             News.objects.all(),
+            
         ))
         return objs
 
