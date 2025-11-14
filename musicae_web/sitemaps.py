@@ -1,7 +1,8 @@
 from django.contrib.sitemaps import Sitemap
-from django.urls import reverse
+from musicae_content.models import Person, Publication, File
 from itertools import chain
-from musicae_content.models import Page, Person, Publication, News
+from django.urls import reverse
+
 
 class DynamicPageSitemap(Sitemap):
     priority = 0.8
@@ -9,6 +10,10 @@ class DynamicPageSitemap(Sitemap):
 
     def items(self):
         return Page.objects.all()
+
+    def location(self, item):
+        return reverse(item.link.target.replace('/', ''))
+
 
 class ModelObjSitemap(Sitemap):
     priority = 0.5
@@ -22,18 +27,27 @@ class ModelObjSitemap(Sitemap):
         ))
         return objs
 
+
 class StaticPageSitemap(Sitemap):
     priority = 0.9
     i18n = True
 
     def items(self):
-        return [
-            'home',
-            'members_lst',
-            'library_lst',
-            'about',
-            'research_list'
-        ]
+        return ['index', 'members_lst', 'publication_lst']
 
     def location(self, item):
         return reverse(item)
+
+
+class FilesSitemap(Sitemap):
+    priority = 0.3
+
+    def items(self):
+        files = list(chain(
+            Publication.objects.filter(file__endswith=".pdf"),
+            File.objects.filter(file__endswith=".pdf")
+        ))
+        return files
+
+    def location(self, item):
+        return item.get_file_url()
