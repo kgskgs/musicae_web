@@ -97,11 +97,11 @@
 
       {% if member.orcid %}
         <a
-          href="https://orcid.org/{{ member.orcid }}"
+          href="https://orcid.org/{{ person.orcid }}"
           target="_blank" rel="noopener"
           class="inline-flex items-center group"
-          aria-label="ORCID: {{ member.orcid }}"
-          title="ORCID: {{ member.orcid }}"
+          aria-label="ORCID: {{ person.orcid }}"
+          title="ORCID: {{ person.orcid }}"
         >
           <svg class="h-5 w-5 text-green-600 opacity-90 group-hover:opacity-100 transition-opacity"
                viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
