@@ -87,28 +87,27 @@
           {% endif %}
        </div>
        
-        <div class="flex flex-wrap items-center gap-2 text-lg text-gray-700">
-          {% for member in publication.authors.all %}
-            <span class="inline-flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2 text-lg text-gray-700 mt-2">
+            {% if person.orcid %}
               <a
-                href="{% url 'members_det' member.pk %}"
-                class="no-underline text-gray-700 hover:text-[var(--color-surface)] transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-surface)] rounded-sm"
-              >{{ member.name }}</a>
+                href="https://orcid.org/{{ person.orcid }}"
+                target="_blank" rel="noopener"
+                class="inline-flex items-center gap-2 group"
+                aria-label="ORCID: {{ person.orcid }}"
+                title="ORCID: {{ person.orcid }}"
+              >
+                <span class="text-gray-700">ORCID</span>
+                <svg class="h-5 w-5 text-green-600 opacity-90 group-hover:opacity-100 transition-opacity"
+                    viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.384h2.75v10.151h-2.75V4.384zM8.744 15.82c-.732 0-1.326.594-1.326 1.326s.594 1.326 1.326 1.326c.732 0 1.326-.594 1.326-1.326s-.594-1.326-1.326-1.326zM13.61 7.232v7.3h2.75V8.528c0-2.384 1.705-2.544 2.294-2.544v-2.75s-1.822.007-3.232 1.456V7.232z"/>
+                </svg>
+                <span class="text-sm text-gray-600 group-hover:underline">
+                  {{ person.orcid }}
+                </span>
+              </a>
+            {% endif %}
+          </div>
 
-              {% if person.orcid %}
-                <a
-                  href="https://orcid.org/{{ person.orcid }}"
-                  target="_blank" rel="noopener"
-                  class="inline-flex items-center group"
-                  aria-label="ORCID: {{ person.orcid }}"
-                  title="ORCID: {{ person.orcid }}"
-                >
-                  ...svg...
-                </a>
-              {% endif %}
-            </span>{% if not forloop.last %}, {% endif %}
-          {% endfor %}
-        </div>
 
 
         
