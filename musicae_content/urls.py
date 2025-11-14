@@ -3,7 +3,7 @@ from . import views as content_views
 
 urlpatterns = [
     path("", content_views.home, name="home"),
-
+  
     path("members/", content_views.PersonList.as_view(), name="members_lst"),
     path("members/<int:pk>/", content_views.PersonDetail.as_view(), name="members_det"),
 

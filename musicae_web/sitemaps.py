@@ -1,25 +1,19 @@
 from django.contrib.sitemaps import Sitemap
-
 from musicae_content.models import Person, Publication, File, ResearchPage
 from itertools import chain
 from django.urls import reverse
 
 
 class DynamicPageSitemap(Sitemap):
-    """
-    FIX: This sitemap now correctly points to the ResearchPage model 
-    instead of the old 'Page' model.
-    """
     priority = 0.8
     i18n = True
 
     def items(self):
-       
         return ResearchPage.objects.all()
 
     def location(self, item):
-        
-        return reverse("research_det", kwargs={'slug': item.slug})
+     
+        return reverse("research_detail", kwargs={'slug': item.slug})
 
 
 class ModelObjSitemap(Sitemap):
@@ -34,7 +28,8 @@ class ModelObjSitemap(Sitemap):
         ))
         return objs
     
-  
+    
+
 
 class StaticPageSitemap(Sitemap):
     priority = 0.9
@@ -42,7 +37,7 @@ class StaticPageSitemap(Sitemap):
 
     def items(self):
        
-        return ['index', 'members_lst', 'publication_lst']
+        return ['home', 'members_lst', 'library_lst']
 
     def location(self, item):
         return reverse(item)
@@ -59,5 +54,5 @@ class FilesSitemap(Sitemap):
         return files
 
     def location(self, item):
-        
+      
         return item.file.url
