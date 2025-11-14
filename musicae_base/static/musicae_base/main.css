@@ -1049,7 +1049,7 @@
 }
 :root {
   --h1-size: clamp(2.8rem, 7vw + 0.7rem, 6.3rem);
-  --h2-size: clamp(2.1rem, 4.9vw + 0.7rem, 4.2rem);
+  --h2-size: clamp(1.785rem, 4.165vw + 0.595rem, 3.57rem);
   --p-size: clamp(1.125rem, 1vw + 0.8rem, 1.5rem);
   --color-bg-light: #FFFFFF;
   --color-bg-soft: #F9F9F9;
