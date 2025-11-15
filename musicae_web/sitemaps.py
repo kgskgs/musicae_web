@@ -27,8 +27,6 @@ class ModelObjSitemap(Sitemap):
             
         ))
         return objs
-    cd
-    
 
 
 class StaticPageSitemap(Sitemap):
