@@ -211,7 +211,10 @@ if not DEBUG:
 
     # Django 4+ expects full scheme (https://example.com). If you're on Django 3,
     # hostnames also work. Provide space-separated values in DJANGO_CSRF_TRUSTED_ORIGINS.
-    CSRF_TRUSTED_ORIGINS = env_list("DJANGO_CSRF_TRUSTED_ORIGINS", "")
+    CSRF_TRUSTED_ORIGINS = [
+    "https://fundamentamusicae.bg",
+    "https://www.fundamentamusicae.bg",
+]
 
     # Extra hardening
     SESSION_COOKIE_SAMESITE = "Lax"
