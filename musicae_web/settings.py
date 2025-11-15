@@ -32,7 +32,7 @@ DEBUG = False
 def env_list(name: str, default: str = ""):
     return [x for x in os.environ.get(name, default).split() if x]
 
-ALLOWED_HOSTS = ['fundamentamusicae.bg', 'www.fundamentamusicae.bg', '35.157.187.254', '127.0.0.1', ]
+ALLOWED_HOSTS = ['fundamentamusicae.bg', 'www.fundamentamusicae.bg', '35.157.187.254', '127.0.0.1', 'localhost' ]
 
 
 
@@ -219,3 +219,23 @@ if not DEBUG:
     # Extra hardening
     SESSION_COOKIE_SAMESITE = "Lax"
     X_FRAME_OPTIONS = "DENY"
+
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        # This logger catches ALLOWED_HOSTS / DisallowedHost problems
+        "django.security.DisallowedHost": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}
