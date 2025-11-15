@@ -27,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Core settings
 SECRET_KEY = os.environ.get("DJANGO_KEY", "^dev-only-unsafe-key^")
-DEBUG = True
+DEBUG = False
 # space-separated list → list
 def env_list(name: str, default: str = ""):
     return [x for x in os.environ.get(name, default).split() if x]
