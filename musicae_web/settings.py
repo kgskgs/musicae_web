@@ -32,7 +32,7 @@ DEBUG = False
 def env_list(name: str, default: str = ""):
     return [x for x in os.environ.get(name, default).split() if x]
 
-ALLOWED_HOSTS = ['fundamentamusicae.bg', 'www.fundamentamusicae.bg', '3.121.16.126', '127.0.0.1']
+ALLOWED_HOSTS = ['fundamentamusicae.bg', 'www.fundamentamusicae.bg', '35.157.187.254', '127.0.0.1']
 
 
 
