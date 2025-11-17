@@ -9,6 +9,7 @@ Safe for local dev and production:
 
 import os
 from .cap_funcs import add_sub_challange
+from pathlib import Path
 
 # ────────────────────────────────────────────────────────────────────────────────
 # Environment helpers

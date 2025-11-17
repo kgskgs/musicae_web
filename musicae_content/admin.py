@@ -389,7 +389,7 @@ class PTopicAdmin(TranslationAdmin):
     list_display = ("text",)
     search_fields = ("text",)
 
-# admin.py
+
 from modeltranslation.admin import TranslationAdmin
 
 
