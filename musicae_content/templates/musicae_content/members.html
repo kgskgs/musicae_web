@@ -1,29 +1,25 @@
 {% extends "musicae_base/base.html" %}
-{% load static i18n %}
+{% load static i18n seo_tags %}
 
-{% block head_extra %}
-{% load i18n url_i18n %}
+{% block title %}{% trans "Членове" %} | Fundamenta Musicae{% endblock %}
 
-<title>{% trans "Членове" %} | Fundamenta Musicae</title>
-<link rel="canonical" href="{% url 'members_lst' %}">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'bg' }}" hreflang="bg">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'en' }}" hreflang="en">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'de' }}" hreflang="de">
+{% block meta_description %}{% trans 'Запознайте се с колектива на Fundamenta Musicae — профили, интереси и публикации.' %}{% endblock %}
 
-<meta name="description" content="{% trans 'Запознайте се с колектива на Fundamenta Musicae — профили, интереси и публикации.' %}">
+{% block seo_extra %}
 <meta property="og:type" content="website">
 <meta property="og:title" content="{% trans 'Членове | Fundamenta Musicae' %}">
 <meta property="og:description" content="{% trans 'Профили, интереси и публикации на членовете на центъра.' %}">
-<meta property="og:url" content="{% url 'members_lst' %}">
-<meta property="og:image" content="{{ STATIC_URL }}musicae_base/og/members.jpg">
+<meta property="og:url" content="{% absolute_url request request.path %}">
+<meta property="og:image" content="{% absolute_static request 'musicae_base/banners/8.jpg' %}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{% trans 'Членове | Fundamenta Musicae' %}">
 <meta name="twitter:description" content="{% trans 'Профили, интереси и публикации на членовете на центъра.' %}">
+<meta name="twitter:image" content="{% absolute_static request 'musicae_base/banners/8.jpg' %}">
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"CollectionPage",
 "name":"{% filter escapejs %}{% trans 'Членове | Fundamenta Musicae' %}{% endfilter %}",
-"url":"{% url 'members_lst' %}"}
+"url":"{% absolute_url request request.path %}"}
 </script>
 {% endblock %}
 

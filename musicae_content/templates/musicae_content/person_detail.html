@@ -1,21 +1,27 @@
 {% extends "musicae_base/base.html" %}
-{% load static i18n url_i18n %} 
+{% load static i18n seo_tags %} 
 
-{% block head_extra %}
-{% load i18n %}
+{% block title %}{{ person.name }} | Fundamenta Musicae{% endblock %}
 
-<title>{{ person.name }} | Fundamenta Musicae</title>
-<link rel="canonical" href="{{ person.get_absolute_url }}">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'bg' }}" hreflang="bg">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'en' }}" hreflang="en">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'de' }}" hreflang="de">
+{% block meta_description %}{% if person.short_description %}{{ person.short_description|striptags|truncatechars:180 }}{% elif person.currentResearch %}{{ person.currentResearch|striptags|truncatechars:180 }}{% else %}{{ person.bio|striptags|truncatechars:180 }}{% endif %}{% endblock %}
 
+{% block seo_extra %}
+<meta property="og:type" content="profile">
+<meta property="og:title" content="{{ person.name|escape }} | Fundamenta Musicae">
+<meta property="og:description" content="{% if person.short_description %}{{ person.short_description|striptags|truncatechars:180 }}{% elif person.currentResearch %}{{ person.currentResearch|striptags|truncatechars:180 }}{% else %}{{ person.bio|striptags|truncatechars:180 }}{% endif %}">
+<meta property="og:url" content="{% absolute_url request person.get_absolute_url %}">
+<meta property="og:image" content="{% if person.image %}{% absolute_url request person.image.url %}{% else %}{% absolute_static request 'musicae_base/Profile_avatar_placeholder_large.png' %}{% endif %}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ person.name|escape }} | Fundamenta Musicae">
+<meta name="twitter:description" content="{% if person.short_description %}{{ person.short_description|striptags|truncatechars:180 }}{% elif person.currentResearch %}{{ person.currentResearch|striptags|truncatechars:180 }}{% else %}{{ person.bio|striptags|truncatechars:180 }}{% endif %}">
+<meta name="twitter:image" content="{% if person.image %}{% absolute_url request person.image.url %}{% else %}{% absolute_static request 'musicae_base/Profile_avatar_placeholder_large.png' %}{% endif %}">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person",
 "name":"{{ person.name|escape }}",
 {% if person.title %}"jobTitle":"{{ person.title|escape }}",{% endif %}
-{% if person.image %}"image":"{{ person.image.url }}",{% endif %}
-"url":"{{ person.get_absolute_url }}",
+{% if person.image %}"image":"{% absolute_url request person.image.url %}",{% endif %}
+"url":"{% absolute_url request person.get_absolute_url %}",
+"description":"{% if person.short_description %}{{ person.short_description|striptags|truncatechars:180 }}{% elif person.currentResearch %}{{ person.currentResearch|striptags|truncatechars:180 }}{% else %}{{ person.bio|striptags|truncatechars:180 }}{% endif %}",
 "affiliation":{"@type":"Organization","name":"Fundamenta Musicae"}
 {% comment %} --- ADDED BLOCK --- {% endcomment %}
 {% if person.currentResearch %}

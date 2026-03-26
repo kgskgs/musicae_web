@@ -7,6 +7,8 @@ from django.urls import reverse
 class DynamicPageSitemap(Sitemap):
     priority = 0.8
     i18n = True
+    alternates = True
+    x_default = True
 
     def items(self):
         return ResearchPage.objects.all()
@@ -19,6 +21,8 @@ class DynamicPageSitemap(Sitemap):
 class ModelObjSitemap(Sitemap):
     priority = 0.5
     i18n = True
+    alternates = True
+    x_default = True
 
     def items(self):
         objs = list(chain(
@@ -32,6 +36,8 @@ class ModelObjSitemap(Sitemap):
 class StaticPageSitemap(Sitemap):
     priority = 0.9
     i18n = True
+    alternates = True
+    x_default = True
 
     def items(self):
        

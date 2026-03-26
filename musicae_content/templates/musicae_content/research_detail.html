@@ -1,58 +1,28 @@
 {% extends "musicae_base/base.html" %}
-{% load i18n static %}
-{% load i18n url_i18n %}
+{% load i18n static seo_tags %}
 
-{% block head_extra %}
+{% block title %}{{ page.name }} | Fundamenta Musicae{% endblock %}
 
-<title>{% trans "За нас" %} | Fundamenta Musicae</title>
+{% block meta_description %}{% if sections and sections|length > 0 %}{% trans 'Център за музикална философия и хуманитаристика — секции:' %} {% for s in sections|slice:':3' %}{% if not forloop.first %}, {% endif %}{{ s.title|striptags }}{% endfor %}{% else %}{% trans 'Център за музикална философия и хуманитаристика: хоризонт, история и изследователски направления.' %}{% endif %}{% endblock %}
 
-{# canonical & hreflang #}
-<link rel="canonical" href="{% url 'musicae_base:about' %}">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'bg' }}" hreflang="bg">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'en' }}" hreflang="en">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'de' }}" hreflang="de">
-
-{# Meta description that lists up to 3 section titles, with a clean fallback #}
-<meta name="description" content="
-{% if sections and sections|length > 0 %}
-{% trans 'Център за музикална философия и хуманитаристика — секции:' %} 
-{% for s in sections|slice:':3' %}{% if not forloop.first %}, {% endif %}{{ s.title|striptags }}{% endfor %}
-{% else %}
-{% trans 'Център за музикална философия и хуманитаристика: хоризонт, история и изследователски направления.' %}
-{% endif %}
-">
-
-{# Open Graph #}
+{% block seo_extra %}
 <meta property="og:type" content="website">
-<meta property="og:title" content="{% trans 'За нас | Fundamenta Musicae' %}">
-<meta property="og:description" content="
-{% if sections and sections|length > 0 %}
-{% trans 'Секции:' %} {% for s in sections|slice:':3' %}{% if not forloop.first %}, {% endif %}{{ s.title|striptags }}{% endfor %}
-{% else %}
-{% trans 'Мисия и изследователски теми: музикална философия, феноменология, педагогика и др.' %}
-{% endif %}
-">
-<meta property="og:url" content="{% url 'musicae_base:about' %}">
-<meta property="og:image" content="{{ STATIC_URL }}musicae_base/og/about.jpg">
+<meta property="og:title" content="{{ page.name|escape }} | Fundamenta Musicae">
+<meta property="og:description" content="{% if sections and sections|length > 0 %}{% trans 'Секции:' %} {% for s in sections|slice:':3' %}{% if not forloop.first %}, {% endif %}{{ s.title|striptags }}{% endfor %}{% else %}{% trans 'Мисия и изследователски теми: музикална философия, феноменология, педагогика и др.' %}{% endif %}">
+<meta property="og:url" content="{% absolute_url request request.path %}">
+<meta property="og:image" content="{% absolute_static request 'musicae_base/banners/2.jpg' %}">
 
-{# Twitter #}
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{% trans 'За нас | Fundamenta Musicae' %}">
-<meta name="twitter:description" content="
-{% if sections and sections|length > 0 %}
-{% trans 'Секции:' %} {% for s in sections|slice:':3' %}{% if not forloop.first %}, {% endif %}{{ s.title|striptags }}{% endfor %}
-{% else %}
-{% trans 'Мисия и изследователски теми: музикална философия, феноменология, педагогика и др.' %}
-{% endif %}
-">
+<meta name="twitter:title" content="{{ page.name|escape }} | Fundamenta Musicae">
+<meta name="twitter:description" content="{% if sections and sections|length > 0 %}{% trans 'Секции:' %} {% for s in sections|slice:':3' %}{% if not forloop.first %}, {% endif %}{{ s.title|striptags }}{% endfor %}{% else %}{% trans 'Мисия и изследователски теми: музикална философия, феноменология, педагогика и др.' %}{% endif %}">
+<meta name="twitter:image" content="{% absolute_static request 'musicae_base/banners/2.jpg' %}">
 
-{# Optional JSON-LD (static description is fine) #}
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
   "@type":"AboutPage",
-  "name":"{% filter escapejs %}{% trans 'За нас | Fundamenta Musicae' %}{% endfilter %}",
-  "url":"{% url 'musicae_base:about' %}",
+  "name":"{{ page.name|escapejs }} | Fundamenta Musicae",
+  "url":"{% absolute_url request request.path %}",
   "description":"{% filter escapejs %}{% trans 'Център за музикална философия и хуманитаристика: хоризонт, история и изследователски направления.' %}{% endfilter %}"
 }
 </script>
@@ -66,9 +36,9 @@
     .tile--right{ width: calc(50% + var(--outset)); margin-left: 50%; }
     .tile p{ max-width: var(--para-measure); }
   }
-  .text-mission-bg * { color: var(--color-bg-light) !important; }
+.text-mission-bg * { color: var(--color-bg-light) !important; }
 </style>
-{% endblock %}
+{% endblock seo_extra %}
 
 {% block content %}
   {% for s in sections %}

@@ -1,28 +1,25 @@
 {% extends "musicae_base/base.html" %}
-{% load i18n url_i18n static %}
+{% load i18n static seo_tags %}
 
-{% block head_extra %}
+{% block title %}{% trans "Библиотека" %} | Fundamenta Musicae{% endblock %}
 
-  <title>{% trans "Библиотека" %} | Fundamenta Musicae</title>
-  <link rel="canonical" href="{% url 'library_lst' %}">
-  <link rel="alternate" href="{{ request.get_full_path|translate_url:'bg' }}" hreflang="bg">
-  <link rel="alternate" href="{{ request.get_full_path|translate_url:'en' }}" hreflang="en">
-  <link rel="alternate" href="{{ request.get_full_path|translate_url:'de' }}" hreflang="de">
+{% block meta_description %}{% trans 'Публикации от членовете на Fundamenta Musicae — статии, книги, изследвания.' %}{% endblock %}
 
-  <meta name="description" content="{% trans 'Публикации от членовете на Fundamenta Musicae — статии, книги, изследвания.' %}">
+{% block seo_extra %}
   <meta property="og:type" content="website">
   <meta property="og:title" content="{% trans 'Библиотека | Fundamenta Musicae' %}">
   <meta property="og:description" content="{% trans 'Разгледайте и свалете публикации от нашия колектив.' %}">
-  <meta property="og:url" content="{% url 'library_lst' %}">
-  <meta property="og:image" content="{{ STATIC_URL }}musicae_base/og/library.jpg">
+  <meta property="og:url" content="{% absolute_url request request.path %}">
+  <meta property="og:image" content="{% absolute_static request 'musicae_base/banners/14.jpg' %}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{% trans 'Библиотека | Fundamenta Musicae' %}">
   <meta name="twitter:description" content="{% trans 'Разгледайте и свалете публикации от нашия колектив.' %}">
+  <meta name="twitter:image" content="{% absolute_static request 'musicae_base/banners/14.jpg' %}">
 
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"CollectionPage",
   "name":"{% filter escapejs %}{% trans 'Библиотека | Fundamenta Musicae' %}{% endfilter %}",
-  "url":"{% url 'library_lst' %}"}
+  "url":"{% absolute_url request request.path %}"}
   </script>
 
   <script src="{% static 'musicae_content/publication_list.js' %}"></script>
@@ -111,7 +108,7 @@
       pointer-events: none; /* prevent blocking clicks */
     }
   </style>
-{% endblock head_extra %}
+{% endblock seo_extra %}
 
 
 

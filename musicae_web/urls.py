@@ -18,10 +18,10 @@ from django.urls import path, include
 
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.sitemaps.views import sitemap
 from .sitemaps import *
 from django.conf.urls.i18n import i18n_patterns
 from musicae_base.health import health
+from .seo_views import robots_txt, sitemap
 
 sitemaps = {
     'staticPages': StaticPageSitemap(),
@@ -36,6 +36,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
     path('captcha/', include('captcha.urls')),
+    path("robots.txt", robots_txt, name="robots_txt"),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
      path("ckeditor/", include("ckeditor_uploader.urls")), 

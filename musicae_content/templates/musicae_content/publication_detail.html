@@ -1,32 +1,38 @@
 {% extends "musicae_base/base.html" %}
-{% load i18n static citations %}
-{% load i18n url_i18n %}
+{% load i18n static citations seo_tags %}
 
-{% block title %}{{ object.title }} · {% trans "Publication" %} · Fundamenta Musicae{% endblock %}
+{% block title %}{{ object.title }} | Fundamenta Musicae{% endblock %}
 
-{% block head_extra %}
-<title>{{ object.title }} | Fundamenta Musicae</title>
-<link rel="canonical" href="{{ object.get_absolute_url }}">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'bg' }}" hreflang="bg">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'en' }}" hreflang="en">
-<link rel="alternate" href="{{ request.get_full_path|translate_url:'de' }}" hreflang="de">
+{% block meta_description %}{{ object.abstract|default_if_none:''|striptags|truncatechars:180 }}{% endblock %}
 
+{% block seo_extra %}
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ object.title|escape }}">
+<meta property="og:description" content="{{ object.abstract|default_if_none:''|striptags|truncatechars:180 }}">
+<meta property="og:url" content="{% absolute_url request object.get_absolute_url %}">
+<meta property="og:image" content="{% if object.banner %}{% absolute_url request object.banner.url %}{% else %}{% absolute_static request 'musicae_base/banners/15.jpg' %}{% endif %}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ object.title|escape }}">
+<meta name="twitter:description" content="{{ object.abstract|default_if_none:''|striptags|truncatechars:180 }}">
+<meta name="twitter:image" content="{% if object.banner %}{% absolute_url request object.banner.url %}{% else %}{% absolute_static request 'musicae_base/banners/15.jpg' %}{% endif %}">
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ScholarlyArticle",
 "headline":"{{ object.title|escape }}","name":"{{ object.title|escape }}",
-{% if object.banner %}"image":["{{ object.banner.url }}"],{% endif %}
-"url":"{{ object.get_absolute_url }}",
+{% if object.banner %}"image":["{% absolute_url request object.banner.url %}"],{% else %}"image":["{% absolute_static request 'musicae_base/banners/15.jpg' %}"],{% endif %}
+"url":"{% absolute_url request object.get_absolute_url %}",
 {% if object.published_year %}"datePublished":"{{ object.published_year }}",{% endif %}
 "author":[{% for a in object.authors.all %}{"@type":"Person","name":"{{ a.name|escape }}"}{% if not forloop.last %},{% endif %}{% endfor %}],
 "publisher":{"@type":"Organization","name":"Fundamenta Musicae"},
+{% if object.file %}"encoding":[{"@type":"MediaObject","contentUrl":"{% absolute_url request object.file.url %}","encodingFormat":"application/pdf","name":"{{ object.title|escapejs }}"}],{% endif %}
 
 
 {% if object.keywords_txt %}
 "keywords":"{{ object.keywords_txt|escapejs }}",
 {% endif %}
 
-"description":"{{ object.abstract|default_if_none:''|striptags|truncatechars:200|escapejs }}"}
+"description":"{{ object.abstract|default_if_none:''|striptags|truncatechars:200|escapejs }}",
+"inLanguage":"{{ LANGUAGE_CODE|default:'bg' }}"}
 </script>
 
 <style>
@@ -49,7 +55,7 @@
   .muted { opacity:.7; }
   .pub-actions .hint { display:block; font-size:.95rem; opacity:.8; margin-top:.25rem; }
 </style>
-{% endblock head_extra %}
+{% endblock seo_extra %}
 
 {% block content %}
 

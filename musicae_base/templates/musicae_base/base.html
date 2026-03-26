@@ -1,10 +1,20 @@
-{% load static i18n url_i18n %}
+{% load static i18n url_i18n seo_tags %}
 {% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:'bg' }}">
 <head>
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Fundamenta Musicae | Center for Musical Philosophy and Humanities{% endblock %}</title>
+  <title>{% block title %}Fundamenta Musicae | {% trans "Център за музикална философия и хуманитаристика" %}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{% trans 'Център за музикална философия и хуманитаристика: хоризонт, история и изследователски направления.' %}{% endblock %}">
+  <meta name="robots" content="{% block meta_robots %}index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1{% endblock %}">
+  <link rel="canonical" href="{% block canonical_href %}{% absolute_url request request.path %}{% endblock %}">
+  {% block hreflang_links %}
+  <link rel="alternate" href="{% absolute_lang_url request 'bg' request.path %}" hreflang="bg">
+  <link rel="alternate" href="{% absolute_lang_url request 'en' request.path %}" hreflang="en">
+  <link rel="alternate" href="{% absolute_lang_url request 'de' request.path %}" hreflang="de">
+  <link rel="alternate" href="{% absolute_lang_url request 'bg' request.path %}" hreflang="x-default">
+  {% endblock %}
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,6 +65,7 @@
 
   </style>
 
+  {% block seo_extra %}{% endblock %}
   {% block head_extra %}{% endblock %}
 </head>
 <body class="antialiased">
