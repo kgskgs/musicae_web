@@ -2,6 +2,13 @@ from django import template
 from django.utils.html import escape, mark_safe
 from modeltranslation.utils import build_localized_fieldname
 
+from musicae_content.book_chapter_upload_data import (
+    AUTHOR_NAMES_BG,
+    BOOK_TITLE_BG,
+    BOOK_TITLE_DE,
+    BOOK_TITLE_EN,
+)
+
 
 register = template.Library()
 
@@ -63,6 +70,41 @@ def _invert(fullname: str) -> str:
 
 def _format_people(authors, pub_lang: str):
     return [_display_name_for_lang(person, pub_lang) for person in authors]
+
+
+def _ordered_people(publication, pub_lang: str):
+    people = list(publication.authors.all())
+    if publication.ptype != publication.ptypes.chapter:
+        return _format_people(people, pub_lang)
+
+    by_bg_name = {
+        (getattr(person, "name", "") or "").strip(): person
+        for person in people
+    }
+    ordered_people = []
+    used_names = set()
+
+    for bg_name in AUTHOR_NAMES_BG:
+        person = by_bg_name.get(bg_name)
+        if person:
+            ordered_people.append(_display_name_for_lang(person, pub_lang))
+            used_names.add(bg_name)
+
+    for person in people:
+        bg_name = (getattr(person, "name", "") or "").strip()
+        if bg_name not in used_names:
+            ordered_people.append(_display_name_for_lang(person, pub_lang))
+
+    return ordered_people
+
+
+def _book_title_for_lang(pub_lang: str) -> str:
+    lang = _norm(pub_lang)
+    if lang == "de":
+        return BOOK_TITLE_DE
+    if lang == "en":
+        return BOOK_TITLE_EN
+    return BOOK_TITLE_BG
 
 
 def _join_citation(authors: str, title_html: str, tail: str):
@@ -219,8 +261,29 @@ def _split_page_range(page_range: str):
 def build_bibtex(publication, url: str = "") -> str:
     key = f"pub{publication.pk or 'draft'}"
     authors = " and ".join(
-        _invert(name) for name in _format_people(publication.authors.all(), publication.language or "")
+        _invert(name) for name in _ordered_people(publication, publication.language or "")
     )
+
+    if publication.ptype == publication.ptypes.chapter:
+        fields = [
+            ("title", _book_title_for_lang(publication.language or "")),
+            ("author", authors),
+            ("year", publication.published_year),
+            ("publisher", publication.citation_publisher),
+            ("address", publication.citation_place),
+        ]
+        if publication.language:
+            fields.append(("language", publication.language))
+        if url:
+            fields.append(("url", url))
+
+        body = ",\n".join(
+            f"  {name} = {{{_bibtex_escape(value)}}}"
+            for name, value in fields
+            if value not in (None, "")
+        )
+        return f"@book{{{key},\n{body}\n}}"
+
     fields = [
         ("title", publication.title),
         ("author", authors),
@@ -257,6 +320,33 @@ def build_bibtex(publication, url: str = "") -> str:
 
 
 def build_ris(publication, url: str = "") -> str:
+    if publication.ptype == publication.ptypes.chapter:
+        lines = [
+            "TY  - BOOK",
+            f"TI  - {_book_title_for_lang(publication.language or '')}",
+        ]
+
+        for author in _ordered_people(publication, publication.language or ""):
+            lines.append(f"AU  - {_invert(author)}")
+
+        if publication.published_year:
+            lines.append(f"PY  - {publication.published_year}")
+
+        if publication.citation_publisher:
+            lines.append(f"PB  - {publication.citation_publisher}")
+
+        if publication.citation_place:
+            lines.append(f"CY  - {publication.citation_place}")
+
+        if publication.language:
+            lines.append(f"LA  - {publication.language}")
+
+        if url:
+            lines.append(f"UR  - {url}")
+
+        lines.append("ER  -")
+        return "\n".join(lines)
+
     lines = [
         f"TY  - {publication.ris_reference_type}",
         f"TI  - {publication.title}",
@@ -340,6 +430,26 @@ def chicago_authors(authors, pub_lang: str):
 
 @register.simple_tag
 def mla_citation_html(publication, pub_lang: str):
+    if publication.ptype == publication.ptypes.chapter:
+        authors = _ordered_people(publication, pub_lang)
+        count = len(authors)
+        if count == 0:
+            author_text = ""
+        elif count == 1:
+            author_text = _invert(authors[0])
+        elif count == 2:
+            author_text = f"{_invert(authors[0])}, and {authors[1]}"
+        else:
+            author_text = f"{_invert(authors[0])}, et al."
+
+        return _join_citation(
+            author_text,
+            f"<em>{escape(_book_title_for_lang(pub_lang))}</em>.",
+            f"{escape(publication.citation_publisher)}, {escape(publication.published_year)}."
+            if publication.citation_publisher and publication.published_year
+            else "",
+        )
+
     return _join_citation(
         mla_authors(publication.authors.all(), pub_lang),
         _title_fragment(publication),
@@ -349,6 +459,41 @@ def mla_citation_html(publication, pub_lang: str):
 
 @register.simple_tag
 def chicago_citation_html(publication, pub_lang: str):
+    if publication.ptype == publication.ptypes.chapter:
+        authors = _ordered_people(publication, pub_lang)
+        count = len(authors)
+        if count == 0:
+            author_text = ""
+        elif count == 1:
+            author_text = _invert(authors[0])
+        elif count == 2:
+            author_text = f"{_invert(authors[0])}, and {authors[1]}"
+        else:
+            shown = authors[:7] if count > 10 else authors[:10]
+            first = _invert(shown[0])
+            rest = shown[1:]
+            if count > 10:
+                author_text = f"{first}, {', '.join(rest)}, et al."
+            elif len(rest) == 1:
+                author_text = f"{first}, and {rest[0]}"
+            else:
+                author_text = f"{first}, {', '.join(rest[:-1])}, and {rest[-1]}"
+
+        tail = ""
+        if publication.citation_place and publication.citation_publisher and publication.published_year:
+            tail = (
+                f"{escape(publication.citation_place)}: "
+                f"{escape(publication.citation_publisher)}, {escape(publication.published_year)}."
+            )
+        elif publication.citation_publisher and publication.published_year:
+            tail = f"{escape(publication.citation_publisher)}, {escape(publication.published_year)}."
+
+        return _join_citation(
+            author_text,
+            f"<em>{escape(_book_title_for_lang(pub_lang))}</em>.",
+            tail,
+        )
+
     return _join_citation(
         chicago_authors(publication.authors.all(), pub_lang),
         _title_fragment(publication),

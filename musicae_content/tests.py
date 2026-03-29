@@ -12,8 +12,14 @@ from .templatetags.citations import (
 
 
 class PublicationCitationTests(TestCase):
-    def _make_author(self, name):
-        return Person.objects.create(name=name, member=False)
+    def _make_author(self, name, **translations):
+        author = Person.objects.create(name=name, member=False)
+        for field_name, value in translations.items():
+            if hasattr(author, field_name):
+                setattr(author, field_name, value)
+        if translations:
+            author.save()
+        return author
 
     def _make_publication(self, **overrides):
         defaults = {
@@ -91,8 +97,16 @@ class PublicationCitationTests(TestCase):
         self.assertNotIn("SP  - ", ris)
 
     def test_chapter_citations_and_exports_use_book_container_data(self):
-        first_author = self._make_author("Emil Devedjiev")
-        second_author = self._make_author("Christian Vassilev")
+        first_author = self._make_author(
+            "Емил Деведжиев",
+            name_en="Emil Devedjiev",
+            name_de="Emil Devedjiev",
+        )
+        second_author = self._make_author(
+            "Кристиан Василев",
+            name_en="Christian Vassilev",
+            name_de="Christian Vassilev",
+        )
         publication = self._make_publication(
             ptype=Publication.ptypes.chapter,
             title="Behaviorism, Development, Education",
@@ -108,23 +122,34 @@ class PublicationCitationTests(TestCase):
         bibtex = build_bibtex(publication, "https://example.com/publications/3/")
         ris = build_ris(publication, "https://example.com/publications/3/")
 
-        self.assertIn("&ldquo;Behaviorism, Development, Education.&rdquo;", mla)
-        self.assertIn("<em>Music Development and Music Education</em>, Riva, 2024, pp. 35-54.", mla)
+        self.assertIn("Devedjiev, Emil, and Christian Vassilev.", mla)
+        self.assertIn("<em>Music Development and Music Education</em>.", mla)
+        self.assertIn("Riva, 2024.", mla)
+        self.assertNotIn("Behaviorism, Development, Education", mla)
+        self.assertNotIn("35-54", mla)
 
-        self.assertIn("In <em>Music Development and Music Education</em>, 35-54. Sofia: Riva, 2024.", chicago)
+        self.assertIn("Devedjiev, Emil, and Christian Vassilev.", chicago)
+        self.assertIn("<em>Music Development and Music Education</em>.", chicago)
+        self.assertIn("Sofia: Riva, 2024.", chicago)
+        self.assertNotIn("Behaviorism, Development, Education", chicago)
+        self.assertNotIn("35-54", chicago)
 
-        self.assertIn("@incollection{pub", bibtex)
-        self.assertIn("booktitle = {Music Development and Music Education}", bibtex)
+        self.assertIn("@book{pub", bibtex)
+        self.assertIn("title = {Music Development and Music Education}", bibtex)
+        self.assertIn("author = {Devedjiev, Emil and Vassilev, Christian}", bibtex)
         self.assertIn("publisher = {Riva}", bibtex)
         self.assertIn("address = {Sofia}", bibtex)
-        self.assertIn("pages = {35-54}", bibtex)
+        self.assertNotIn("pages = {35-54}", bibtex)
+        self.assertNotIn("Behaviorism, Development, Education", bibtex)
 
-        self.assertIn("TY  - CHAP", ris)
-        self.assertIn("T2  - Music Development and Music Education", ris)
+        self.assertIn("TY  - BOOK", ris)
+        self.assertIn("TI  - Music Development and Music Education", ris)
+        self.assertIn("AU  - Devedjiev, Emil", ris)
+        self.assertIn("AU  - Vassilev, Christian", ris)
         self.assertIn("PB  - Riva", ris)
         self.assertIn("CY  - Sofia", ris)
-        self.assertIn("SP  - 35", ris)
-        self.assertIn("EP  - 54", ris)
+        self.assertNotIn("SP  - 35", ris)
+        self.assertNotIn("EP  - 54", ris)
 
     def test_publication_detail_page_renders_page_range_and_downloads(self):
         author = self._make_author("Clara Schumann")

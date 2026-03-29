@@ -285,6 +285,6 @@ BOOK_CHAPTERS = [
 
 def build_bib_info(title_bg, page_range):
     return (
-        f"Деведжиев, Емил, Василев, Кристиан. „{title_bg}.“ В "
-        f"{BOOK_TITLE_BG}, с. {page_range}. {PUBLISHED_PLACE}: {PUBLISHER}, {PUBLISHED_YEAR}."
+        f"Деведжиев, Емил, Василев, Кристиан. "
+        f"{BOOK_TITLE_BG}. {PUBLISHED_PLACE}: {PUBLISHER}, {PUBLISHED_YEAR}."
     )
