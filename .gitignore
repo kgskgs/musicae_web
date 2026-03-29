@@ -14,3 +14,7 @@ __pycache__/
 *$py.class
 #sublime
 *.sublime-workspace
+
+# Runtime and generated upload artifacts
+media/
+chapter_upload_bundle/

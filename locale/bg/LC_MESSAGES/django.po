@@ -757,3 +757,18 @@ msgstr ""
 #: .\musicae_web\settings.py:167
 msgid "German"
 msgstr ""
+
+msgid "Глава"
+msgstr "Глава"
+
+msgid "Container Title"
+msgstr "Заглавие на източника"
+
+msgid "Book or proceedings title used for chapters and conference papers."
+msgstr "Заглавие на книгата или сборника, използвано за глави и доклади."
+
+msgid "Sort Page Start"
+msgstr "Начална страница за подреждане"
+
+msgid "Automatically derived from the first page in Page Range."
+msgstr "Извлича се автоматично от първата страница в диапазона."

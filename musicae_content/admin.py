@@ -101,13 +101,14 @@ class PersonAdmin(TranslationAdmin):
 
 class PublicationAdmin(TranslationAdmin):
     form = PublicationAdminForm
-    ordering = ("-published_year",)
+    ordering = ("-published_year", "sort_page_start", "title")
     save_as = True
 
-    list_display = ["title", "internal", "ptype", "published_year", "pk"]
+    list_display = ["title", "internal", "ptype", "published_year", "page_range", "pk"]
     list_filter = ("ptype", "published_year", "internal")
-    search_fields = ("title", "abstract", "bib_info", "page_range")
+    search_fields = ("title", "abstract", "bib_info", "page_range", "container_title")
     filter_horizontal = ("authors",)
+    readonly_fields = ("sort_page_start",)
 
     fieldsets = (
         (None, {
@@ -118,12 +119,14 @@ class PublicationAdmin(TranslationAdmin):
                 "published_year",
                 "published_place",
                 "page_range",
+                "sort_page_start",
                 "bib_info",
                 "language",
                 "internal",
                 "authors",
                 "publisher_txt",
                 "journal_txt",
+                "container_title",
                 "topic",
                 "keywords_txt",
                 "file",
@@ -237,8 +240,8 @@ class PublicationAdmin(TranslationAdmin):
             "book": Publication.ptypes.mon,
             "booklet": Publication.ptypes.aut,
             "conference": Publication.ptypes.doc,
-            "inbook": Publication.ptypes.stu,
-            "incollection": Publication.ptypes.stu,
+            "inbook": Publication.ptypes.chapter,
+            "incollection": Publication.ptypes.chapter,
             "inproceedings": Publication.ptypes.doc,
             "manual": Publication.ptypes.tex,
             "mastersthesis": Publication.ptypes.dis,
@@ -289,8 +292,9 @@ class PublicationAdmin(TranslationAdmin):
         entry_type = str(entry.get("ENTRYTYPE") or entry.get("entrytype") or "").strip().lower()
         mapped_ptype = self._bibtex_type_to_ptype(entry_type, has_url=bool(entry.get("url")))
 
-        # journal: journal / journaltitle / booktitle
-        journal_txt = self._get_first_nonempty(entry, "journal", "journaltitle", "booktitle")
+        # journal containers stay separate from book/proceedings containers
+        journal_txt = self._get_first_nonempty(entry, "journal", "journaltitle")
+        container_title = self._get_first_nonempty(entry, "booktitle")
 
         # publisher: publisher / organization / institution
         publisher_txt = self._get_first_nonempty(
@@ -331,6 +335,7 @@ class PublicationAdmin(TranslationAdmin):
                     "page_range": page_range or "",
                     "abstract": abstract or "",
                     "journal_txt": journal_txt or "",
+                    "container_title": container_title or "",
                     "publisher_txt": publisher_txt or "",
                     "keywords_txt": keywords_txt or "",
                 },
@@ -360,6 +365,10 @@ class PublicationAdmin(TranslationAdmin):
 
             if journal_txt and not pub.journal_txt:
                 pub.journal_txt = journal_txt
+                changed = True
+
+            if container_title and not pub.container_title:
+                pub.container_title = container_title
                 changed = True
 
             if publisher_txt and not pub.publisher_txt:

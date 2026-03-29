@@ -834,3 +834,18 @@ msgstr "Englisch"
 #: .\musicae_web\settings.py:167
 msgid "German"
 msgstr "Deutsch"
+
+msgid "Глава"
+msgstr "Kapitel"
+
+msgid "Container Title"
+msgstr "Titel des Sammelwerks"
+
+msgid "Book or proceedings title used for chapters and conference papers."
+msgstr "Titel des Buches oder Tagungsbands für Kapitel und Konferenzbeiträge."
+
+msgid "Sort Page Start"
+msgstr "Seitensortierbeginn"
+
+msgid "Automatically derived from the first page in Page Range."
+msgstr "Wird automatisch aus der ersten Seite des Seitenbereichs abgeleitet."

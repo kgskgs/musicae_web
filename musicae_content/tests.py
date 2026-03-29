@@ -90,6 +90,42 @@ class PublicationCitationTests(TestCase):
         self.assertIn("TY  - BOOK", ris)
         self.assertNotIn("SP  - ", ris)
 
+    def test_chapter_citations_and_exports_use_book_container_data(self):
+        first_author = self._make_author("Emil Devedjiev")
+        second_author = self._make_author("Christian Vassilev")
+        publication = self._make_publication(
+            ptype=Publication.ptypes.chapter,
+            title="Behaviorism, Development, Education",
+            container_title="Music Development and Music Education",
+            publisher_txt="Riva",
+            published_place="Sofia",
+            page_range="35-54",
+        )
+        publication.authors.add(first_author, second_author)
+
+        mla = str(mla_citation_html(publication, "en"))
+        chicago = str(chicago_citation_html(publication, "en"))
+        bibtex = build_bibtex(publication, "https://example.com/publications/3/")
+        ris = build_ris(publication, "https://example.com/publications/3/")
+
+        self.assertIn("&ldquo;Behaviorism, Development, Education.&rdquo;", mla)
+        self.assertIn("<em>Music Development and Music Education</em>, Riva, 2024, pp. 35-54.", mla)
+
+        self.assertIn("In <em>Music Development and Music Education</em>, 35-54. Sofia: Riva, 2024.", chicago)
+
+        self.assertIn("@incollection{pub", bibtex)
+        self.assertIn("booktitle = {Music Development and Music Education}", bibtex)
+        self.assertIn("publisher = {Riva}", bibtex)
+        self.assertIn("address = {Sofia}", bibtex)
+        self.assertIn("pages = {35-54}", bibtex)
+
+        self.assertIn("TY  - CHAP", ris)
+        self.assertIn("T2  - Music Development and Music Education", ris)
+        self.assertIn("PB  - Riva", ris)
+        self.assertIn("CY  - Sofia", ris)
+        self.assertIn("SP  - 35", ris)
+        self.assertIn("EP  - 54", ris)
+
     def test_publication_detail_page_renders_page_range_and_downloads(self):
         author = self._make_author("Clara Schumann")
         publication = self._make_publication(
@@ -107,6 +143,32 @@ class PublicationCitationTests(TestCase):
         self.assertContains(response, "Studies in Form")
         self.assertContains(response, "Download BibTeX")
         self.assertContains(response, "Download RIS")
+
+    def test_same_year_publications_order_by_first_page_then_title(self):
+        first = self._make_publication(
+            ptype=Publication.ptypes.chapter,
+            title="First chapter",
+            published_year=2021,
+            page_range="7-34",
+        )
+        second = self._make_publication(
+            ptype=Publication.ptypes.chapter,
+            title="Second chapter",
+            published_year=2021,
+            page_range="35-54",
+        )
+        third = self._make_publication(
+            title="Standalone publication",
+            published_year=2021,
+            page_range="",
+        )
+
+        publications = list(Publication.objects.filter(published_year=2021))
+
+        self.assertEqual([publication.pk for publication in publications], [first.pk, second.pk, third.pk])
+        self.assertEqual(first.sort_page_start, 7)
+        self.assertEqual(second.sort_page_start, 35)
+        self.assertEqual(third.sort_page_start, 999999)
 
 
 class PublicationBibtexImportTests(TestCase):
@@ -130,8 +192,30 @@ class PublicationBibtexImportTests(TestCase):
         self.assertTrue(created)
         self.assertEqual(status, "created")
         self.assertEqual(publication.ptype, Publication.ptypes.doc)
-        self.assertEqual(publication.journal_txt, "Proceedings of the Modal Congress")
+        self.assertEqual(publication.container_title, "Proceedings of the Modal Congress")
+        self.assertEqual(publication.journal_txt, "")
         self.assertEqual(publication.publisher_txt, "Fundamenta Press")
         self.assertEqual(publication.published_place, "Sofia")
         self.assertEqual(publication.page_range, "55-61")
         self.assertEqual(publication.authors.count(), 2)
+
+    def test_import_maps_incollection_to_chapter(self):
+        entry = {
+            "ENTRYTYPE": "incollection",
+            "title": "Listening and Development",
+            "year": "2021",
+            "booktitle": "Music Development and Music Education",
+            "publisher": "Riva",
+            "address": "Sofia",
+            "pages": "117--134",
+            "author": "Devedjiev, Emil and Vassilev, Christian",
+        }
+
+        publication, created, status = self.admin.create_publication_from_entry(entry)
+
+        self.assertTrue(created)
+        self.assertEqual(status, "created")
+        self.assertEqual(publication.ptype, Publication.ptypes.chapter)
+        self.assertEqual(publication.container_title, "Music Development and Music Education")
+        self.assertEqual(publication.publisher_txt, "Riva")
+        self.assertEqual(publication.page_range, "117-134")

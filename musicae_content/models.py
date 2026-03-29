@@ -105,6 +105,7 @@ class Publication(models.Model):
         hab = 8, _("Хабилитация")
         onl = 9, _("Онлайн материал")
         elb = 10, _("Електронна книга")
+        chapter = 11, _("Глава")
 
     # Основно съдържание (регистрирано за превод)
     title = models.CharField(max_length=255, verbose_name=_("Title"))
@@ -117,6 +118,13 @@ class Publication(models.Model):
         null=True,
         verbose_name=_("Page Range"),
         help_text=_("Optional page span, e.g. 45-67."),
+    )
+    sort_page_start = models.PositiveIntegerField(
+        default=999999,
+        editable=False,
+        db_index=True,
+        verbose_name=_("Sort Page Start"),
+        help_text=_("Automatically derived from the first page in Page Range."),
     )
     
     # Поле за тип публикация, използващо вложения клас
@@ -138,6 +146,13 @@ class Publication(models.Model):
         verbose_name=_("Journal (Text)"),
         blank=True, 
         null=True
+    )
+    container_title = models.CharField(
+        max_length=255,
+        verbose_name=_("Container Title"),
+        blank=True,
+        null=True,
+        help_text=_("Book or proceedings title used for chapters and conference papers."),
     )
     keywords_txt = models.TextField(
         verbose_name=_("Keywords (Comma Separated)"),
@@ -170,7 +185,7 @@ class Publication(models.Model):
     class Meta:
         verbose_name = _("Publication")
         verbose_name_plural = _("Publications")
-        ordering = ['-published_year', 'title']
+        ordering = ['-published_year', 'sort_page_start', 'title']
         
     def __str__(self):
         return self.title
@@ -186,6 +201,8 @@ class Publication(models.Model):
 
     @property
     def citation_kind(self):
+        if self.ptype == self.ptypes.chapter:
+            return "chapter"
         if self.ptype in {self.ptypes.art, self.ptypes.stu, self.ptypes.doc}:
             return "container"
         if self.ptype in {self.ptypes.mon, self.ptypes.col, self.ptypes.tex, self.ptypes.elb}:
@@ -198,11 +215,11 @@ class Publication(models.Model):
 
     @property
     def citation_title_is_quoted(self):
-        return self.citation_kind == "container"
+        return self.citation_kind in {"container", "chapter"}
 
     @property
     def citation_container(self):
-        return self._clean_text(self.journal_txt)
+        return self._clean_text(self.container_title or self.journal_txt)
 
     @property
     def citation_publisher(self):
@@ -222,12 +239,14 @@ class Publication(models.Model):
     @property
     def supports_page_range(self):
         return bool(self.normalized_page_range) and (
-            self.ptype in {self.ptypes.art, self.ptypes.stu, self.ptypes.doc}
+            self.ptype in {self.ptypes.art, self.ptypes.stu, self.ptypes.doc, self.ptypes.chapter}
             or bool(self.citation_container)
         )
 
     @property
     def bibtex_entry_type(self):
+        if self.ptype == self.ptypes.chapter:
+            return "incollection"
         if self.ptype in {self.ptypes.mon, self.ptypes.col, self.ptypes.tex, self.ptypes.elb}:
             return "book"
         if self.ptype in {self.ptypes.dis, self.ptypes.hab}:
@@ -250,6 +269,8 @@ class Publication(models.Model):
 
     @property
     def ris_reference_type(self):
+        if self.ptype == self.ptypes.chapter:
+            return "CHAP"
         if self.ptype in {self.ptypes.mon, self.ptypes.col, self.ptypes.tex, self.ptypes.elb}:
             return "BOOK"
         if self.ptype in {self.ptypes.dis, self.ptypes.hab}:
@@ -261,6 +282,21 @@ class Publication(models.Model):
         if self.ptype == self.ptypes.onl:
             return "ELEC"
         return "GEN"
+
+    @staticmethod
+    def page_range_start(page_range):
+        normalized = Publication._clean_text(page_range)
+        if not normalized:
+            return 999999
+
+        match = re.search(r"(\d+)", normalized)
+        if not match:
+            return 999999
+        return int(match.group(1))
+
+    def save(self, *args, **kwargs):
+        self.sort_page_start = self.page_range_start(self.page_range)
+        super().save(*args, **kwargs)
 
 
 class Link(models.Model):

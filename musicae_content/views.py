@@ -31,7 +31,7 @@ def mobile(request):
 def home(request):
     publications = (
         Publication.objects
-        .order_by('-published_year', 'title')[:5]   # latest 5 by year
+        .order_by('-published_year', 'sort_page_start', 'title')[:5]
     )
     members = Person.objects.all()[:12]
     return render(request, "home.html", {
@@ -159,6 +159,8 @@ def PublicationList(request, internal=False):
                     q_obj |= Q(keywords_txt__icontains=term)
                     # publisher stored as text
                     q_obj |= Q(publisher_txt__icontains=term)
+                    # book/proceedings container
+                    q_obj |= Q(container_title__icontains=term)
 
                 pub_set = pub_set.filter(q_obj).distinct()
 

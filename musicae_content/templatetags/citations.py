@@ -96,6 +96,18 @@ def _mla_tail(publication):
     publisher = publication.citation_publisher
     place = publication.citation_place
 
+    if publication.citation_kind == "chapter":
+        bits = []
+        if container:
+            bits.append(f"<em>{escape(container)}</em>")
+        if publisher:
+            bits.append(escape(publisher))
+        if year:
+            bits.append(escape(year))
+        if pages:
+            bits.append(f"pp. {escape(pages)}")
+        return f"{', '.join(bits)}." if bits else ""
+
     if publication.citation_kind == "container":
         bits = []
         if container:
@@ -133,6 +145,18 @@ def _chicago_tail(publication):
     container = publication.citation_container
     publisher = publication.citation_publisher
     place = publication.citation_place
+
+    if publication.citation_kind == "chapter":
+        prefix = f"In <em>{escape(container)}</em>" if container else ""
+        if prefix and pages and place and publisher and year:
+            return f"{prefix}, {escape(pages)}. {escape(place)}: {escape(publisher)}, {escape(year)}."
+        if prefix and pages:
+            return f"{prefix}, {escape(pages)}."
+        if prefix and place and publisher and year:
+            return f"{prefix}. {escape(place)}: {escape(publisher)}, {escape(year)}."
+        if place and publisher and year:
+            return f"{escape(place)}: {escape(publisher)}, {escape(year)}."
+        return prefix + "." if prefix else ""
 
     if publication.citation_kind == "container":
         if container and year and pages:
