@@ -160,6 +160,9 @@ class PublicationCitationTests(TestCase):
             title="Form and Memory",
             journal_txt="Studies in Form",
             page_range="33-48",
+            abstract="",
+            bib_info="Bibliographic fallback description.",
+            keywords_txt="rhythm; pedagogy, rhythm\nanalysis",
         )
         publication.authors.add(author)
 
@@ -171,6 +174,12 @@ class PublicationCitationTests(TestCase):
         self.assertContains(response, "Studies in Form")
         self.assertContains(response, "Download BibTeX")
         self.assertContains(response, "Download RIS")
+        self.assertContains(response, 'name="keywords" content="rhythm, pedagogy, analysis"', html=False)
+        self.assertContains(response, 'property="article:tag" content="rhythm"', html=False)
+        self.assertContains(response, 'property="article:tag" content="pedagogy"', html=False)
+        self.assertContains(response, 'property="article:tag" content="analysis"', html=False)
+        self.assertContains(response, "Bibliographic fallback description.")
+        self.assertContains(response, '"keywords":"rhythm, pedagogy, analysis"')
 
     def test_same_year_publications_order_by_first_page_then_title(self):
         first = self._make_publication(

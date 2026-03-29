@@ -3,18 +3,27 @@
 
 {% block title %}{{ object.title }} | Fundamenta Musicae{% endblock %}
 
-{% block meta_description %}{{ object.abstract|default_if_none:''|striptags|truncatechars:180 }}{% endblock %}
+{% block meta_description %}{{ object.abstract|default:object.bib_info|default:object.title|striptags|truncatechars:180 }}{% endblock %}
 
 {% block seo_extra %}
+{% with seo_description=object.abstract|default:object.bib_info|default:object.title %}
 <meta property="og:type" content="article">
+<meta property="og:site_name" content="Fundamenta Musicae">
 <meta property="og:title" content="{{ object.title|escape }}">
-<meta property="og:description" content="{{ object.abstract|default_if_none:''|striptags|truncatechars:180 }}">
+<meta property="og:description" content="{{ seo_description|striptags|truncatechars:180 }}">
 <meta property="og:url" content="{% absolute_url request object.get_absolute_url %}">
 <meta property="og:image" content="{% if object.banner %}{% absolute_url request object.banner.url %}{% else %}{% absolute_static request 'musicae_base/banners/15.jpg' %}{% endif %}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ object.title|escape }}">
-<meta name="twitter:description" content="{{ object.abstract|default_if_none:''|striptags|truncatechars:180 }}">
+<meta name="twitter:description" content="{{ seo_description|striptags|truncatechars:180 }}">
+<meta name="twitter:url" content="{% absolute_url request object.get_absolute_url %}">
 <meta name="twitter:image" content="{% if object.banner %}{% absolute_url request object.banner.url %}{% else %}{% absolute_static request 'musicae_base/banners/15.jpg' %}{% endif %}">
+{% if object.keyword_list %}
+<meta name="keywords" content="{{ object.keyword_list|join:', '|escape }}">
+{% for keyword in object.keyword_list %}
+<meta property="article:tag" content="{{ keyword|escape }}">
+{% endfor %}
+{% endif %}
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ScholarlyArticle",
@@ -25,11 +34,12 @@
 "author":[{% for a in object.authors.all %}{"@type":"Person","name":"{{ a.name|escape }}"}{% if not forloop.last %},{% endif %}{% endfor %}],
 "publisher":{"@type":"Organization","name":"Fundamenta Musicae"},
 {% if object.file %}"encoding":[{"@type":"MediaObject","contentUrl":"{% absolute_url request object.file.url %}","encodingFormat":"application/pdf","name":"{{ object.title|escapejs }}"}],{% endif %}
-{% if object.keywords_txt %}"keywords":"{{ object.keywords_txt|escapejs }}",{% endif %}
+{% if object.keyword_list %}"keywords":"{{ object.keyword_list|join:', '|escapejs }}",{% endif %}
 {% if object.supports_page_range %}"pagination":"{{ object.normalized_page_range|escapejs }}",{% endif %}
-"description":"{{ object.abstract|default_if_none:''|striptags|truncatechars:200|escapejs }}",
+"description":"{{ seo_description|striptags|truncatechars:200|escapejs }}",
 "inLanguage":"{{ LANGUAGE_CODE|default:'bg' }}"}
 </script>
+{% endwith %}
 
 <style>
   @media (min-width: 1024px){
