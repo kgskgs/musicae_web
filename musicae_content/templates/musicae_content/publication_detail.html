@@ -83,7 +83,7 @@
     <div class="mb-8">
       <h2 class="text-h2 font-display text-[var(--color-text-dark)] inline align-middle">{{ object.title }}</h2>
       {% if object.is_bulgarian and LANGUAGE_CODE|slice:":2" != "bg" %}
-      <span class="inline-flex items-center align-middle ml-2 rounded-md border border-gray-300 px-2 py-1 text-base text-gray-700 bg-white/80">
+      <span class="inline-flex items-center align-top ml-2 rounded-md border border-gray-300 px-2 py-0.5 text-sm text-gray-700 bg-white/80 relative -top-3">
         {% if LANGUAGE_CODE|slice:":2" == "de" %}Auf Bulgarisch{% else %}In Bulgarian{% endif %}
       </span>
       {% endif %}
