@@ -27,7 +27,7 @@ class ModelObjSitemap(Sitemap):
     def items(self):
         objs = list(chain(
             Person.objects.all(),
-            Publication.objects.all(),
+            Publication.objects.filter(internal=False),
             
         ))
         return objs
@@ -41,7 +41,7 @@ class StaticPageSitemap(Sitemap):
 
     def items(self):
        
-        return ['home', 'members_lst', 'library_lst']
+        return ['home', 'about', 'research_list', 'members_lst', 'library_lst']
 
     def location(self, item):
         return reverse(item)
@@ -52,8 +52,8 @@ class FilesSitemap(Sitemap):
 
     def items(self):
         files = list(chain(
-            Publication.objects.filter(file__endswith=".pdf"),
-            File.objects.filter(file__endswith=".pdf")
+            Publication.objects.filter(file__iendswith=".pdf", internal=False),
+            File.objects.filter(file__iendswith=".pdf")
         ))
         return files
 

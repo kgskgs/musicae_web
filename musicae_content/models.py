@@ -167,6 +167,7 @@ class Publication(models.Model):
     published_year = models.IntegerField(verbose_name=_("Year"))
     internal = models.BooleanField(default=False, verbose_name=_("Internal Publication"))
     language = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("Language"))
+    is_bulgarian = models.BooleanField(default=False, verbose_name=_("Is Bulgarian"))
 
     # Полета за връзка (остават dropdowns/multi-selects)
     authors = models.ManyToManyField('Person', related_name='publications', verbose_name=_("Authors"))
@@ -253,6 +254,20 @@ class Publication(models.Model):
     def keyword_list(self):
         return self.parse_keywords(self.keywords_txt)[: self.KEYWORDS_MAX_COUNT]
 
+    def _keyword_field_names(self):
+        names = ["keywords_txt"]
+        for field in self._meta.get_fields():
+            name = getattr(field, "name", "")
+            if name.startswith("keywords_txt_") and name not in names:
+                names.append(name)
+        return names
+
+    def _normalize_keyword_fields(self):
+        for name in self._keyword_field_names():
+            value = getattr(self, name, None)
+            keywords = self.parse_keywords(value)[: self.KEYWORDS_MAX_COUNT]
+            setattr(self, name, ", ".join(keywords))
+
     @property
     def normalized_page_range(self):
         if not self.page_range:
@@ -320,21 +335,22 @@ class Publication(models.Model):
 
     def save(self, *args, **kwargs):
         self.sort_page_start = self.page_range_start(self.page_range)
-        keywords = self.parse_keywords(self.keywords_txt)[: self.KEYWORDS_MAX_COUNT]
-        self.keywords_txt = ", ".join(keywords)
+        self._normalize_keyword_fields()
+        normalized_language = (self.language or "").strip().lower()
+        self.is_bulgarian = normalized_language.startswith("bg")
         super().save(*args, **kwargs)
 
     def clean(self):
         super().clean()
-        keywords = self.parse_keywords(self.keywords_txt)
-        if len(keywords) > self.KEYWORDS_MAX_COUNT:
-            raise ValidationError(
-                {
-                    "keywords_txt": _(
-                        "Enter no more than %(max)d keywords."
-                    ) % {"max": self.KEYWORDS_MAX_COUNT}
-                }
-            )
+        errors = {}
+        for name in self._keyword_field_names():
+            keywords = self.parse_keywords(getattr(self, name, ""))
+            if len(keywords) > self.KEYWORDS_MAX_COUNT:
+                errors[name] = _(
+                    "Enter no more than %(max)d keywords."
+                ) % {"max": self.KEYWORDS_MAX_COUNT}
+        if errors:
+            raise ValidationError(errors)
 
 
 class Link(models.Model):

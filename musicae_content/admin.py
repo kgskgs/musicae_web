@@ -108,7 +108,7 @@ class PublicationAdmin(TranslationAdmin):
     list_filter = ("ptype", "published_year", "internal")
     search_fields = ("title", "abstract", "bib_info", "page_range", "container_title")
     filter_horizontal = ("authors",)
-    readonly_fields = ("sort_page_start",)
+    readonly_fields = ("sort_page_start", "is_bulgarian")
 
     fieldsets = (
         (None, {
@@ -122,6 +122,7 @@ class PublicationAdmin(TranslationAdmin):
                 "sort_page_start",
                 "bib_info",
                 "language",
+                "is_bulgarian",
                 "internal",
                 "authors",
                 "publisher_txt",
@@ -134,6 +135,19 @@ class PublicationAdmin(TranslationAdmin):
             )
         }),
     )
+
+    def get_fieldsets(self, request, obj=None):
+        base_fieldsets = super().get_fieldsets(request, obj)
+        fieldsets = []
+        translatable = {"title", "abstract", "keywords_txt"}
+        for name, opts in base_fieldsets:
+            fields = []
+            for f in opts.get("fields", []):
+                fields.append(f)
+                if f in translatable:
+                    fields += get_translation_fields(f)
+            fieldsets.append((name, {"fields": tuple(fields)}))
+        return fieldsets
 
     # ----- BibTeX Import Integration -----
 

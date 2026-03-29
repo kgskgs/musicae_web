@@ -24,20 +24,27 @@
 <meta property="article:tag" content="{{ keyword|escape }}">
 {% endfor %}
 {% endif %}
+{% if object.published_year %}
+<meta property="article:published_time" content="{{ object.published_year }}-01-01">
+{% endif %}
+{% for a in object.authors.all %}
+<meta property="article:author" content="{% absolute_url request a.get_absolute_url %}">
+{% endfor %}
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ScholarlyArticle",
 "headline":"{{ object.title|escape }}","name":"{{ object.title|escape }}",
 {% if object.banner %}"image":["{% absolute_url request object.banner.url %}"],{% else %}"image":["{% absolute_static request 'musicae_base/banners/15.jpg' %}"],{% endif %}
 "url":"{% absolute_url request object.get_absolute_url %}",
-{% if object.published_year %}"datePublished":"{{ object.published_year }}",{% endif %}
-"author":[{% for a in object.authors.all %}{"@type":"Person","name":"{{ a.name|escape }}"}{% if not forloop.last %},{% endif %}{% endfor %}],
+{% if object.published_year %}"datePublished":"{{ object.published_year }}-01-01",{% endif %}
+"mainEntityOfPage":{"@type":"WebPage","@id":"{% absolute_url request object.get_absolute_url %}"},
+"author":[{% for a in object.authors.all %}{"@type":"Person","name":"{{ a.name|escape }}","url":"{% absolute_url request a.get_absolute_url %}"}{% if not forloop.last %},{% endif %}{% endfor %}],
 "publisher":{"@type":"Organization","name":"Fundamenta Musicae"},
 {% if object.file %}"encoding":[{"@type":"MediaObject","contentUrl":"{% absolute_url request object.file.url %}","encodingFormat":"application/pdf","name":"{{ object.title|escapejs }}"}],{% endif %}
 {% if object.keyword_list %}"keywords":"{{ object.keyword_list|join:', '|escapejs }}",{% endif %}
 {% if object.supports_page_range %}"pagination":"{{ object.normalized_page_range|escapejs }}",{% endif %}
 "description":"{{ seo_description|striptags|truncatechars:200|escapejs }}",
-"inLanguage":"{{ LANGUAGE_CODE|default:'bg' }}"}
+"inLanguage":"{{ object.language|default:LANGUAGE_CODE|default:'bg' }}"}
 </script>
 {% endwith %}
 
@@ -73,7 +80,14 @@
 <section id="hero" class="pt-24 pb-10 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
   <div class="max-w-7xl mx-auto">
     <a href="{% url 'library_lst' %}" class="inline-flex items-center gap-2 mb-6 text-body anchor-link">&larr; {% trans "Назад към библиотека" %}</a>
-    <h2 class="text-h2 font-display mb-8 text-[var(--color-text-dark)]">{{ object.title }}</h2>
+    <div class="mb-8 flex flex-wrap items-center gap-3">
+      <h2 class="text-h2 font-display text-[var(--color-text-dark)]">{{ object.title }}</h2>
+      {% if object.is_bulgarian and LANGUAGE_CODE|slice:":2" != "bg" %}
+      <span class="inline-flex items-center rounded-md border border-gray-300 px-2 py-1 text-sm text-gray-700 bg-white/80">
+        {% if LANGUAGE_CODE|slice:":2" == "de" %}Auf Bulgarisch{% else %}In Bulgarian{% endif %}
+      </span>
+      {% endif %}
+    </div>
 
     <p class="text-xl md:text-4xl tracking-normal lead text-gray-600">
       {% if object.authors.all %}
@@ -108,7 +122,7 @@
 
     {% if object.keyword_list %}
     <div class="mt-6 text-body">
-      <span class="muted">
+      <span>
         {% if LANGUAGE_CODE|slice:":2" == "en" %}Keywords{% elif LANGUAGE_CODE|slice:":2" == "de" %}Schlüsselwörter{% else %}Ключови думи{% endif %}:
       </span>
       {% for keyword in object.keyword_list %}

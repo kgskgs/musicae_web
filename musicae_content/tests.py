@@ -1,9 +1,10 @@
 from django.contrib.admin.sites import AdminSite
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import translation
 
 from .admin import PublicationAdmin
-from .models import Person, Publication
+from .models import File, Person, Publication
 from .templatetags.citations import (
     build_bibtex,
     build_ris,
@@ -45,6 +46,9 @@ class PublicationCitationTests(TestCase):
             page_range=" 10 - 24 ",
         )
         publication.authors.add(author)
+        if hasattr(publication, "keywords_txt_en"):
+            publication.keywords_txt_en = "psychology, music, analysis"
+            publication.save(update_fields=["keywords_txt_en"])
 
         mla = str(mla_citation_html(publication, "en"))
         chicago = str(chicago_citation_html(publication, "en"))
@@ -163,10 +167,13 @@ class PublicationCitationTests(TestCase):
             abstract="",
             bib_info="Bibliographic fallback description.",
             keywords_txt="rhythm; pedagogy, rhythm\nanalysis",
+            language="bg",
         )
         publication.authors.add(author)
 
         response = self.client.get(publication.get_absolute_url())
+        response_bg = self.client.get(publication.get_absolute_url(), HTTP_ACCEPT_LANGUAGE="bg")
+        response_en = self.client.get(f"/en{publication.get_absolute_url()}", HTTP_ACCEPT_LANGUAGE="en")
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Цитирай")
@@ -180,6 +187,28 @@ class PublicationCitationTests(TestCase):
         self.assertContains(response, 'property="article:tag" content="analysis"', html=False)
         self.assertContains(response, "Bibliographic fallback description.")
         self.assertContains(response, '"keywords":"rhythm, pedagogy, analysis"')
+        self.assertContains(response, 'property="article:published_time" content="2024-01-01"', html=False)
+        self.assertContains(response, 'property="article:author"', html=False)
+        self.assertContains(response, '"mainEntityOfPage"', html=False)
+        self.assertContains(response, '"inLanguage":"bg"', html=False)
+        self.assertContains(response_en, "In Bulgarian")
+        self.assertNotContains(response_bg, "In Bulgarian")
+
+    def test_bulgarian_language_flag_auto_syncs(self):
+        publication = self._make_publication(language="bg")
+        self.assertTrue(publication.is_bulgarian)
+
+        publication.language = "en"
+        publication.save()
+        publication.refresh_from_db()
+        self.assertFalse(publication.is_bulgarian)
+
+    def test_keywords_limit_validation_applies_to_translated_fields(self):
+        publication = self._make_publication()
+        if hasattr(publication, "keywords_txt_en"):
+            publication.keywords_txt_en = "a,b,c,d,e,f,g,h"
+            with self.assertRaises(ValidationError):
+                publication.full_clean()
 
     def test_same_year_publications_order_by_first_page_then_title(self):
         first = self._make_publication(
@@ -256,3 +285,45 @@ class PublicationBibtexImportTests(TestCase):
         self.assertEqual(publication.container_title, "Music Development and Music Education")
         self.assertEqual(publication.publisher_txt, "Riva")
         self.assertEqual(publication.page_range, "117-134")
+
+
+class SitemapCoverageTests(TestCase):
+    def test_sitemap_includes_static_pages_and_excludes_internal_publications(self):
+        public_pub = Publication.objects.create(
+            title="Public publication",
+            published_year=2024,
+            ptype=Publication.ptypes.art,
+            internal=False,
+        )
+        internal_pub = Publication.objects.create(
+            title="Internal publication",
+            published_year=2024,
+            ptype=Publication.ptypes.art,
+            internal=True,
+        )
+
+        Publication.objects.create(
+            title="Public pdf publication",
+            published_year=2024,
+            ptype=Publication.ptypes.art,
+            internal=False,
+            file="publications/public.pdf",
+        )
+        Publication.objects.create(
+            title="Internal pdf publication",
+            published_year=2024,
+            ptype=Publication.ptypes.art,
+            internal=True,
+            file="publications/internal.pdf",
+        )
+        File.objects.create(title="Standalone file", file="files/standalone.pdf")
+
+        response = self.client.get("/sitemap.xml", HTTP_HOST="127.0.0.1")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "http://127.0.0.1/about/")
+        self.assertContains(response, "http://127.0.0.1/research/")
+        self.assertContains(response, f"http://127.0.0.1{public_pub.get_absolute_url()}")
+        self.assertNotContains(response, f"http://127.0.0.1{internal_pub.get_absolute_url()}")
+        self.assertContains(response, "http://127.0.0.1/media/publications/public.pdf")
+        self.assertNotContains(response, "http://127.0.0.1/media/publications/internal.pdf")
