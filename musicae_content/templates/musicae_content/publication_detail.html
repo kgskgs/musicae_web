@@ -86,7 +86,13 @@
 
       {% if object.get_ptype_display %}
         {% if object.authors.all %}<span> &middot; </span>{% endif %}
-        <span class="font-light">{{ object.get_ptype_display }}</span>
+        <span class="font-light">
+          {% if object.ptype == 11 %}
+            {% if LANGUAGE_CODE|slice:":2" == "en" %}Chapter{% elif LANGUAGE_CODE|slice:":2" == "de" %}Kapitel{% else %}Глава{% endif %}
+          {% else %}
+            {{ object.get_ptype_display }}
+          {% endif %}
+        </span>
       {% endif %}
 
       {% if object.published_year %}
@@ -101,10 +107,12 @@
     </p>
 
     {% if object.keyword_list %}
-    <div class="mt-6 flex flex-wrap items-center gap-2">
-      <span class="text-body muted">{% trans "Ключови думи:" %}</span>
+    <div class="mt-6 text-body">
+      <span class="muted">
+        {% if LANGUAGE_CODE|slice:":2" == "en" %}Keywords{% elif LANGUAGE_CODE|slice:":2" == "de" %}Schlüsselwörter{% else %}Ключови думи{% endif %}:
+      </span>
       {% for keyword in object.keyword_list %}
-      <span class="inline-flex items-center rounded-full border border-gray-300 px-3 py-1 text-sm text-gray-700 bg-white/70">{{ keyword }}</span>
+      <span>{{ keyword }}</span>{% if not forloop.last %}<span class="muted"> &middot; </span>{% endif %}
       {% endfor %}
     </div>
     {% endif %}
