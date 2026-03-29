@@ -9,7 +9,7 @@ from modeltranslation.utils import get_translation_fields
 from ckeditor.widgets import CKEditorWidget
 from django.utils.html import format_html
 
-
+import re
 from .models import (
     Person,
     Publication,
@@ -106,7 +106,7 @@ class PublicationAdmin(TranslationAdmin):
 
     list_display = ["title", "internal", "ptype", "published_year", "pk"]
     list_filter = ("ptype", "published_year", "internal")
-    search_fields = ("title", "abstract", "bib_info")
+    search_fields = ("title", "abstract", "bib_info", "page_range")
     filter_horizontal = ("authors",)
 
     fieldsets = (
@@ -117,6 +117,7 @@ class PublicationAdmin(TranslationAdmin):
                 "abstract",
                 "published_year",
                 "published_place",
+                "page_range",
                 "bib_info",
                 "language",
                 "internal",
@@ -224,6 +225,36 @@ class PublicationAdmin(TranslationAdmin):
                     return cleaned
         return None
 
+    def _normalize_page_range(self, value):
+        cleaned = Publication._clean_text(value)
+        if not cleaned:
+            return None
+        return re.sub(r"\s*[-–—]+\s*", "-", cleaned)
+
+    def _bibtex_type_to_ptype(self, entry_type, has_url=False):
+        mapping = {
+            "article": Publication.ptypes.art,
+            "book": Publication.ptypes.mon,
+            "booklet": Publication.ptypes.aut,
+            "conference": Publication.ptypes.doc,
+            "inbook": Publication.ptypes.stu,
+            "incollection": Publication.ptypes.stu,
+            "inproceedings": Publication.ptypes.doc,
+            "manual": Publication.ptypes.tex,
+            "mastersthesis": Publication.ptypes.dis,
+            "online": Publication.ptypes.onl,
+            "electronic": Publication.ptypes.elb,
+            "phdthesis": Publication.ptypes.dis,
+            "proceedings": Publication.ptypes.col,
+            "techreport": Publication.ptypes.doc,
+            "thesis": Publication.ptypes.dis,
+        }
+        if entry_type in mapping:
+            return mapping[entry_type]
+        if entry_type == "misc" and has_url:
+            return Publication.ptypes.onl
+        return Publication.ptypes.art
+
     def create_publication_from_entry(self, entry):
         """
         Parse a single BibTeX entry (dict) and map it to the Publication model.
@@ -255,15 +286,26 @@ class PublicationAdmin(TranslationAdmin):
             return (None, False, "skipped")
 
         # --- Map BibTeX -> our text fields ---
+        entry_type = str(entry.get("ENTRYTYPE") or entry.get("entrytype") or "").strip().lower()
+        mapped_ptype = self._bibtex_type_to_ptype(entry_type, has_url=bool(entry.get("url")))
 
         # journal: journal / journaltitle / booktitle
         journal_txt = self._get_first_nonempty(entry, "journal", "journaltitle", "booktitle")
 
         # publisher: publisher / organization / institution
-        publisher_txt = self._get_first_nonempty(entry, "publisher", "organization", "institution")
+        publisher_txt = self._get_first_nonempty(
+            entry,
+            "publisher",
+            "organization",
+            "institution",
+            "school",
+        )
 
         # place: address / location
         published_place = self._get_first_nonempty(entry, "address", "location")
+
+        # page range
+        page_range = self._normalize_page_range(self._get_first_nonempty(entry, "pages"))
 
         # abstract
         abstract = self._get_first_nonempty(entry, "abstract")
@@ -283,8 +325,10 @@ class PublicationAdmin(TranslationAdmin):
                 published_year=year,
                 defaults={
                     "title": title,
+                    "ptype": mapped_ptype,
                     "published_year": year,
                     "published_place": published_place or "",
+                    "page_range": page_range or "",
                     "abstract": abstract or "",
                     "journal_txt": journal_txt or "",
                     "publisher_txt": publisher_txt or "",
@@ -306,6 +350,10 @@ class PublicationAdmin(TranslationAdmin):
                 pub.published_place = published_place
                 changed = True
 
+            if page_range and not pub.page_range:
+                pub.page_range = page_range
+                changed = True
+
             if abstract and not pub.abstract:
                 pub.abstract = abstract
                 changed = True
@@ -322,7 +370,14 @@ class PublicationAdmin(TranslationAdmin):
                 pub.keywords_txt = keywords_txt
                 changed = True
 
+            # Older imports defaulted to article. Only upgrade that default when
+            # the incoming BibTeX type is more specific.
+            if pub.ptype == Publication.ptypes.art and mapped_ptype != Publication.ptypes.art:
+                pub.ptype = mapped_ptype
+                changed = True
+
             if changed:
+                pub.save()
                 status = "updated"
 
         # --- Authors ---
@@ -333,7 +388,10 @@ class PublicationAdmin(TranslationAdmin):
             # Basic "Author One and Author Two" splitting
             names = [n.strip() for n in str(author_string).split(" and ") if n.strip()]
             for full_name in names:
-                person, _ = Person.objects.get_or_create(name=full_name)
+                person, _ = Person.objects.get_or_create(
+                    name=full_name,
+                    defaults={"member": False},
+                )
                 author_objs.append(person)
 
         pub.save()

@@ -6,6 +6,7 @@ from django.utils import timezone
 
 import datetime
 import os
+import re
 
 
 def forDjango(cls):
@@ -110,6 +111,13 @@ class Publication(models.Model):
     abstract = models.TextField(blank=True, verbose_name=_("Abstract"))
     bib_info = models.TextField(blank=True, verbose_name=_("Bibliographic Info"))
     published_place = models.CharField(max_length=255, blank=True, null=True, verbose_name=_("Published Place"))
+    page_range = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        verbose_name=_("Page Range"),
+        help_text=_("Optional page span, e.g. 45-67."),
+    )
     
     # Поле за тип публикация, използващо вложения клас
     ptype = models.IntegerField(
@@ -169,6 +177,90 @@ class Publication(models.Model):
     
     def get_absolute_url(self):
         return reverse("publications_det", args=[self.pk])
+
+    @staticmethod
+    def _clean_text(value):
+        if not value:
+            return ""
+        return " ".join(str(value).split()).strip(" ,;.")
+
+    @property
+    def citation_kind(self):
+        if self.ptype in {self.ptypes.art, self.ptypes.stu, self.ptypes.doc}:
+            return "container"
+        if self.ptype in {self.ptypes.mon, self.ptypes.col, self.ptypes.tex, self.ptypes.elb}:
+            return "book"
+        if self.ptype in {self.ptypes.dis, self.ptypes.hab}:
+            return "thesis"
+        if self.ptype == self.ptypes.onl:
+            return "online"
+        return "standalone"
+
+    @property
+    def citation_title_is_quoted(self):
+        return self.citation_kind == "container"
+
+    @property
+    def citation_container(self):
+        return self._clean_text(self.journal_txt)
+
+    @property
+    def citation_publisher(self):
+        return self._clean_text(self.publisher_txt)
+
+    @property
+    def citation_place(self):
+        return self._clean_text(self.published_place)
+
+    @property
+    def normalized_page_range(self):
+        if not self.page_range:
+            return ""
+        cleaned = self._clean_text(self.page_range)
+        return re.sub(r"\s*[-–—]+\s*", "-", cleaned)
+
+    @property
+    def supports_page_range(self):
+        return bool(self.normalized_page_range) and (
+            self.ptype in {self.ptypes.art, self.ptypes.stu, self.ptypes.doc}
+            or bool(self.citation_container)
+        )
+
+    @property
+    def bibtex_entry_type(self):
+        if self.ptype in {self.ptypes.mon, self.ptypes.col, self.ptypes.tex, self.ptypes.elb}:
+            return "book"
+        if self.ptype in {self.ptypes.dis, self.ptypes.hab}:
+            return "phdthesis"
+        if self.ptype == self.ptypes.doc:
+            return "inproceedings"
+        if self.ptype in {self.ptypes.art, self.ptypes.stu}:
+            return "article" if self.citation_container else "incollection"
+        if self.ptype == self.ptypes.aut:
+            return "booklet"
+        return "misc"
+
+    @property
+    def bibtex_secondary_title_field(self):
+        if self.bibtex_entry_type == "article":
+            return "journal"
+        if self.bibtex_entry_type in {"incollection", "inproceedings"}:
+            return "booktitle"
+        return ""
+
+    @property
+    def ris_reference_type(self):
+        if self.ptype in {self.ptypes.mon, self.ptypes.col, self.ptypes.tex, self.ptypes.elb}:
+            return "BOOK"
+        if self.ptype in {self.ptypes.dis, self.ptypes.hab}:
+            return "THES"
+        if self.ptype == self.ptypes.doc:
+            return "CONF"
+        if self.ptype in {self.ptypes.art, self.ptypes.stu}:
+            return "JOUR" if self.citation_container else "CHAP"
+        if self.ptype == self.ptypes.onl:
+            return "ELEC"
+        return "GEN"
 
 
 class Link(models.Model):

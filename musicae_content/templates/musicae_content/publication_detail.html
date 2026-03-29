@@ -25,236 +25,275 @@
 "author":[{% for a in object.authors.all %}{"@type":"Person","name":"{{ a.name|escape }}"}{% if not forloop.last %},{% endif %}{% endfor %}],
 "publisher":{"@type":"Organization","name":"Fundamenta Musicae"},
 {% if object.file %}"encoding":[{"@type":"MediaObject","contentUrl":"{% absolute_url request object.file.url %}","encodingFormat":"application/pdf","name":"{{ object.title|escapejs }}"}],{% endif %}
-
-
-{% if object.keywords_txt %}
-"keywords":"{{ object.keywords_txt|escapejs }}",
-{% endif %}
-
+{% if object.keywords_txt %}"keywords":"{{ object.keywords_txt|escapejs }}",{% endif %}
+{% if object.supports_page_range %}"pagination":"{{ object.normalized_page_range|escapejs }}",{% endif %}
 "description":"{{ object.abstract|default_if_none:''|striptags|truncatechars:200|escapejs }}",
 "inLanguage":"{{ LANGUAGE_CODE|default:'bg' }}"}
 </script>
 
 <style>
-  @media (min-width: 1024px){
-    :root{ --outset: 2rem; --para-measure: 90ch; }
-    @media (min-width: 1280px){ :root{ --outset: 2.5rem; --para-measure: 95ch; } }
-    @media (min-width: 1536px){ :root{ --outset: 3rem; --para-measure: 100ch; } }
-    .tile{ text-align:left; }
-    .tile--left{ width: calc(50% + var(--outset)); margin-left: calc(-1 * var(--outset)); }
-    .tile--right{ width: calc(50% + var(--outset)); margin-left: 50%; }
-    .tile p{ max-width: var(--para-measure); }
+  .anchor-link {
+    text-decoration: none;
   }
-  .text-mission-bg * { color: var(--color-bg-light) !important; }
-  .anchor-link { text-decoration: none; }
-  .pub-bib a { text-decoration: underline; text-underline-offset: 2px; }
-  .pub-meta { opacity: .9; }
-  .bio-content p + p { margin-top: .6em; }
-  .btn-contrast { display:inline-flex; align-items:center; gap:.5rem; }
-  .btn-ghost { display:inline-flex; align-items:center; gap:.5rem; border:1px solid currentColor; padding:.5rem .9rem; border-radius:.75rem; }
-  .muted { opacity:.7; }
-  .pub-actions .hint { display:block; font-size:.95rem; opacity:.8; margin-top:.25rem; }
+
+  .publication-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .publication-grid {
+      grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr);
+      align-items: start;
+    }
+  }
+
+  .detail-card {
+    border: 1px solid rgb(229 231 235);
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.06);
+  }
+
+  .detail-card--dark {
+    background: var(--color-surface);
+    color: var(--color-bg-light);
+  }
+
+  .detail-card--dark a {
+    color: var(--color-bg-light);
+  }
+
+  .meta-list dt {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+
+  .meta-list dd {
+    margin-top: 0.35rem;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .citation-block p {
+    line-height: 1.75;
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 0.65rem 1rem;
+    text-decoration: none;
+    transition: transform 160ms ease, opacity 160ms ease;
+  }
+
+  .btn-ghost:hover {
+    transform: translateY(-1px);
+    opacity: 0.92;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.8rem 1.1rem;
+    text-decoration: none;
+    background: var(--color-bg-light);
+    color: var(--color-surface);
+    font-weight: 600;
+  }
+
+  .rich-text p + p {
+    margin-top: 0.85rem;
+  }
 </style>
 {% endblock seo_extra %}
 
 {% block content %}
+{% absolute_url request object.get_absolute_url as record_url %}
+{% mla_citation_html object LANGUAGE_CODE as mla_citation %}
+{% chicago_citation_html object LANGUAGE_CODE as chicago_citation %}
+{% bibtex_citation object record_url as bibtex_download %}
+{% ris_citation object record_url as ris_download %}
 
-<!-- HERO / TITLE -->
-<section id="hero" class="pt-24 pb-10 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
+<section class="pt-24 pb-10 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
   <div class="max-w-7xl mx-auto">
-    <a href="{% url 'library_lst' %}" class="inline-flex items-center gap-2 mb-6 text-body anchor-link">← {% trans "Назад към библиотека" %}</a>
-    <h2 class="text-h2 font-display mb-8 text-[var(--color-text-dark)]">{{ object.title }}</h2>
+    <a href="{% url 'library_lst' %}" class="inline-flex items-center gap-2 mb-6 text-body anchor-link">&larr; {% trans "Back to library" %}</a>
 
-    <!-- All info on the LEFT: Author → ptype → year -->
-    <p class="text-xl md:text-4xl tracking-normal lead text-gray-600">
-      {% if object.authors.all %}
-    <span class="font-normal">
-      {% for p in object.authors.all %}
-        <a href="{% url 'members_det' p.pk %}" class="anchor-link">{{ p|name_for_lang:LANGUAGE_CODE }}</a>{% if not forloop.last %},{% if not forloop.last %} {% endif %}{% endif %}
-      {% endfor %}
-    </span>
-{% endif %}
+    <div class="max-w-4xl">
+      <p class="text-sm uppercase tracking-[0.18em] text-gray-500 mb-4">{% trans "Publication record" %}</p>
+      <h1 class="text-h2 font-display mb-6 text-[var(--color-text-dark)]">{{ object.title }}</h1>
 
-      {% if object.get_ptype_display %}
-        {% if object.authors.all %}<span> · </span>{% endif %}
-        <span class="font-light">
-          {{ object.get_ptype_display }}
-        </span>
-      {% endif %}
+      <p class="text-lg md:text-2xl text-gray-600 leading-relaxed">
+        {% for person in object.authors.all %}
+          <a href="{% url 'members_det' person.pk %}" class="anchor-link">{{ person|name_for_lang:LANGUAGE_CODE }}</a>{% if not forloop.last %}, {% endif %}
+        {% empty %}
+          {% trans "Author not listed" %}
+        {% endfor %}
 
-      {% if object.published_year %}
-        {% if object.get_ptype_display or object.authors.all %}<span> · </span>{% endif %}
-        <span class="font-light">
-          {{ object.published_year }}
-        </span>
-      {% endif %}
-    </p>
-  </div>
-</section>
-
-
-{% if object.keywords_txt %}
-<section id="keywords" class="pt-24 pb-20 px-6 md:px-12 bg-[var(--color-surface)] border-t border-gray-200">
-  <div class="max-w-7xl mx-auto">
-    <div class="tile tile--right text-mission-bg">
-      <h2 class="font-display text-h2 mb-3">{% trans "Ключови думи" %}</h2>
-      <p class="text-body">{{ object.keywords_txt }}</p>
+        {% if object.get_ptype_display %}<span class="mx-2 text-gray-400">&middot;</span>{{ object.get_ptype_display }}{% endif %}
+        {% if object.published_year %}<span class="mx-2 text-gray-400">&middot;</span>{{ object.published_year }}{% endif %}
+        {% if object.supports_page_range %}<span class="mx-2 text-gray-400">&middot;</span>{% trans "pp." %} {{ object.normalized_page_range }}{% endif %}
+      </p>
     </div>
   </div>
 </section>
-{% endif %}
 
-{% if object.abstract %}
-<section id="abstract" class="pt-24 pb-16 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
-  <div class="max-w-7xl mx-auto">
-    <div class="mx-auto text-left" style="max-width:calc(100% - var(--outset)); width:calc(100% - var(--outset));">
-      <h2 class="font-display text-h2 mb-3">{% trans "Абстракт" %}</h2>
-      <div class="text-body">{{ object.abstract|safe }}</div>
+<section class="pb-20 px-6 md:px-12 bg-[var(--color-bg-light)]">
+  <div class="max-w-7xl mx-auto publication-grid">
+    <div class="space-y-6">
+      {% if object.abstract %}
+      <article class="detail-card p-6 md:p-8">
+        <h2 class="font-display text-h3 mb-4">{% trans "Abstract" %}</h2>
+        <div class="rich-text text-body">{{ object.abstract|safe }}</div>
+      </article>
+      {% endif %}
+
+      {% if object.keywords_txt %}
+      <article class="detail-card p-6 md:p-8">
+        <h2 class="font-display text-h3 mb-4">{% trans "Keywords" %}</h2>
+        <p class="text-body leading-relaxed">{{ object.keywords_txt }}</p>
+      </article>
+      {% endif %}
+
+      {% if object.bib_info %}
+      <article class="detail-card p-6 md:p-8">
+        <h2 class="font-display text-h3 mb-4">{% trans "Bibliographic note" %}</h2>
+        <div class="rich-text text-body">{{ object.bib_info|safe }}</div>
+      </article>
+      {% endif %}
     </div>
-  </div>
-</section>
-{% endif %}
 
+    <aside class="space-y-6">
+      <section class="detail-card p-6 md:p-8">
+        <h2 class="font-display text-h3 mb-5">{% trans "Publication details" %}</h2>
+        <dl class="meta-list grid gap-5">
+          <div>
+            <dt>{% trans "Type" %}</dt>
+            <dd>{{ object.get_ptype_display }}</dd>
+          </div>
 
-<!-- ACCESS (reversed: surface bg, right tile, white text) -->
-<section id="access" class="pt-24 pb-16 px-6 md:px-12 bg-[var(--color-surface)] border-t border-gray-200">
-  <div class="max-w-7xl mx-auto">
-    <div class="tile tile--right text-mission-bg">
-      <h2 class="font-display text-h2 mb-3">{% trans "Достъп" %}</h2>
-      <div class="pub-actions">
+          {% if object.published_year %}
+          <div>
+            <dt>{% trans "Year" %}</dt>
+            <dd>{{ object.published_year }}</dd>
+          </div>
+          {% endif %}
+
+          {% if object.language %}
+          <div>
+            <dt>{% trans "Language" %}</dt>
+            <dd>{{ object.language }}</dd>
+          </div>
+          {% endif %}
+
+          {% if object.citation_container %}
+          <div>
+            <dt>{% trans "Journal or proceedings" %}</dt>
+            <dd>{{ object.citation_container }}</dd>
+          </div>
+          {% endif %}
+
+          {% if object.citation_publisher %}
+          <div>
+            <dt>{% trans "Publisher" %}</dt>
+            <dd>{{ object.citation_publisher }}</dd>
+          </div>
+          {% endif %}
+
+          {% if object.citation_place %}
+          <div>
+            <dt>{% trans "Place" %}</dt>
+            <dd>{{ object.citation_place }}</dd>
+          </div>
+          {% endif %}
+
+          {% if object.supports_page_range %}
+          <div>
+            <dt>{% trans "Page range" %}</dt>
+            <dd>{{ object.normalized_page_range }}</dd>
+          </div>
+          {% endif %}
+        </dl>
+      </section>
+
+      <section class="detail-card detail-card--dark p-6 md:p-8">
+        <h2 class="font-display text-h3 mb-4">{% trans "Access" %}</h2>
         {% if object.file %}
-          <a class="btn-contrast" href="{{ object.file.url }}" target="_blank" rel="noopener">{% trans "Свали / Виж PDF" %}</a>
+          <a class="btn-primary" href="{{ object.file.url }}" target="_blank" rel="noopener">{% trans "Open PDF" %}</a>
+          <p class="text-sm mt-3 opacity-80">{% trans "The hosted file opens in a new tab." %}</p>
         {% else %}
-          <p class="text-body">{% trans "No hosted file is available for this record." %}</p>
+          <p class="text-body opacity-90">{% trans "No hosted file is available for this record." %}</p>
         {% endif %}
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
-<!-- HOW TO CITE (reversed: light bg, left tile, normal text) -->
-<section id="how-to-cite" class="pt-24 pb-20 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
-  <div class="max-w-7xl mx-auto">
-    <div class="tile tile--left">
-      <h2 class="font-display text-h2 mb-3">{% trans "Цитирай" %}</h2>
+      <section class="detail-card p-6 md:p-8 citation-block">
+        <h2 class="font-display text-h3 mb-5">{% trans "Cite this publication" %}</h2>
 
-      <div class="text-body space-y-4">
-        <div>
-          <strong>MLA:</strong>
-          {% mla_authors object.authors.all object.language %}.
-          “{{ object.title }}.”
-          {% if object.journal_txt %} {{ object.journal_txt }},{% elif object.publisher_txt %} {{ object.publisher_txt }},{% endif %}
-          {{ object.published_year }}.
+        <div class="space-y-5">
+          <div>
+            <p class="text-sm uppercase tracking-[0.16em] text-gray-500 mb-2">MLA</p>
+            <p class="text-body">{{ mla_citation }}</p>
+          </div>
+
+          <div>
+            <p class="text-sm uppercase tracking-[0.16em] text-gray-500 mb-2">Chicago</p>
+            <p class="text-body">{{ chicago_citation }}</p>
+          </div>
         </div>
 
-        <div>
-          <strong>Chicago:</strong>
-          {% chicago_authors object.authors.all object.language %}.
-          {{ object.published_year }}. <em>{{ object.title }}</em>.
-          {% if object.journal_txt %} {{ object.journal_txt }}.{% endif %}
-          {% if object.publisher_txt %} {{ object.publisher_txt }}.{% endif %}
-          {% if object.published_place %} {{ object.published_place }}.{% endif %}
-        </div>
-
-        <div id="cite-buttons" class="mt-4 space-x-3">
-          <a id="btn-bibtex"
-             class="btn-ghost"
-             href="#"
-             download="publication-{{ object.pk }}.bib"
-             data-key="pub{{ object.pk }}"
-             data-title="{{ object.title|escapejs }}"
-             data-year="{{ object.published_year|default_if_none:'' }}"
-             data-journal="{{ object.journal_txt|default_if_none:''|escapejs }}"
-             data-publisher="{{ object.publisher_txt|default_if_none:''|escapejs }}"
-             data-place="{{ object.published_place|default_if_none:''|escapejs }}"
-             data-language="{{ object.language|default_if_none:''|escapejs }}"
-             data-url="{% if object.file %}{{ object.file.url|escapejs }}{% endif %}"
-             data-authors="{% for p in object.authors.all %}{{ p|name_for_lang:object.language|escapejs }}{% if not forloop.last %}||{% endif %}{% endfor %}">
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a
+            id="btn-bibtex"
+            class="btn-ghost"
+            href="#"
+            download="publication-{{ object.pk }}.bib"
+            data-download="{{ bibtex_download|escapejs }}"
+          >
             {% trans "Download BibTeX" %}
           </a>
 
-          <a id="btn-ris"
-             class="btn-ghost"
-             href="#"
-             download="publication-{{ object.pk }}.ris"
-             data-title="{{ object.title|escapejs }}"
-             data-year="{{ object.published_year|default_if_none:'' }}"
-             data-journal="{{ object.journal_txt|default_if_none:''|escapejs }}"
-             data-publisher="{{ object.publisher_txt|default_if_none:''|escapejs }}"
-             data-place="{{ object.published_place|default_if_none:''|escapejs }}"
-             data-language="{{ object.language|default_if_none:''|escapejs }}"
-             data-url="{% if object.file %}{{ object.file.url|escapejs }}{% endif %}"
-             data-authors="{% for p in object.authors.all %}{{ p|name_for_lang:object.language|escapejs }}{% if not forloop.last %}||{% endif %}{% endfor %}">
+          <a
+            id="btn-ris"
+            class="btn-ghost"
+            href="#"
+            download="publication-{{ object.pk }}.ris"
+            data-download="{{ ris_download|escapejs }}"
+          >
             {% trans "Download RIS" %}
           </a>
         </div>
-      </div>
-    </div>
+
+        <p class="text-sm text-gray-500 mt-3">{% trans "Downloads use the publication page URL so the citation always points back to the record." %}</p>
+      </section>
+    </aside>
   </div>
 </section>
 
-
 <script>
-(function(){
-  function buildBibTeX(el){
-    const key = el.dataset.key || 'pub';
-    const title = el.dataset.title || '';
-    const year = el.dataset.year || '';
-    const journal = el.dataset.journal || '';
-    const publisher = el.dataset.publisher || '';
-    const place = el.dataset.place || '';
-    const language = el.dataset.language || '';
-    const url = el.dataset.url || '';
-    const authors = (el.dataset.authors || '').split('||').filter(Boolean);
-    const type = journal ? 'article' : 'book';
-    let s = `@${type}{${key},\n`;
-    s += `title = {${title}},\n`;
-    if (authors.length) s += `author = {${authors.join(' and ')}},\n`;
-    if (year) s += `year = {${year}},\n`;
-    if (journal) s += `journal = {${journal}},\n`;
-    if (publisher) s += `publisher = {${publisher}},\n`;
-    if (place) s += `address = {${place}},\n`;
-    if (language) s += `language = {${language}},\n`;
-    if (url) s += `url = {${url}},\n`;
-    s = s.replace(/,\n$/,'\n') + `}`;
-    return s;
-  }
+  (function () {
+    function wireDownload(id, mimeType) {
+      const link = document.getElementById(id);
+      if (!link) {
+        return;
+      }
 
-  function buildRIS(el){
-    const title = el.dataset.title || '';
-    const year = el.dataset.year || '';
-    const journal = el.dataset.journal || '';
-    const publisher = el.dataset.publisher || '';
-    const place = el.dataset.place || '';
-    const language = el.dataset.language || '';
-    const url = el.dataset.url || '';
-    const authors = (el.dataset.authors || '').split('||').filter(Boolean);
-    const ty = journal ? 'JOUR' : 'BOOK';
-    let s = `TY  - ${ty}\n`;
-    s += `TI  - ${title}\n`;
-    authors.forEach(a => s += `AU  - ${a}\n`);
-    if (year) s += `PY  - ${year}\n`;
-    if (journal) s += `T2  - ${journal}\n`;
-    if (publisher) s += `PB  - ${publisher}\n`;
-    if (place) s += `CY  - ${place}\n`;
-    if (language) s += `LA  - ${language}\n`;
-    if (url) s += `UR  - ${url}\n`;
-    s += `ER  -`;
-    return s;
-  }
+      const content = link.dataset.download || "";
+      const blob = new Blob([content], { type: mimeType });
+      const blobUrl = URL.createObjectURL(blob);
+      link.href = blobUrl;
+    }
 
-  function wire(id, builder){
-    const a = document.getElementById(id);
-    if (!a) return;
-    const txt = builder(a);
-    a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(txt);
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    wire('btn-bibtex', buildBibTeX);
-    wire('btn-ris', buildRIS);
-  });
-})();
+    document.addEventListener("DOMContentLoaded", function () {
+      wireDownload("btn-bibtex", "application/x-bibtex;charset=utf-8");
+      wireDownload("btn-ris", "application/x-research-info-systems;charset=utf-8");
+    });
+  })();
 </script>
-
 {% endblock content %}
