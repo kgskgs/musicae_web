@@ -1,5 +1,6 @@
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
+from django.utils import translation
 
 from .admin import PublicationAdmin
 from .models import Person, Publication
@@ -114,13 +115,15 @@ class PublicationCitationTests(TestCase):
             publisher_txt="Riva",
             published_place="Sofia",
             page_range="35-54",
+            language="en",
         )
-        publication.authors.add(first_author, second_author)
+        publication.authors.add(second_author, first_author)
 
-        mla = str(mla_citation_html(publication, "en"))
-        chicago = str(chicago_citation_html(publication, "en"))
-        bibtex = build_bibtex(publication, "https://example.com/publications/3/")
-        ris = build_ris(publication, "https://example.com/publications/3/")
+        with translation.override("en"):
+            mla = str(mla_citation_html(publication, "en"))
+            chicago = str(chicago_citation_html(publication, "en"))
+            bibtex = build_bibtex(publication, "https://example.com/publications/3/")
+            ris = build_ris(publication, "https://example.com/publications/3/")
 
         self.assertIn("Devedjiev, Emil, and Christian Vassilev.", mla)
         self.assertIn("<em>Music Development and Music Education</em>.", mla)

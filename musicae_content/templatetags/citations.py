@@ -46,6 +46,23 @@ def _display_name_for_lang(person, pub_lang: str) -> str:
     return getattr(person, "name", "") or ""
 
 
+def _bg_name(person) -> str:
+    if not person:
+        return ""
+
+    field_bg = build_localized_fieldname("name", "bg")
+    if hasattr(person, field_bg):
+        value = getattr(person, field_bg) or ""
+        if value:
+            return value
+
+    raw_value = person.__dict__.get("name")
+    if raw_value:
+        return raw_value
+
+    return getattr(person, "name", "") or ""
+
+
 def _split_given_family(fullname: str):
     if not fullname:
         return ("", "")
@@ -78,7 +95,7 @@ def _ordered_people(publication, pub_lang: str):
         return _format_people(people, pub_lang)
 
     by_bg_name = {
-        (getattr(person, "name", "") or "").strip(): person
+        _bg_name(person).strip(): person
         for person in people
     }
     ordered_people = []
@@ -91,7 +108,7 @@ def _ordered_people(publication, pub_lang: str):
             used_names.add(bg_name)
 
     for person in people:
-        bg_name = (getattr(person, "name", "") or "").strip()
+        bg_name = _bg_name(person).strip()
         if bg_name not in used_names:
             ordered_people.append(_display_name_for_lang(person, pub_lang))
 
