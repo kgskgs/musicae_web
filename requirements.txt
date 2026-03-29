@@ -1,6 +1,6 @@
-﻿asgiref==3.10.0
+asgiref==3.10.0
 bibtexparser==1.4.4
-Django==5.2.8
+Django==5.2.12
 django-ckeditor==6.7.1
 django-cleanup==9.0.0
 django-js-asset==3.1.2
