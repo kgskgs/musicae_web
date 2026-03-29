@@ -102,9 +102,9 @@ class PublicationCitationTests(TestCase):
         response = self.client.get(publication.get_absolute_url())
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Publication details")
-        self.assertContains(response, "Page range")
+        self.assertContains(response, "Цитирай")
         self.assertContains(response, "33-48")
+        self.assertContains(response, "Studies in Form")
         self.assertContains(response, "Download BibTeX")
         self.assertContains(response, "Download RIS")
 

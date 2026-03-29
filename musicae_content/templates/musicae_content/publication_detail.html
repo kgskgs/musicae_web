@@ -32,86 +32,24 @@
 </script>
 
 <style>
-  .anchor-link {
-    text-decoration: none;
+  @media (min-width: 1024px){
+    :root{ --outset: 2rem; --para-measure: 90ch; }
+    @media (min-width: 1280px){ :root{ --outset: 2.5rem; --para-measure: 95ch; } }
+    @media (min-width: 1536px){ :root{ --outset: 3rem; --para-measure: 100ch; } }
+    .tile{ text-align:left; }
+    .tile--left{ width: calc(50% + var(--outset)); margin-left: calc(-1 * var(--outset)); }
+    .tile--right{ width: calc(50% + var(--outset)); margin-left: 50%; }
+    .tile p{ max-width: var(--para-measure); }
   }
-
-  .publication-grid {
-    display: grid;
-    gap: 1.5rem;
-  }
-
-  @media (min-width: 1024px) {
-    .publication-grid {
-      grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr);
-      align-items: start;
-    }
-  }
-
-  .detail-card {
-    border: 1px solid rgb(229 231 235);
-    border-radius: 1.25rem;
-    background: rgba(255, 255, 255, 0.88);
-    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.06);
-  }
-
-  .detail-card--dark {
-    background: var(--color-surface);
-    color: var(--color-bg-light);
-  }
-
-  .detail-card--dark a {
-    color: var(--color-bg-light);
-  }
-
-  .meta-list dt {
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0.65;
-  }
-
-  .meta-list dd {
-    margin-top: 0.35rem;
-    font-size: 1rem;
-    line-height: 1.55;
-  }
-
-  .citation-block p {
-    line-height: 1.75;
-  }
-
-  .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid currentColor;
-    border-radius: 999px;
-    padding: 0.65rem 1rem;
-    text-decoration: none;
-    transition: transform 160ms ease, opacity 160ms ease;
-  }
-
-  .btn-ghost:hover {
-    transform: translateY(-1px);
-    opacity: 0.92;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 999px;
-    padding: 0.8rem 1.1rem;
-    text-decoration: none;
-    background: var(--color-bg-light);
-    color: var(--color-surface);
-    font-weight: 600;
-  }
-
-  .rich-text p + p {
-    margin-top: 0.85rem;
-  }
+  .text-mission-bg * { color: var(--color-bg-light) !important; }
+  .anchor-link { text-decoration: none; }
+  .pub-bib a { text-decoration: underline; text-underline-offset: 2px; }
+  .pub-meta { opacity: .9; }
+  .bio-content p + p { margin-top: .6em; }
+  .btn-contrast { display:inline-flex; align-items:center; gap:.5rem; }
+  .btn-ghost { display:inline-flex; align-items:center; gap:.5rem; border:1px solid currentColor; padding:.5rem .9rem; border-radius:.75rem; }
+  .muted { opacity:.7; }
+  .pub-actions .hint { display:block; font-size:.95rem; opacity:.8; margin-top:.25rem; }
 </style>
 {% endblock seo_extra %}
 
@@ -122,133 +60,92 @@
 {% bibtex_citation object record_url as bibtex_download %}
 {% ris_citation object record_url as ris_download %}
 
-<section class="pt-24 pb-10 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
+<section id="hero" class="pt-24 pb-10 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
   <div class="max-w-7xl mx-auto">
-    <a href="{% url 'library_lst' %}" class="inline-flex items-center gap-2 mb-6 text-body anchor-link">&larr; {% trans "Back to library" %}</a>
+    <a href="{% url 'library_lst' %}" class="inline-flex items-center gap-2 mb-6 text-body anchor-link">&larr; {% trans "Назад към библиотека" %}</a>
+    <h2 class="text-h2 font-display mb-8 text-[var(--color-text-dark)]">{{ object.title }}</h2>
 
-    <div class="max-w-4xl">
-      <p class="text-sm uppercase tracking-[0.18em] text-gray-500 mb-4">{% trans "Publication record" %}</p>
-      <h1 class="text-h2 font-display mb-6 text-[var(--color-text-dark)]">{{ object.title }}</h1>
-
-      <p class="text-lg md:text-2xl text-gray-600 leading-relaxed">
+    <p class="text-xl md:text-4xl tracking-normal lead text-gray-600">
+      {% if object.authors.all %}
+      <span class="font-normal">
         {% for person in object.authors.all %}
           <a href="{% url 'members_det' person.pk %}" class="anchor-link">{{ person|name_for_lang:LANGUAGE_CODE }}</a>{% if not forloop.last %}, {% endif %}
-        {% empty %}
-          {% trans "Author not listed" %}
         {% endfor %}
+      </span>
+      {% endif %}
 
-        {% if object.get_ptype_display %}<span class="mx-2 text-gray-400">&middot;</span>{{ object.get_ptype_display }}{% endif %}
-        {% if object.published_year %}<span class="mx-2 text-gray-400">&middot;</span>{{ object.published_year }}{% endif %}
-        {% if object.supports_page_range %}<span class="mx-2 text-gray-400">&middot;</span>{% trans "pp." %} {{ object.normalized_page_range }}{% endif %}
-      </p>
+      {% if object.get_ptype_display %}
+        {% if object.authors.all %}<span> &middot; </span>{% endif %}
+        <span class="font-light">{{ object.get_ptype_display }}</span>
+      {% endif %}
+
+      {% if object.published_year %}
+        {% if object.get_ptype_display or object.authors.all %}<span> &middot; </span>{% endif %}
+        <span class="font-light">{{ object.published_year }}</span>
+      {% endif %}
+
+      {% if object.supports_page_range %}
+        {% if object.get_ptype_display or object.authors.all or object.published_year %}<span> &middot; </span>{% endif %}
+        <span class="font-light">{% trans "pp." %} {{ object.normalized_page_range }}</span>
+      {% endif %}
+    </p>
+  </div>
+</section>
+
+{% if object.keywords_txt %}
+<section id="keywords" class="pt-24 pb-20 px-6 md:px-12 bg-[var(--color-surface)] border-t border-gray-200">
+  <div class="max-w-7xl mx-auto">
+    <div class="tile tile--right text-mission-bg">
+      <h2 class="font-display text-h2 mb-3">{% trans "Ключови думи" %}</h2>
+      <p class="text-body">{{ object.keywords_txt }}</p>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if object.abstract %}
+<section id="abstract" class="pt-24 pb-16 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
+  <div class="max-w-7xl mx-auto">
+    <div class="mx-auto text-left" style="max-width:calc(100% - var(--outset)); width:calc(100% - var(--outset));">
+      <h2 class="font-display text-h2 mb-3">{% trans "Абстракт" %}</h2>
+      <div class="text-body">{{ object.abstract|safe }}</div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section id="access" class="pt-24 pb-16 px-6 md:px-12 bg-[var(--color-surface)] border-t border-gray-200">
+  <div class="max-w-7xl mx-auto">
+    <div class="tile tile--right text-mission-bg">
+      <h2 class="font-display text-h2 mb-3">{% trans "Достъп" %}</h2>
+      <div class="pub-actions">
+        {% if object.file %}
+          <a class="btn-contrast" href="{{ object.file.url }}" target="_blank" rel="noopener">{% trans "Свали / Виж PDF" %}</a>
+        {% else %}
+          <p class="text-body">{% trans "No hosted file is available for this record." %}</p>
+        {% endif %}
+      </div>
     </div>
   </div>
 </section>
 
-<section class="pb-20 px-6 md:px-12 bg-[var(--color-bg-light)]">
-  <div class="max-w-7xl mx-auto publication-grid">
-    <div class="space-y-6">
-      {% if object.abstract %}
-      <article class="detail-card p-6 md:p-8">
-        <h2 class="font-display text-h3 mb-4">{% trans "Abstract" %}</h2>
-        <div class="rich-text text-body">{{ object.abstract|safe }}</div>
-      </article>
-      {% endif %}
+<section id="how-to-cite" class="pt-24 pb-20 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
+  <div class="max-w-7xl mx-auto">
+    <div class="tile tile--left">
+      <h2 class="font-display text-h2 mb-3">{% trans "Цитирай" %}</h2>
 
-      {% if object.keywords_txt %}
-      <article class="detail-card p-6 md:p-8">
-        <h2 class="font-display text-h3 mb-4">{% trans "Keywords" %}</h2>
-        <p class="text-body leading-relaxed">{{ object.keywords_txt }}</p>
-      </article>
-      {% endif %}
-
-      {% if object.bib_info %}
-      <article class="detail-card p-6 md:p-8">
-        <h2 class="font-display text-h3 mb-4">{% trans "Bibliographic note" %}</h2>
-        <div class="rich-text text-body">{{ object.bib_info|safe }}</div>
-      </article>
-      {% endif %}
-    </div>
-
-    <aside class="space-y-6">
-      <section class="detail-card p-6 md:p-8">
-        <h2 class="font-display text-h3 mb-5">{% trans "Publication details" %}</h2>
-        <dl class="meta-list grid gap-5">
-          <div>
-            <dt>{% trans "Type" %}</dt>
-            <dd>{{ object.get_ptype_display }}</dd>
-          </div>
-
-          {% if object.published_year %}
-          <div>
-            <dt>{% trans "Year" %}</dt>
-            <dd>{{ object.published_year }}</dd>
-          </div>
-          {% endif %}
-
-          {% if object.language %}
-          <div>
-            <dt>{% trans "Language" %}</dt>
-            <dd>{{ object.language }}</dd>
-          </div>
-          {% endif %}
-
-          {% if object.citation_container %}
-          <div>
-            <dt>{% trans "Journal or proceedings" %}</dt>
-            <dd>{{ object.citation_container }}</dd>
-          </div>
-          {% endif %}
-
-          {% if object.citation_publisher %}
-          <div>
-            <dt>{% trans "Publisher" %}</dt>
-            <dd>{{ object.citation_publisher }}</dd>
-          </div>
-          {% endif %}
-
-          {% if object.citation_place %}
-          <div>
-            <dt>{% trans "Place" %}</dt>
-            <dd>{{ object.citation_place }}</dd>
-          </div>
-          {% endif %}
-
-          {% if object.supports_page_range %}
-          <div>
-            <dt>{% trans "Page range" %}</dt>
-            <dd>{{ object.normalized_page_range }}</dd>
-          </div>
-          {% endif %}
-        </dl>
-      </section>
-
-      <section class="detail-card detail-card--dark p-6 md:p-8">
-        <h2 class="font-display text-h3 mb-4">{% trans "Access" %}</h2>
-        {% if object.file %}
-          <a class="btn-primary" href="{{ object.file.url }}" target="_blank" rel="noopener">{% trans "Open PDF" %}</a>
-          <p class="text-sm mt-3 opacity-80">{% trans "The hosted file opens in a new tab." %}</p>
-        {% else %}
-          <p class="text-body opacity-90">{% trans "No hosted file is available for this record." %}</p>
-        {% endif %}
-      </section>
-
-      <section class="detail-card p-6 md:p-8 citation-block">
-        <h2 class="font-display text-h3 mb-5">{% trans "Cite this publication" %}</h2>
-
-        <div class="space-y-5">
-          <div>
-            <p class="text-sm uppercase tracking-[0.16em] text-gray-500 mb-2">MLA</p>
-            <p class="text-body">{{ mla_citation }}</p>
-          </div>
-
-          <div>
-            <p class="text-sm uppercase tracking-[0.16em] text-gray-500 mb-2">Chicago</p>
-            <p class="text-body">{{ chicago_citation }}</p>
-          </div>
+      <div class="text-body space-y-4">
+        <div>
+          <strong>MLA:</strong>
+          {{ mla_citation }}
         </div>
 
-        <div class="mt-6 flex flex-wrap gap-3">
+        <div>
+          <strong>Chicago:</strong>
+          {{ chicago_citation }}
+        </div>
+
+        <div id="cite-buttons" class="mt-4 space-x-3">
           <a
             id="btn-bibtex"
             class="btn-ghost"
@@ -269,31 +166,26 @@
             {% trans "Download RIS" %}
           </a>
         </div>
-
-        <p class="text-sm text-gray-500 mt-3">{% trans "Downloads use the publication page URL so the citation always points back to the record." %}</p>
-      </section>
-    </aside>
+      </div>
+    </div>
   </div>
 </section>
 
 <script>
-  (function () {
-    function wireDownload(id, mimeType) {
-      const link = document.getElementById(id);
-      if (!link) {
-        return;
-      }
+(function(){
+  function wireDownload(id, mimeType){
+    const link = document.getElementById(id);
+    if (!link) return;
+    const content = link.dataset.download || "";
+    const blob = new Blob([content], { type: mimeType });
+    link.href = URL.createObjectURL(blob);
+  }
 
-      const content = link.dataset.download || "";
-      const blob = new Blob([content], { type: mimeType });
-      const blobUrl = URL.createObjectURL(blob);
-      link.href = blobUrl;
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-      wireDownload("btn-bibtex", "application/x-bibtex;charset=utf-8");
-      wireDownload("btn-ris", "application/x-research-info-systems;charset=utf-8");
-    });
-  })();
+  document.addEventListener('DOMContentLoaded', function(){
+    wireDownload('btn-bibtex', 'application/x-bibtex;charset=utf-8');
+    wireDownload('btn-ris', 'application/x-research-info-systems;charset=utf-8');
+  });
+})();
 </script>
+
 {% endblock content %}
