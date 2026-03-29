@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils import timezone
 
@@ -92,6 +93,7 @@ class Person(models.Model):
         return None
 
 class Publication(models.Model):
+    KEYWORDS_MAX_COUNT = 7
     # Вложеният клас за избор на тип публикация (ptypes), както поискахте
     class ptypes(models.IntegerChoices):
         mon = 0, _("Монография")
@@ -158,7 +160,7 @@ class Publication(models.Model):
         verbose_name=_("Keywords (Comma Separated)"),
         blank=True, 
         null=True,
-        help_text=_("Enter keywords as a single block of text, separated by commas.")
+        help_text=_("Enter up to 7 keywords separated by commas.")
     )
 
     # Други полета
@@ -199,6 +201,24 @@ class Publication(models.Model):
             return ""
         return " ".join(str(value).split()).strip(" ,;.")
 
+    @classmethod
+    def parse_keywords(cls, raw_value):
+        if not raw_value:
+            return []
+        chunks = re.split(r"[,;\n]+", str(raw_value))
+        keywords = []
+        seen = set()
+        for chunk in chunks:
+            keyword = cls._clean_text(chunk)
+            if not keyword:
+                continue
+            folded = keyword.casefold()
+            if folded in seen:
+                continue
+            seen.add(folded)
+            keywords.append(keyword)
+        return keywords
+
     @property
     def citation_kind(self):
         if self.ptype == self.ptypes.chapter:
@@ -228,6 +248,10 @@ class Publication(models.Model):
     @property
     def citation_place(self):
         return self._clean_text(self.published_place)
+
+    @property
+    def keyword_list(self):
+        return self.parse_keywords(self.keywords_txt)[: self.KEYWORDS_MAX_COUNT]
 
     @property
     def normalized_page_range(self):
@@ -296,7 +320,21 @@ class Publication(models.Model):
 
     def save(self, *args, **kwargs):
         self.sort_page_start = self.page_range_start(self.page_range)
+        keywords = self.parse_keywords(self.keywords_txt)[: self.KEYWORDS_MAX_COUNT]
+        self.keywords_txt = ", ".join(keywords)
         super().save(*args, **kwargs)
+
+    def clean(self):
+        super().clean()
+        keywords = self.parse_keywords(self.keywords_txt)
+        if len(keywords) > self.KEYWORDS_MAX_COUNT:
+            raise ValidationError(
+                {
+                    "keywords_txt": _(
+                        "Enter no more than %(max)d keywords."
+                    ) % {"max": self.KEYWORDS_MAX_COUNT}
+                }
+            )
 
 
 class Link(models.Model):

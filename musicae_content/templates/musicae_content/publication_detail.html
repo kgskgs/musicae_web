@@ -89,19 +89,17 @@
         <span class="font-light">{% trans "pp." %} {{ object.normalized_page_range }}</span>
       {% endif %}
     </p>
-  </div>
-</section>
 
-{% if object.keywords_txt %}
-<section id="keywords" class="pt-24 pb-20 px-6 md:px-12 bg-[var(--color-surface)] border-t border-gray-200">
-  <div class="max-w-7xl mx-auto">
-    <div class="tile tile--right text-mission-bg">
-      <h2 class="font-display text-h2 mb-3">{% trans "Ключови думи" %}</h2>
-      <p class="text-body">{{ object.keywords_txt }}</p>
+    {% if object.keyword_list %}
+    <div class="mt-6 flex flex-wrap items-center gap-2">
+      <span class="text-body muted">{% trans "Ключови думи:" %}</span>
+      {% for keyword in object.keyword_list %}
+      <span class="inline-flex items-center rounded-full border border-gray-300 px-3 py-1 text-sm text-gray-700 bg-white/70">{{ keyword }}</span>
+      {% endfor %}
     </div>
+    {% endif %}
   </div>
 </section>
-{% endif %}
 
 {% if object.abstract %}
 <section id="abstract" class="pt-24 pb-16 px-6 md:px-12 bg-[var(--color-bg-light)] border-t border-gray-200">
