@@ -175,7 +175,7 @@
       {% if publication.abstract %}
       <details class="pub-abstract">
         <summary class="pub-abstract-toggle">{% trans "Show Abstract" %}</summary>
-        <p class="text-body">{{ publication.abstract|safe }}</p>
+        <div class="text-body">{{ publication.abstract|safe }}</div>
       </details>
       {% endif %}
     </li>
