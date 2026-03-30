@@ -82,12 +82,6 @@
     <a href="{% url 'library_lst' %}" class="inline-flex items-center gap-2 mb-6 text-body anchor-link">&larr; {% trans "Назад към библиотека" %}</a>
     <div class="mb-8">
       <h2 class="text-h2 font-display text-[var(--color-text-dark)] inline align-middle">{{ object.title }}</h2>
-      {% if object.is_bulgarian and LANGUAGE_CODE|slice:":2" != "bg" %}
-      <span class="ml-2 text-body text-gray-600 whitespace-nowrap">
-        <span class="muted">&middot;</span>
-        {% if LANGUAGE_CODE|slice:":2" == "de" %}Auf Bulgarisch{% else %}In Bulgarian{% endif %}
-      </span>
-      {% endif %}
     </div>
 
     <p class="text-xl md:text-4xl tracking-normal lead text-gray-600">
@@ -115,8 +109,15 @@
         <span class="font-light">{{ object.published_year }}</span>
       {% endif %}
 
-      {% if object.supports_page_range %}
+      {% if object.is_bulgarian and LANGUAGE_CODE|slice:":2" != "bg" %}
         {% if object.get_ptype_display or object.authors.all or object.published_year %}<span> &middot; </span>{% endif %}
+        <span class="font-light">
+          {% if LANGUAGE_CODE|slice:":2" == "de" %}Auf Bulgarisch{% else %}In Bulgarian{% endif %}
+        </span>
+      {% endif %}
+
+      {% if object.supports_page_range %}
+        {% if object.get_ptype_display or object.authors.all or object.published_year or object.is_bulgarian and LANGUAGE_CODE|slice:":2" != "bg" %}<span> &middot; </span>{% endif %}
         <span class="font-light">{% trans "pp." %} {{ object.normalized_page_range }}</span>
       {% endif %}
     </p>
