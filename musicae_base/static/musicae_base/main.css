@@ -1607,8 +1607,8 @@ header .nav-links a:hover::after, header .nav-links a:focus-visible::after, head
 }
 .publication-item .pub-abstract .text-body {
   margin-top: 0.75rem;
-  font-size: 1rem;
-  line-height: 1.55;
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 .publication-list > li.text-body {
   padding: 1rem 0;
